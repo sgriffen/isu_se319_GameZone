@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4c719019-b067-4776-947c-d2fba62cd9dd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gameZone/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameZone/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameZone/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameZone/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameZone/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameZone/src/main/java/gameZone/GameZone.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameZone/target/classes/gameZone/GameZone.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1ZgZdogDmskIou1tqf3HuwpDvSi" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\griff\Documents\school\se319\proj\g11\src\main\resources\static" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4c719019-b067-4776-947c-d2fba62cd9dd" name="Default Changelist" comment="" />
+      <created>1585262787024</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585262787024</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2172" y="363" key="#Project_Structure" timestamp="1585263092653">
+      <screen x="0" y="0" width="3440" height="1400" />
+    </state>
+    <state x="2172" y="363" key="#Project_Structure/0.0.3440.1400@0.0.3440.1400" timestamp="1585263092653" />
+  </component>
+</project>
