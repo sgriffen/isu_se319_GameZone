@@ -16,7 +16,7 @@ maven-build:
     - mvn package -B
     
 maven-test: 
-  stage: maventest
+  stage: maven-test
   tags:  
       - spring
   script:  
