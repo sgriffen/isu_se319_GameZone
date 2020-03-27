@@ -49,7 +49,7 @@ public class DefaultService {
      * @return
      * 		{@code String}
      */
-    public String index() { return htmlPrefix + "home"; }
+    public String index() { return htmlPrefix + "HomeScreen"; }
 
     /* ****************************************************** END GET HELPERS ****************************************************** */
 
