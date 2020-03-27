@@ -37,7 +37,7 @@ public class DefaultService {
     public DefaultService(GlobalResources gRec) {
 
         this.gRec = gRec;
-        htmlPrefix = "html" + gRec.getFileSep();
+        htmlPrefix = "default" + gRec.getFileSep();
     }
 
     /* ***************************************************** END CONSTRUCTORS ****************************************************** */
