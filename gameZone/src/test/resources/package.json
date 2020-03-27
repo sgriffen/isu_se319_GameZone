@@ -1,0 +1,20 @@
+{
+  "name": "resources",
+  "version": "1.0.0",
+  "description": "selenium web driver tests for frontend CI/CD",
+  "main": "test.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Game Zone"
+  },
+  "author": "Rob Barton",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^25.2.3"
+  },
+  "devDependencies": {},
+  "keywords": []
+}
