@@ -12,7 +12,7 @@ maven-build:
   tags:
     - spring
   script:
-    - sudo cd ~/g11
+    - sudo cd /g11
     - mvn package -B
     
 maven-test: 
@@ -20,11 +20,11 @@ maven-test:
   tags:  
       - spring
   script:  
-      - sudo cd ~/g11
+      - sudo cd /g11
       - mvn test  
   artifacts:  
     paths:  
-      - ~/target/*.jar
+      - /g11/target/*.jar
 # artifacts are created when job executes successfully, and can be manually downloaded from GitLab GUI.
 # artifacts are not mandatory, buts it good practice, in case auto deploy fails, you can manually download the jar.
 # maven-test:
@@ -44,5 +44,5 @@ autoDeploy:
   tags:
     - spring
   script:
-    - sudo cd ~/g11
+    - sudo cd /g11
     - mvn package
