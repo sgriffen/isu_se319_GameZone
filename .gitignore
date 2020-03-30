@@ -89,3 +89,41 @@ lerna-debug.log
 # System Files
 .DS_Store
 Thumbs.db
+
+
+HELP.md
+gameZone/target
+gameZone/output
+!.mvn/wrapper/maven-wrapper.jar
+*.gz
+*.log
+*.tmp
+*.jar
+bin
+gameZone/out
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+
+### VS Code ###
+.vscode/
