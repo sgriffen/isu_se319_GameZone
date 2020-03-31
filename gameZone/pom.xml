@@ -136,23 +136,23 @@
 			<artifactId>ssl</artifactId>
 			<version>1.0</version>
 			<scope>test</scope>
-		</dependency>-->
+		</dependency>
 		
 		<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>2.52.0</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>-->
 		
-		<!--<dependency>
+		<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>stf</artifactId>
 			<version>1.0.1</version>
 			<scope>test</scope>
 		</dependency>
 		
-		<dependency>
+		<!--<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>jackson-all</artifactId>
 			<version>1.9.0</version>
