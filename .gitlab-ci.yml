@@ -10,7 +10,7 @@ mavenBuild:
   tags:
     - spring
   script:
-    - sudo cd g11/gameZone
+    - cd /g11
     - mvn package -B
     
 mavenTest: 
@@ -18,7 +18,7 @@ mavenTest:
   tags:  
       - spring
   script:  
-      - sudo cd g11/gameZone
+      - /g11
       - mvn test  
   artifacts:  
     paths:  
