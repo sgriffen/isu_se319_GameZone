@@ -124,14 +124,14 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!--<dependency>
+		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.8</version>
 			<scope>test</scope>
 		</dependency>
 		
-		<dependency>
+		<!--<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>ssl</artifactId>
 			<version>1.0</version>
