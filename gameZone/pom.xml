@@ -9,7 +9,6 @@
     </parent>
     <groupId>se309.g11.gameZone</groupId>
     <artifactId>gameZone</artifactId>
-    <version>0.0.1</version>
     <name>gameZone</name>
     <description>GameZone backend module</description>
 

@@ -14,7 +14,7 @@ public class User implements UserInterface {
      * {@code GlobalResources} {@code Component}. Grants the ability to use global variables and methods common to other {@code classes} in this Application
      */
     @Transient
-    private final GlobalResources gValue = new GlobalResources();
+    private final GlobalResources gValue = new GlobalResources(null);
 
     /**
      * ID for this {@code User}. Used for identification in the database

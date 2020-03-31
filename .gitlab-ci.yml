@@ -2,12 +2,10 @@
 # Each stages executes in sequence, if previous job fails, then all the preceeding jobs are skipped.
 stages:
   - mavenbuild
-  - maven-test
+  - maventest
   - autodeploy
 
-# tags: "shell" should match with the tag name provided to runner, for spring runner should execute in shell.
-# Notice that in petclinic project, the spring project is in root of master, if yours is in folder then cd to that folder.
-maven-build:
+mavenbuild:
   stage: mavenbuild
   tags:
     - spring
@@ -15,8 +13,8 @@ maven-build:
     - sudo cd /g11
     - mvn package -B
     
-maven-test: 
-  stage: maven-test
+maventest: 
+  stage: maventest
   tags:  
       - spring
   script:  
@@ -24,25 +22,20 @@ maven-test:
       - mvn test  
   artifacts:  
     paths:  
-      - /g11/target/*.jar
-# artifacts are created when job executes successfully, and can be manually downloaded from GitLab GUI.
-# artifacts are not mandatory, buts it good practice, in case auto deploy fails, you can manually download the jar.
-# maven-test:
-#  stage: maventest
-#  tags:
-#    - shell
-#  script:
-#    - cd Spring
-#    - mvn test
-#  artifacts:
-#    paths:
-#      - g11
-# Make sure there is /target directory in your server, else script will fail, or use any other folder you like.
-# If you are changing the folder, reflect the change in systemd-web-demo service too.
+      - /g11/*.jar
+      
 autoDeploy:
-  stage: autodeploy
+  stage: autoDeploy
   tags:
     - spring
   script:
-    - sudo cd /g11
+    - cd /g11
     - mvn package
+    - sudo rm -r /g11/resources/templates
+    - sudo rm -r /g11/resources/static
+    - sudo mv target/*.jar /g11/gameZone.jar
+    - sudo mv gameZone/src/main/resources/templates /gameZone/resources/templates
+    - sudo mv gameZone/src/main/resources/static /gameZone/resources/static
+    - sudo chmod -R 777 /g11
+    - sudo systemctl stop gameZone.service
+    - sudo systemctl start gameZone.service
