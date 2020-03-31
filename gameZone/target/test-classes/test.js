@@ -3,11 +3,11 @@ var driver = new Builder().forBrowser("chrome").build();
 async function launch(){
 	var path = process.cwd()+'../../../main/resources/templates/default/home.html';
 	await driver.get( path);
-	//driver.findElement(By.id("txtFirstName")).sendKeys("Hello");
+	//driver.findElement(By.id("txtFirstName")).sendKeys("Hello"); //all of this is just reference for later
 	//driver.findElement(By.id("txtLastName")).sendKeys("There");
 	//await driver.findElement(By.id("btnValidate")).click();
 	//let w = await driver.findElement(By.id('labelNotifytxtFinalResult')).getText();
-	//driver.quit()
+	driver.quit()
 	return true;
 }
 
