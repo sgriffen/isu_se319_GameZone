@@ -109,13 +109,63 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
         </dependency>
+		
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>18.0.0</version>
             <scope>compile</scope>
         </dependency>
-    </dependencies>
+		
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.52.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>secureci-testing-framework</groupId>
+			<artifactId>ssl</artifactId>
+			<version>1.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>secureci-testing-framework</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.52.0</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>secureci-testing-framework</groupId>
+			<artifactId>stf</artifactId>
+			<version>1.0.1</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>secureci-testing-framework</groupId>
+			<artifactId>jackson-all</artifactId>
+			<version>1.9.0</version>
+			<scope>test</scope>
+		 </dependency>
+		 
+		  <dependency>
+			<groupId>secureci-testing-framework</groupId>
+			<artifactId>selenium-server-standalone</artifactId>
+			<scope>test</scope>
+			<version>2.52.0</version>
+		  </dependency>
+	</dependencies>
 
     <build>
         <plugins>
