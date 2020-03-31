@@ -131,14 +131,14 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!--<dependency>
+		<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>ssl</artifactId>
 			<version>1.0</version>
 			<scope>test</scope>
 		</dependency>
 		
-		<dependency>
+		<!--<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>2.52.0</version>
