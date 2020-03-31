@@ -136,7 +136,7 @@
 			<artifactId>ssl</artifactId>
 			<version>1.0</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency>-->
 		
 		<dependency>
 			<groupId>secureci-testing-framework</groupId>
@@ -145,12 +145,12 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<dependency>
+		<!--<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>stf</artifactId>
 			<version>1.0.1</version>
 			<scope>test</scope>
-		</dependency>-->
+		</dependency>
 		
 		<dependency>
 			<groupId>secureci-testing-framework</groupId>
@@ -159,7 +159,7 @@
 			<scope>test</scope>
 		 </dependency>
 		 
-		 <!--<dependency>
+		 <dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>selenium-server-standalone</artifactId>
 			<scope>test</scope>
