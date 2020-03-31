@@ -1,20 +1,20 @@
 # Stages of pipeline, should match with stage tag inside each job.
 # Each stages executes in sequence, if previous job fails, then all the preceeding jobs are skipped.
 stages:
-  - mavenbuild
-  - maventest
-  - autodeploy
+  - mavenBuild
+  - mavenTest
+  - autoDeploy
 
-mavenbuild:
-  stage: mavenbuild
+mavenBuild:
+  stage: mavenBuild
   tags:
     - spring
   script:
     - sudo cd /g11
     - mvn package -B
     
-maventest: 
-  stage: maventest
+mavenTest: 
+  stage: mavenTest
   tags:  
       - spring
   script:  
