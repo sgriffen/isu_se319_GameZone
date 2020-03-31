@@ -10,7 +10,7 @@ mavenBuild:
   tags:
     - spring
   script:
-    - cd /g11
+    - cd /g11/gameZone
     - mvn package -B
     
 mavenTest: 
@@ -18,11 +18,11 @@ mavenTest:
   tags:  
       - spring
   script:  
-      - /g11
+      - /g11/gameZone
       - mvn test  
   artifacts:  
     paths:  
-      - g11/gameZone/*.jar
+      - g11/gameZone/target/*.jar
       
 autoDeploy:
   stage: autoDeploy
