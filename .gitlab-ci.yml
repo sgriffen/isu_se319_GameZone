@@ -18,7 +18,7 @@ mavenTest:
   tags:  
       - spring
   script:  
-      - gameZone
+      - cd gameZone
       - mvn test  
   artifacts:  
     paths:  
