@@ -8,7 +8,7 @@ async function launch(){
 	//await driver.findElement(By.id("btnValidate")).click();
 	//let w = await driver.findElement(By.id('labelNotifytxtFinalResult')).getText();
 	driver.quit()
-	return true;
+	return false;
 }
 
 jest.setTimeout(50000000);//this can probably be smaller but it's easier to keep it big rn

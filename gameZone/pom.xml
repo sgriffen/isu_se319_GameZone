@@ -143,7 +143,7 @@
 			<artifactId>selenium-java</artifactId>
 			<version>2.52.0</version>
 			<scope>test</scope>
-		</dependency>-->
+		</dependency>
 		
 		<dependency>
 			<groupId>secureci-testing-framework</groupId>
@@ -152,7 +152,7 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!--<dependency>
+		<dependency>
 			<groupId>secureci-testing-framework</groupId>
 			<artifactId>jackson-all</artifactId>
 			<version>1.9.0</version>
