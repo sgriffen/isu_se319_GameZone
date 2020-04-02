@@ -41,7 +41,7 @@ public class UserController {
     /**
      * {@code Log} for this controller
      */
-    private Log log = LogFactory.getLog(GameZone.class);
+    private Log log;
 
     /* ************************************************** END INSTANCE VARIABLES *************************************************** */
 
@@ -56,8 +56,10 @@ public class UserController {
      */
     public UserController(GlobalResources gRec, UserService uService) {
 
-        this.uService = uService;
         this.gRec = gRec;
+        this.uService = uService;
+
+        this.log = LogFactory.getLog(GameZone.class);
     }
 
     /* ***************************************************** END CONSTRUCTORS ****************************************************** */

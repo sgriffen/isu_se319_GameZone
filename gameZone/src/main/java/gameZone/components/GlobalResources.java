@@ -166,7 +166,7 @@ public class GlobalResources {
      */
     private String generateAuthenticator() {
 
-        int authLen = 25;
+        int authLen = 10;
 
         String key = new String();
         Random rand = new Random();
