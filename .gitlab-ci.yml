@@ -1,9 +1,18 @@
 # Stages of pipeline, should match with stage tag inside each job.
 # Each stages executes in sequence, if previous job fails, then all the preceeding jobs are skipped.
+
+image: node:latest
+
 stages:
   - mavenBuild
   - mavenTest
+  - build
+  - test
 #  - autoDeploy
+
+cache:
+      paths:
+        - node_modules/
 
 mavenBuild:
   stage: mavenBuild
@@ -23,6 +32,23 @@ mavenTest:
   artifacts:  
     paths:  
       - gameZone/target/*.jar
+      
+install_dependencies:
+      stage: build
+      tags:
+        - docker
+      script:
+        - npm install
+      artifacts:
+        paths:
+          - cd gameZone
+          - node_modules/
+
+    testing_testing:
+      stage: test
+      tags:
+        - docker
+      script: npm test                                
       
 #autoDeploy:
 #  stage: autoDeploy
