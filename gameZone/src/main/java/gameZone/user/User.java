@@ -5,7 +5,7 @@ import gameZone.components.GlobalResources;
 import javax.persistence.*;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User implements UserInterface {
 
     /* ************************************************* START INSTANCE VARIABLES ************************************************** */
