@@ -73,21 +73,11 @@ public class WebSocketComponent {
     @OnMessage
     public void socketMessage(Session socketSession, SocketIntentWrapper payloadWrap) {
 
-        //TODO
-        //echos request
-        SocketIntentWrapper echoWrap = new SocketIntentWrapper(
-                payloadWrap.getIntent() + 1,
-                "ECHO: [" + payloadWrap.getPayload() + "]",
-                null
-        );
-
-        this.whisperAll(echoWrap);
+        this.parseIntent(payloadWrap);
     }
 
     @OnClose
     public void socketClose(Session socketSession) {
-
-        log.info("SOCKET: client attempting to close connection");
 
         String toClose = new String();
 
@@ -119,5 +109,21 @@ public class WebSocketComponent {
 
         try { to.getBasicRemote().sendObject(wrap); }
         catch(Exception e) { log.error("SOCKET: whisper exception", e); }
+    }
+
+    private void parseIntent(SocketIntentWrapper intentWrap) {
+
+        switch(intentWrap.getIntent()) {
+
+            default :
+                SocketIntentWrapper echo = new SocketIntentWrapper(
+                    201,
+                    "ECHO: [" + intentWrap.getPayload() + "]",
+                        "ECHO FROM: [" + intentWrap.getIdentifier() + "]"
+                );
+
+                whisper(echo, listeners.get(intentWrap.getIdentifier()));
+                break;
+        }
     }
 }

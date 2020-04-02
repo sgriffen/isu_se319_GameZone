@@ -10,6 +10,7 @@ public class SocketIntentWrapper {
 
     private String payload;
 
+    private String identifier;
     /**
      * Default constructor
      *
@@ -23,6 +24,7 @@ public class SocketIntentWrapper {
 
         intent = 200;
         payload = null;
+        identifier = null;
     }
 
     /**
@@ -31,13 +33,14 @@ public class SocketIntentWrapper {
      * 		Error {@code code} desired
      * @param payload
      * 		Payload {@code String} desired
-     * @param exception
-     * 		Return {@code GameZoneExceptionType} and {@code String} desired
+     * @param identifier
+     * 		{@code User.id_app} desired
      */
-    public SocketIntentWrapper(int intent, String payload, ArrayList<ExceptionUpdateWrapper> exception) {
+    public SocketIntentWrapper(int intent, String payload, String identifier) {
 
         this.setIntent(intent);
         this.setPayload(payload);
+        this.setIdentifier(identifier);
     }
 
     /**
@@ -65,4 +68,17 @@ public class SocketIntentWrapper {
      * 		Desired {@code payload} for {@code SocketIntentWrapper}
      */
     public void setPayload(String payload) { this.payload = payload; }
+
+    /**
+     * Get the {@code identifier} of {@code SocketIntentWrapper}
+     * @return
+     * 		{@code identifier}
+     */
+    public String getIdentifier() { return identifier; }
+    /**
+     * Set {@code identifier} of {@code SocketIntentWrapper}
+     * @param identifier
+     * 		Desired {@code identifier} for {@code SocketIntentWrapper}
+     */
+    public void setIdentifier(String identifier) { this.identifier = identifier; }
 }
