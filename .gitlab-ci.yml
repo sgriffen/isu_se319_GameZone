@@ -8,7 +8,11 @@ stages:
   - test
 #  - autoDeploy
 
-image: node:latest
+default:
+  image: node:latest
+
+  before_script:
+    - bundle install
 
 cache:
       paths:
