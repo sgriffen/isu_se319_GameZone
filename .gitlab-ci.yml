@@ -2,8 +2,7 @@
 # Each stages executes in sequence, if previous job fails, then all the preceeding jobs are skipped.
 
 # https://hub.docker.com/r/library/node/tags/
-image: 
-    - node:latest
+image: node:latest
 
 stages:
   - mavenBuild
