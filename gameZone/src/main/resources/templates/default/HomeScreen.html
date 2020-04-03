@@ -6,8 +6,8 @@
 	</head>
 	<body style="background-color:DarkBlue;">
 		<script>
-			//let socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket");//server
-			let socket = new WebSocket("ws://localhost:8080/websocket/identifier");//localhost
+			let socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/identifier");//server
+			//let socket = new WebSocket("ws://localhost:8080/websocket/identifier");//localhost
 			
 			socket.onopen = function(e) {
 				alert("[open] Connection established");
