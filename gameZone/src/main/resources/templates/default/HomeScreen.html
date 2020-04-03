@@ -6,27 +6,29 @@
 	</head>
 	<body style="background-color:DarkBlue;">
 		<script>
-			`//let socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket");//server
-			let socket = new WebSocket("ws://localhost:8080/websocket");//localhost
+			//let socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket");//server
+			let socket = new WebSocket("ws://localhost:8080/websocket/identifier");//localhost
 			
 			socket.onopen = function(e) {
 				alert("[open] Connection established");
 				alert("Sending to server");
-				socket.send("{
-								"intent": "201",
-								"payload": "Hello there"
-								}");
+				let json = {
+					"intent": 201,
+					"payload": "Hello there",
+					"identifier": "identifier"
+				};
+				socket.send(JSON.stringify(json));
 			};
 			socket.onmessage = function(event) {
-				alert(`[message] Data received from server: ${event.data}`);
+				alert("[message] Data received from server: ${event.data}");
 			};
 			socket.onclose = function(event) {
 				if (event.wasClean) {
-					alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+					alert("[close] Connection closed cleanly, code=${event.code} reason=${event.reason}");
 				} else {
 				// e.g. server process killed or network down
 				// event.code is usually 1006 in this case
-					alert('[close] Connection died');
+					alert("[close] Connection died");
 				}
 			};
 		</script>
