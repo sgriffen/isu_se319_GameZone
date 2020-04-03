@@ -31,6 +31,7 @@ autoDeploy:
   script:
     - cd gameZone
     - mvn package
+    - sudo rm /gll/*.jar
     - sudo rm -r /g11/resources/templates
     - sudo rm -r /g11/resources/static
     - sudo mv target/*.jar /g11/gameZone.jar
