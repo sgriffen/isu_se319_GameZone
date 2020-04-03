@@ -19,10 +19,10 @@ mavenTest:
       - spring
   script:  
       - cd gameZone
-      - mvn test  
+      - mvn test
   artifacts:  
     paths:  
-      - gameZone/target/*.jar
+      - target/*.jar
       
 autoDeploy:
   stage: autoDeploy
