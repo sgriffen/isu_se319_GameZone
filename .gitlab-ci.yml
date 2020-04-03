@@ -1,11 +1,7 @@
 # Stages of pipeline, should match with stage tag inside each job.
 # Each stages executes in sequence, if previous job fails, then all the preceeding jobs are skipped.
 
-default:
-  image: node:latest
-
-  before_script:
-    - bundle install
+image: node:latest
 
 stages:
   - mavenBuild
