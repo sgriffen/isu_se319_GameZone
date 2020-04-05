@@ -6,6 +6,18 @@
 	</head>
 	<body style="background-color:DarkBlue;">
 		<script>
+			var requestOptions = {
+				method: 'GET',
+				redirect: 'follow'
+			};
+			
+			var id=0;
+			
+			//fetch("https://coms-319-052.cs.iastate.edu:8080/user/generate/token", requestOptions)
+			//fetch("https://localhost:8080/user/generate/token", requestOptions)
+			//	.then(response => response.text())
+			//	.then(result => id)
+			//	.catch(error => console.log('error', error));
 			let socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/identifier");//server
 			//let socket = new WebSocket("ws://localhost:8080/websocket/identifier");//localhost
 			
@@ -15,7 +27,7 @@
 				let json = {
 					"intent": 201,
 					"payload": "Hello there",
-					"identifier": "identifier"
+					"identifier": id
 				};
 				socket.send(JSON.stringify(json));
 			};
