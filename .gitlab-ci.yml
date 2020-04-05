@@ -35,7 +35,7 @@ autoDeploy:
     - sudo rm -r /g11/resources/static
     - sudo mv src/main/resources/templates /g11/resources/templates
     - sudo mv src/main/resources/static /g11/resources/static
-    - sudo mv target/gameZone-0.0.1.jar /g11/gameZone.jar
+    - sudo mv target/*.jar /g11/gameZone.jar
     - sudo chmod -R 777 /g11
     - sudo systemctl stop gameZone.service
     - sudo systemctl start gameZone.service
