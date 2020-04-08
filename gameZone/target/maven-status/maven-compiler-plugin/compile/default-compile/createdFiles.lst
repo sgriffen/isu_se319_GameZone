@@ -1,0 +1,9 @@
+gameZone\exceptions\GameZoneException.class
+gameZone\wrappers\ObjectReturnWrapper.class
+gameZone\user\User.class
+gameZone\services\UserService.class
+gameZone\repositories\UserRepository.class
+gameZone\enums\GameZoneExceptionType.class
+gameZone\controllers\UserController.class
+gameZone\user\UserInterface.class
+gameZone\wrappers\ExceptionUpdateWrapper.class

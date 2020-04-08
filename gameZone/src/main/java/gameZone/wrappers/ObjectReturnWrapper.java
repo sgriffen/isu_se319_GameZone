@@ -36,7 +36,7 @@ public class ObjectReturnWrapper<T> {
      * <br>
      * Used to send {@code Exception} info to the frontend if any
      */
-    private List<ExceptionUpdateWrapper> exception;
+    private List<ExceptionUpdateWrapper> exceptions;
 
     /**
      * Default constructor
@@ -51,7 +51,7 @@ public class ObjectReturnWrapper<T> {
 
         status = 200;
         payload = null;
-        exception = null;
+        exceptions = null;
     }
 
     /**
@@ -101,11 +101,11 @@ public class ObjectReturnWrapper<T> {
      * @return
      * 		{@code exception}
      */
-    public List<ExceptionUpdateWrapper> getException() { return exception; }
+    public List<ExceptionUpdateWrapper> getException() { return exceptions; }
     /**
      * Set {@code exception} of {@code ObjectReturnWrapper}
-     * @param exception
+     * @param exceptions
      * 		Desired {@code exception} for {@code ObjectReturnWrapper}
      */
-    public void setException(ArrayList<ExceptionUpdateWrapper> exception) { this.exception = exception; }
+    public void setException(ArrayList<ExceptionUpdateWrapper> exceptions) { this.exceptions = exceptions; }
 }

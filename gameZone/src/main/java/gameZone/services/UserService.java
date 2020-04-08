@@ -41,6 +41,7 @@ public class UserService {
     public UserService(GlobalResources gRec, UserRepository uRepo) {
 
         this.gRec = gRec;
+
         this.uRepo = uRepo;
     }
 
@@ -63,6 +64,16 @@ public class UserService {
 
         uRepo.save((User) u);
         return u.getIdApp();
+    }
+
+    public UserInterface getUser(String id) {
+
+        for (UserInterface u : uRepo.findAll()) {
+
+            if (u.getIdApp().equals(id)) { return u; }
+        }
+
+        return null;
     }
 
     /* ***************************************************** END POST HELPERS ****************************************************** */

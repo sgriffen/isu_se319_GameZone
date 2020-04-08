@@ -14,6 +14,7 @@ import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ import java.util.ArrayList;
 /**
  * Controller that handles HTTP queries for {@code Users}
  */
-@Controller(value = "/user")
+@Controller
+@RequestMapping(value = "/user")
 public class UserController {
 
     /* ************************************************* START INSTANCE VARIABLES ************************************************** */
@@ -41,7 +43,7 @@ public class UserController {
     /**
      * {@code Log} for this controller
      */
-    private Log log = LogFactory.getLog(GameZone.class);
+    private Log log;
 
     /* ************************************************** END INSTANCE VARIABLES *************************************************** */
 
@@ -56,8 +58,10 @@ public class UserController {
      */
     public UserController(GlobalResources gRec, UserService uService) {
 
-        this.uService = uService;
         this.gRec = gRec;
+        this.uService = uService;
+
+        this.log = LogFactory.getLog(GameZone.class);
     }
 
     /* ***************************************************** END CONSTRUCTORS ****************************************************** */
