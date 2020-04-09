@@ -24,7 +24,7 @@ public class GameSessionService {
 	 * {@code UserRepository} for this service
 	 */
 	@Autowired
-	private GameSessionReporitory gRepo;
+	private GameSessionRepository gRepo;
 	
 	/***END INSTANCE VARIABLES***/
 	
@@ -40,7 +40,7 @@ public class GameSessionService {
 	public GameSessionService(GlobalResources gRec, GameSessionRepository gRepo) {
 		
 		this.gRec = gRec;
-		this.uRepo = uRepo;
+		this.gRepo = gRepo;
 	}
 	
 	/***END CONSTRUCTORS***/
