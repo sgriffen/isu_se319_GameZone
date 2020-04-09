@@ -1,4 +1,9 @@
-package gamezone.gameSession;
+package gameZone.gameSession;
+
+import gameZone.user.User;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "gameSession")
@@ -52,23 +57,16 @@ public class GameSession {
 	
 	/***START GETTERS/SETTERS***/
 	
-	@Override
+
 	public User getPlayer1() { return player1; }
-	@Override
 	public void setPlayer1(User player1) { this.player1 = player1; }
-	@Override
+
 	public User getPlayer2() { return player2; }
-	@Override
-	public void getPlayer2(User player2) { this.player2 = player2; }
+	public void setPlayer2(User player2) { this.player2 = player2; }
 	
-	@Override
+
 	public Integer getGameStatus() { return gameStatus; }
-	@Override
 	public void setGameStatus(Integer gameStatus) { this.gameStatus = gameStatus; }
 	
 	/***END GETTERS/SETTERS***/
-	
-	
-	}
-	
 }

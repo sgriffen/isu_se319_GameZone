@@ -1,6 +1,12 @@
 package gameZone.controllers;
 
-import gamezone.GameZone;
+import gameZone.GameZone;
+import gameZone.components.GlobalResources;
+import gameZone.services.GameSessionService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  * Controller that handles HTTP queries for {@code Sessions}
