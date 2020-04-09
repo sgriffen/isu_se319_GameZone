@@ -1,24 +1,23 @@
 package gameZone.gameSession;
 
 import gameZone.components.GlobalResources;
+import gameZone.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "gameSession")
 public class GameSession {
 
 	/*** START INSTANCE VARIABLE ***/
-	/**
-	 * Player 1 for this {@code gameSession}.
-	 */
-	private User player1;
-	
-	/**
-	 * Player 2 for this {@code gameSession}.
-	 */
-	private User player2;
 
+	/**
+	 * List for the {@code GameSession} users. There should normally be 2 users.
+	 */
+	@OneToMany (targetEntity = User.class)
+	private List<User> users;
 	/**
 	 * ID for this {@code GameSession}. Used for identification in the database
 	 */
@@ -39,21 +38,20 @@ public class GameSession {
 	/**
 	 * Default Constructor
 	 */
-	public gameSession() {
+	public GameSession() {
 		
-		this.setPlayer1(null);
-		this.setPlayer2(null);
+		this.setUsers(new ArrayList<User>());
 		this.setGameStatus(-1);
 		
 	}
 	
 	/**
-	 * Contructor with both Users
+	 * Constructor with both Users
 	 */
-	public gameSession(User player1, User player2) {
-		
-		this.setPlayer1(player1);
-		this.setPlayer2(player2);
+	public GameSession(User player1, User player2) {
+
+		this.setUsers(new ArrayList<User>());
+		this.addPlayers(player1, player2);
 		this.setGameStatus(-1);
 		
 	}
@@ -62,17 +60,38 @@ public class GameSession {
 	
 	/***START GETTERS/SETTERS***/
 
-	public User getPlayer1() { return player1; }
+	public User getPlayer1() {
+		for(int i = 0; i < users.size(); i++)
+		{
+			if (users.get(i).getPlace() == 1)
+			{
+				return users.get(i);
+			}
+		}
+		return null;
+	}
 
-	public void setPlayer1(User player1) { this.player1 = player1; }
+	public void addPlayers(User player1, User player2) { this.users.add(player1); this.users.add(player2); }
 
-	public User getPlayer2() { return player2; }
-
-	public void setPlayer2(User player2) { this.player2 = player2; }
+	public User getPlayer2() {
+		for(int i = 0; i < users.size(); i++)
+		{
+			if (users.get(i).getPlace() == 2)
+			{
+				return users.get(i);
+			}
+		}
+		return null;
+	}
 
 	public Integer getGameStatus() { return gameStatus; }
 
 	public void setGameStatus(Integer gameStatus) { this.gameStatus = gameStatus; }
+
+	public void setUsers(ArrayList<User> users)
+	{
+		this.users = users;
+	}
 	
 	/***END GETTERS/SETTERS***/
 	
