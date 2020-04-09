@@ -1,6 +1,7 @@
 package gameZone.user;
 
 import gameZone.components.GlobalResources;
+import gameZone.gameSession.GameSession;
 
 import javax.persistence.*;
 
@@ -22,7 +23,13 @@ public class User implements UserInterface {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id_db;
-
+    
+    /**
+     * {@code GameSession} this {@code User} is playing in
+     */
+    @ManyToOne
+    private GameSession gameSession;
+    
     /**
      * ID for this {@code User}. Used for identification in-game
      */
@@ -37,6 +44,15 @@ public class User implements UserInterface {
      * Total number of losses for this {@code User}
      */
     private Integer losses;
+    
+    /**
+     * Turn this {@code User} plays on.
+     * <ul>
+     *     <li>{@code place = 1}: {@code User} plays first (player 1)</li>
+     *     <li>{@code place = 2}: {@code User} plays second (player 2)</li>
+     * </ul>
+     */
+    private Integer place;
 
     /* ************************************************** END INSTANCE VARIABLES *************************************************** */
 
@@ -49,7 +65,10 @@ public class User implements UserInterface {
 
         this.setWins(0);
         this.setLosses(0);
-        this.setIdApp(new String());
+        this.setIdApp(null);
+        this.setIdDB(-1);
+        this.setGameSession(null);
+        this.setPlace(-1);
     }
 
     /* ***************************************************** END CONSTRUCTORS ****************************************************** */
@@ -60,7 +79,12 @@ public class User implements UserInterface {
     public Integer getIdDB() { return id_db; }
     @Override
     public void setIdDB(int id_db) { this.id_db =  id_db; }
-
+    
+    @Override
+    public GameSession getGameSession() { return gameSession; }
+    @Override
+    public void setGameSession(GameSession gameSession) { this.gameSession = gameSession; }
+    
     @Override
     public String getIdApp() { return id_app; }
     @Override
@@ -75,6 +99,11 @@ public class User implements UserInterface {
     public Integer getLosses() { return losses; }
     @Override
     public void setLosses(int losses) { this.losses =  losses; }
+    
+    @Override
+    public Integer getPlace() { return place; }
+    @Override
+    public void setPlace(Integer place) { this.place = place; }
 
     /* **************************************************** END GETTERS/SETTERS **************************************************** */
 
