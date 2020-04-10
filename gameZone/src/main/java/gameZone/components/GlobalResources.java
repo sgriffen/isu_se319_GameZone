@@ -40,8 +40,8 @@ public class GlobalResources {
 //        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        /* rob */
-//        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
-//        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
+//        resourceLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"src"+ fileSep +"main"+ fileSep +"resources";
+//        outputLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"output";
         /* live */
         resourceLoc = fileSep + "g11" + fileSep + "resources" + fileSep;
         outputLoc = fileSep + "g11" + fileSep + "output" + fileSep;
