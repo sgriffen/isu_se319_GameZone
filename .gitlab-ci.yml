@@ -1,17 +1,9 @@
 # Stages of pipeline, should match with stage tag inside each job.
 # Each stages executes in sequence, if previous job fails, then all the preceeding jobs are skipped.
-
-#image: node:latest
-
 stages:
   - mavenBuild
   - mavenTest
-  #- test
-  #- autoDeploy
-
-#cache:
-#      paths:
-#        - node_modules/
+  - autoDeploy
 
 mavenBuild:
   stage: mavenBuild
@@ -30,30 +22,23 @@ mavenTest:
       - mvn test  
   artifacts:  
     paths:  
-      - gameZone/target/*.jar
-
-# testing_testing:
-#      stage: test
-#      tags:
-#        - docker
-#      script: 
-#      - npm install
-#      - npm test                              
+      - gameZone/target/*.jar               
       
-#autoDeploy:
-#  stage: autoDeploy
-#  only:
-#    - master
-#  tags:
-#    - spring
-#  script:
-#    - cd /g11
-#    - mvn package
-#    - sudo rm -r /g11/resources/templates
-#    - sudo rm -r /g11/resources/static
-#    - sudo mv gameZone/target/*.jar /g11/gameZone.jar
-#    - sudo mv gameZone/src/main/resources/templates /gameZone/resources/templates
-#    - sudo mv gameZone/src/main/resources/static /gameZone/resources/static
-#    - sudo chmod -R 777 /g11
-#    - sudo systemctl stop gameZone.service
-#    - sudo systemctl start gameZone.service
+autoDeploy:
+  stage: autoDeploy
+  only:
+    - master
+  tags:
+    - spring
+  script:
+    - cd /g11
+    - cd gameZone
+    - mvn package
+    - sudo rm -r /g11/resources/templates
+    - sudo rm -r /g11/resources/static
+    - sudo mv target/*.jar /g11/gameZone.jar
+    - sudo mv src/main/resources/templates /gameZone/resources/templates
+    - sudo mv src/main/resources/static /gameZone/resources/static
+    - sudo chmod -R 777 /g11
+    - sudo systemctl stop gameZone.service
+    - sudo systemctl start gameZone.service
