@@ -42,7 +42,6 @@ public class GameSession {
 		
 		this.setUsers(new ArrayList<User>());
 		this.setGameStatus(-1);
-		
 	}
 	
 	/**
@@ -85,7 +84,7 @@ public class GameSession {
 	}
 
 	public Integer getGameStatus() { return gameStatus; }
-
+	
 	public void setGameStatus(Integer gameStatus) { this.gameStatus = gameStatus; }
 
 	public void setUsers(ArrayList<User> users)
@@ -102,5 +101,4 @@ public class GameSession {
 		gameStatus = 0;
 
 	}
-
 }

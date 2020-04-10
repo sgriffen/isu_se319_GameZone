@@ -31,14 +31,14 @@ public class GlobalResources {
         this.fileSep = File.separator;
 
 //        /* sean */
-//        resourceLoc = "C:" + fileSep + "Users" + fileSep + "Sean" + fileSep + "school" + fileSep + "se319" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
-//        outputLoc = "C:" + fileSep + "Users" + fileSep + "Sean" + fileSep + "school" + fileSep + "se319" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "output";
+//        resourceLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
+//        outputLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "output";
 //        /* jamie */
 //        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        outputLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        /* kira */
 //        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
-//        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
+//        outputLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        /* rob */
 //        resourceLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"src"+ fileSep +"main"+ fileSep +"resources";
 //        outputLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"output";

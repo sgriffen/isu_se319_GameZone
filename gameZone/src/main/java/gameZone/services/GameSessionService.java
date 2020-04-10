@@ -38,7 +38,7 @@ public class GameSessionService {
 	 * 		See {@code webClient.repositories.GameSessionRepository}
 	 */
 	public GameSessionService(GlobalResources gRec, GameSessionRepository gRepo) {
-		
+
 		this.gRec = gRec;
 		this.gRepo = gRepo;
 	}
