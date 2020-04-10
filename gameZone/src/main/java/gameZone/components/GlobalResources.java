@@ -36,13 +36,17 @@ public class GlobalResources {
 //      resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        /* live */
         resourceLoc = fileSep + "g11" + fileSep + "resources" + fileSep;
+//        /* Rob*/
+//        resourceLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"src"+ fileSep +"main"+ fileSep +"resources";
 
         /* sean */
 //        outputLoc = "C:" + fileSep + "Users" + fileSep + "Sean" + fileSep + "school" + fileSep + "se319" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "output";
 //        /* jamie */
 //      outputLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        /* live */
-        outputLoc = fileSep + "g11" + fileSep + "output" + fileSep;
+       outputLoc = fileSep + "g11" + fileSep + "output" + fileSep;
+//        /* Rob */
+//       outputLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"output";
 
         this.uRepo = uRepo;
     }
