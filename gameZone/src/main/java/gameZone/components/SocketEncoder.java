@@ -1,10 +1,9 @@
 package gameZone.components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gameZone.GameZone;
-import gameZone.wrappers.SocketIntentWrapper;
+import gameZone.wrappers.SocketReturnWrapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -12,7 +11,7 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-public class SocketEncoder implements Encoder.Text<SocketIntentWrapper> {
+public class SocketEncoder implements Encoder.Text<SocketReturnWrapper> {
 
     /**
      * {@code Log} for this controller
@@ -25,7 +24,7 @@ public class SocketEncoder implements Encoder.Text<SocketIntentWrapper> {
     private static ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public String encode(SocketIntentWrapper wrap) throws EncodeException {
+    public String encode(SocketReturnWrapper wrap) throws EncodeException {
 
         try { return mapper.writeValueAsString(wrap); }
         catch (JsonProcessingException e) { log.error("SOCKET: encode exception", e.getCause()); }
