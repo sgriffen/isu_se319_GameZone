@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c719019-b067-4776-947c-d2fba62cd9dd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gameZone/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gameZone/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gameZone/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gameZone/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gameZone/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gameZone/src/main/java/gameZone/GameZone.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gameZone/target/classes/gameZone/GameZone.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameZone/src/main/java/gameZone/gameSession/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/gameZone/src/main/java/gameZone/gameSession/GameSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameZone/src/main/java/gameZone/services/GameSessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/gameZone/src/main/java/gameZone/services/GameSessionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +34,9 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gameZone" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -57,8 +56,14 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1585262787024</updated>
+      <workItem from="1586741389382" duration="36000" />
+      <workItem from="1586900436900" duration="411000" />
+      <workItem from="1586900862356" duration="1243000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -68,5 +73,13 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="2172" y="363" key="#Project_Structure/0.0.3440.1400@0.0.3440.1400" timestamp="1585263092653" />
+    <state x="618" y="301" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1586901175558">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="618" y="301" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1536.824@0.0.1536.824" timestamp="1586901175558" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1586902103919">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1586902103919" />
   </component>
 </project>
