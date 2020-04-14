@@ -4,7 +4,7 @@ import gameZone.components.GlobalResources;
 
 import javax.persistence.*;
 
-@Entity
+@Embeddable
 @Table(name = "TicTacToe")
 public class TicTacToe {
 
@@ -17,16 +17,9 @@ public class TicTacToe {
     private final GlobalResources gRec = new GlobalResources(null);
 
     /**
-     * ID for this {@code TicTacToe}. Used for identification in the database
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id_db;
-
-    /**
      * 2D array for this {@code TicTacToe}. Used to play the game. 0 is empty, 1 is cross, 2 is nought.
      */
-    private int board[][];
+    private Integer board[][];
 
     /* END INSTANCE VARIABLES */
 
@@ -37,7 +30,7 @@ public class TicTacToe {
      */
     public TicTacToe()
     {
-        this.board = new int[3][3];
+        this.board = new Integer[3][3];
         this.board[0][0] = 0;
         this.board[0][1] = 0;
         this.board[0][2] = 0;
@@ -51,9 +44,9 @@ public class TicTacToe {
 
     /* END CONSTRUCTORS */
 
-    public int[][] getBoard() { return this.board; }
+    public Integer[][] getBoard() { return this.board; }
 
-    public void setBoard(int[][] board) { this.board = board; }
+    public void setBoard(Integer[][] board) { this.board = board; }
 
     public void setSpace(int space, int x, int y) { this.board[x][y] = space; }
 

@@ -3,6 +3,7 @@ package gameZone.services;
 import gameZone.components.GlobalResources;
 import gameZone.repositories.GameSessionRepository;
 import gameZone.gameSession.GameSession;
+import gameZone.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,4 +45,13 @@ public class GameSessionService {
 	}
 	
 	/***END CONSTRUCTORS***/
+
+	/***HELPERS***/
+
+	public void generateGS(User player1, User player2, int gameType){
+		GameSession gs = new GameSession(player1, player2, gameType);
+		player1.setGameSession(gs);
+		player2.setGameSession(gs);
+		gRepo.save((GameSession)gs);
+	}
 }
