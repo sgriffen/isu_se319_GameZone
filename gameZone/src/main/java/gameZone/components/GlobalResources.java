@@ -29,8 +29,8 @@ public class GlobalResources {
     public GlobalResources(UserRepository uRepo) {
 
         this.fileSep = File.separator;
-
-//        /* sean */
+        
+//       /* sean */
 //        resourceLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        outputLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "output";
 //        /* jamie */
@@ -43,8 +43,8 @@ public class GlobalResources {
 //        resourceLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"src"+ fileSep +"main"+ fileSep +"resources";
 //        outputLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"output";
         /* live */
-        resourceLoc = fileSep + "g11" + fileSep + "resources" + fileSep;
-        outputLoc = fileSep + "g11" + fileSep + "output" + fileSep;
+//        resourceLoc = fileSep + "g11" + fileSep + "resources" + fileSep;
+//        outputLoc = fileSep + "g11" + fileSep + "output" + fileSep;
 
         this.uRepo = uRepo;
     }
