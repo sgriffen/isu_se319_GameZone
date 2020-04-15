@@ -1,13 +1,11 @@
 package gameZone.wrappers;
 
-public class SocketIntentWrapper<T> {
+public class SocketReturnWrapper<T> {
 
 
     private int intent;
 
-    private T payload;
-    
-    private String identifier;
+    private ObjectReturnWrapper<T> payload;
     
     /**
      * Default constructor
@@ -18,11 +16,10 @@ public class SocketIntentWrapper<T> {
      * 		These can be set after creation, but this object should be created and then immediately returned by the function using this class.
      */
     @Deprecated
-    public SocketIntentWrapper() {
+    public SocketReturnWrapper() {
 
         intent = 200;
         payload = null;
-        identifier = null;
     }
 
     /**
@@ -31,14 +28,11 @@ public class SocketIntentWrapper<T> {
      * 		Error {@code code} desired
      * @param payload
      * 		Payload {@code String} desired
-     * @param identifier
-     * 		{@code User.id_app} desired
      */
-    public SocketIntentWrapper(int intent, T payload, String identifier) {
+    public SocketReturnWrapper(int intent, ObjectReturnWrapper payload) {
 
         this.setIntent(intent);
         this.setPayload(payload);
-        this.setIdentifier(identifier);
     }
 
     /**
@@ -59,24 +53,11 @@ public class SocketIntentWrapper<T> {
      * @return
      * 		{@code payload}
      */
-    public T getPayload() { return payload; }
+    public ObjectReturnWrapper getPayload() { return payload; }
     /**
      * Set {@code payload} of {@code SocketIntentWrapper}
      * @param payload
      * 		Desired {@code payload} for {@code SocketIntentWrapper}
      */
-    public void setPayload(T payload) { this.payload = payload; }
-    
-    /**
-     * Get the {@code identifier} of {@code SocketIntentWrapper}
-     * @return
-     * 		{@code identifier}
-     */
-    public String getIdentifier() { return identifier; }
-    /**
-     * Set {@code identifier} of {@code SocketIntentWrapper}
-     * @param identifier
-     * 		Desired {@code identifier} for {@code SocketIntentWrapper}
-     */
-    public void setIdentifier(String identifier) { this.identifier = identifier; }
+    public void setPayload(ObjectReturnWrapper payload) { this.payload = payload; }
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Embeddable
 @Table(name = "TicTacToe")
-public class TicTacToe{
+public class TicTacToe {
 
     /* START INSTANCE VARIABLES*/
 

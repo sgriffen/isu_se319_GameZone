@@ -48,10 +48,16 @@ public class GameSessionService {
 
 	/***HELPERS***/
 
-	public void generateGS(User player1, User player2, int gameType){
+	public String generateGS(User player1, User player2, int gameType) {
+		
 		GameSession gs = new GameSession(player1, player2, gameType);
 		player1.setGameSession(gs);
 		player2.setGameSession(gs);
+		gs.setId_app(gRec.confirmAuthenticator());
 		gRepo.save((GameSession)gs);
+		
+		return gs.getId_app();
 	}
+	
+	public void saveGS(GameSession gs) { gRepo.save(gs); }
 }
