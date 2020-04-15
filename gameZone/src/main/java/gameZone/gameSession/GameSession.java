@@ -1,6 +1,7 @@
 package gameZone.gameSession;
 
 import gameZone.components.GlobalResources;
+import gameZone.ticTacToe.TicTacToe;
 import gameZone.user.User;
 
 import javax.persistence.*;
@@ -26,10 +27,21 @@ public class GameSession {
 	private Integer id_db;
 
 	/**
-	 * Game Status for this {@code gameSession}. Used for telling current status of the gameSession. -1 means the game is yet to start. 0 means playing. 1 means player 1 has won. 2 means player 2 has won.
+	 * Game Status for this {@code GameSession}. Used for telling current status of the gameSession. -1 means the game is yet to start. 0 means playing. 1 means player 1 has won. 2 means player 2 has won.
 	 */
 	private Integer gameStatus;
-	
+
+	/**
+	 * Game type for this {@code GameSession}. Used for telling what game is being ran in this session. 0 is tictactoe, 1 is checkers, 2 is chess, 3 is ultimate tictactoe.
+	 */
+	private Integer gameType;
+
+	/**
+	 * Tictactoe game for this {@code GameSession}. Used for holding the tictactoe game if one is being played.
+	 */
+	@Embedded
+	private TicTacToe tic;
+
 	/***END INSTANCE VARIABLES***/
 	
 	
@@ -47,18 +59,29 @@ public class GameSession {
 	/**
 	 * Constructor with both Users
 	 */
-	public GameSession(User player1, User player2) {
+	public GameSession(User player1, User player2, int gametype) {
 
 		this.setUsers(new ArrayList<User>());
 		this.addPlayers(player1, player2);
 		this.setGameStatus(-1);
-		
+		this.gameType = gametype;
+		if(gametype == 0)
+		{
+			tic = new TicTacToe();
+		}
 	}
 	
 	/***END CONSTRUCTORS***/
-	
+
 	/***START GETTERS/SETTERS***/
 
+	public Integer getId_db() {
+		return id_db;
+	}
+
+	public void setId_db(int id){
+		id_db = id;
+	}
 	public User getPlayer1() {
 		for(int i = 0; i < users.size(); i++)
 		{
