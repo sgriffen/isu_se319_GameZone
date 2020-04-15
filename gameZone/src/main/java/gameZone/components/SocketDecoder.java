@@ -11,7 +11,7 @@ import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 import java.io.IOException;
 
-public class SocketDecoder implements Decoder.Text<SocketReturnWrapper>{
+public class SocketDecoder<T> implements Decoder.Text<SocketReturnWrapper<T>>{
 
     /**
      * {@code Log} for this controller
@@ -24,7 +24,7 @@ public class SocketDecoder implements Decoder.Text<SocketReturnWrapper>{
     private static ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public SocketReturnWrapper decode(String s) throws DecodeException {
+    public SocketReturnWrapper decode(T s) throws DecodeException {
 
         try { return mapper.readValue(s, SocketReturnWrapper.class); }
         catch (IOException e) { log.error("SOCKET: decode exception", e); }

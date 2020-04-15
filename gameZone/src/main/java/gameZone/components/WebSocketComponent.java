@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -39,6 +38,9 @@ public class WebSocketComponent {
     @Autowired
     private UserService uService;
     
+    /**
+     * {@code GameSessionService} for this {@code ServerEndpoint}
+     */
     @Autowired
     private GameSessionService gService;
     
@@ -60,19 +62,19 @@ public class WebSocketComponent {
     
     /* **************************************************** START CONSTRUCTORS ***************************************************** */
     
-    /**
-     * Default constructor
-     */
-    public WebSocketComponent() {
-
-        this.gRec = null;
-        this.uService = null;
-        this.gService = null;
-        
-        log = LogFactory.getLog(GameZone.class);
-        listeners = new HashMap<>();
-        pendingGame = new ArrayList<>();
-    }
+//    /**
+//     * Default constructor
+//     */
+//    public WebSocketComponent() {
+//
+//        this.gRec = null;
+//        this.uService = null;
+//        this.gService = null;
+//
+//        log = LogFactory.getLog(GameZone.class);
+//        listeners = new HashMap<>();
+//        pendingGameList = new ArrayList<>();
+//    }
     
     /**
      * Constructs a WebSocketComponent with the following parameters:
@@ -85,17 +87,18 @@ public class WebSocketComponent {
      */
     public WebSocketComponent(GlobalResources gRec, UserService uService, GameSessionService gService) {
         
-        this();
-        
         this.gRec = gRec;
         this.uService = uService;
         this.gService = gService;
+    
+        log = LogFactory.getLog(GameZone.class);
+        listeners = new HashMap<>();
+        pendingGameList = new ArrayList<>();
     }
     
     /* ***************************************************** END CONSTRUCTORS ****************************************************** */
     
     /* ******************************************************* START ON OPEN ******************************************************* */
-    
     
     @OnOpen
     public void socketOpen(Session socketSession, @PathParam("payload") String payload) {
@@ -131,7 +134,7 @@ public class WebSocketComponent {
     /* ***************************************************** START ON MESSAGE ****************************************************** */
     
     @OnMessage
-    public void socketMessage(Session socketSession, SocketIntentWrapper payloadWrap) {
+    public <T> void socketMessage(Session socketSession, SocketIntentWrapper<T> payloadWrap) {
 
         this.parseIntent(socketSession, payloadWrap);
     }
@@ -183,15 +186,17 @@ public class WebSocketComponent {
         catch(Exception e) { log.error("SOCKET: whisper exception", e); }
     }
 
-    private void parseIntent(Session whisperBackSession, SocketIntentWrapper<StringIntegerWrapper> intentWrap) {
+    private <T> void parseIntent(Session whisperBackSession, SocketIntentWrapper<T> intentWrap) {
 
         switch(intentWrap.getIntent()) {
             
             case 202 : //user wants to start game
-                pendGame(whisperBackSession, intentWrap.getPayload());
+                assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
+                pendGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload());
                 break;
             case 203 : //user accepts or declines game
-                startGame(whisperBackSession, intentWrap.getPayload());
+                assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
+                startGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload());
                 break;
             default : //echo intent payload
                 echoIntent(whisperBackSession, intentWrap.getPayload().toString(), intentWrap.getIdentifier());
@@ -220,7 +225,8 @@ public class WebSocketComponent {
             if (!id2.toUpperCase().equals("AI")) {
     
                 UserInterface requested = uService.getUser(id2);
-                if (requested != null || listeners.get(requested.getIdApp()) != null) { //if requested valid
+                assert(requested != null);
+                if (listeners.get(requested.getIdApp()) != null) { //if requested valid
                     
                     //get session of requested
                     Session requestedSession = listeners.get(requested.getIdApp());
@@ -268,7 +274,8 @@ public class WebSocketComponent {
         if (requested != null) { //if original requested valid
     
             UserInterface requester = uService.getUser(id2);
-            if (requester != null || listeners.get(requester.getIdApp()) != null) { //if original requester valid
+            assert(requester != null);
+            if (listeners.get(requester.getIdApp()) != null) { //if original requester valid
     
                 Session requesterSession = listeners.get(requested.getIdApp());
                 if (wrapper.getInteger() == 0) { //requested user declined, send notification to requester
