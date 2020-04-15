@@ -53,6 +53,8 @@ public class WebSocketComponent {
     
     private List<StringIntegerWrapper> pendingGameList;
     
+    private List<String> startedGameList;
+    
     /**
      * {@code Log} for this controller
      */
@@ -94,6 +96,7 @@ public class WebSocketComponent {
         log = LogFactory.getLog(GameZone.class);
         listeners = new HashMap<>();
         pendingGameList = new ArrayList<>();
+        startedGameList = new ArrayList<>();
     }
     
     /* ***************************************************** END CONSTRUCTORS ****************************************************** */
@@ -300,20 +303,20 @@ public class WebSocketComponent {
                     if (pendingGame != null) { //game info entered correctly, start game
                         
                         //create game session
-                        gService.generateGS((User) requester, (User) requested, pendingGame.getInteger());
-                        
+                        String gs_id = gService.generateGS((User) requester, (User) requested, pendingGame.getInteger());
+                        startedGameList.add(gs_id);
                         //send notification of started game to requester
                         SocketReturnWrapper<String> requesterReturn = new SocketReturnWrapper<String>(
             
                                 203,
-                                new ObjectReturnWrapper<Integer>(200, 1, null)
+                                new ObjectReturnWrapper<String>(200, gs_id, null)
                         );
                         whisper(requesterReturn, requesterSession);
                         //send notification of started game to requester
                         SocketReturnWrapper<String> requestedReturn = new SocketReturnWrapper<String>(
             
                                 203,
-                                new ObjectReturnWrapper<Integer>(200, 1, null)
+                                new ObjectReturnWrapper<String>(200, gs_id, null)
                         );
                         whisper(requestedReturn, requesterSession);
                     } else {
