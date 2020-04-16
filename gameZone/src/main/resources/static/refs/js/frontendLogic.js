@@ -7,42 +7,44 @@ var requestOptions = {
 var id=0;
 var socket;
 
-function init(screen){
+function init(screen) {
+
 	document=screen;
 	//fetch("https://coms-319-052.cs.iastate.edu:8080/user/generate/token", requestOptions)
 	fetch("https://localhost:8080/user/generate/token", requestOptions)
-	.then(response => response.text())
-	.then(result => id)
-	.catch(error => console.log('error', error));
+	    .then(response => response.text())
+	    .then(result => id)
+	    .catch(error => console.log('error', error));
+
 	//socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/identifier");//server
 	socket = new WebSocket("ws://localhost:8080/websocket/identifier");//localhost
 	
 	socket.onopen = function(e) {
-	//document.getElementById("connected").innerHTML = "true";
-	//alert("[open] Connection established");
-	//alert("Sending to server");
-	let json = {
-		"intent": 201,
-		"payload": "Hello there",
-		"identifier": id
-	};
-	socket.send(JSON.stringify(json));
-};
+        //document.getElementById("connected").innerHTML = "true";
+        //alert("[open] Connection established");
+        //alert("Sending to server");
+        let json = {
+            "intent": 201,
+            "payload": "Hello there",
+            "identifier": id
+        };
+        socket.send(JSON.stringify(json));
+    };
 
-socket.onmessage = function(event) {
-	//alert("[message] Data received from server: ${event.data}");
-};
+    socket.onmessage = function(event) {
+        //alert("[message] Data received from server: ${event.data}");
+    };
 
-socket.onclose = function(event) {
-	//document.getElementById("connected").innerHTML = "false";
-	if (event.wasClean) {
-		//alert("[close] Connection closed cleanly, code=${event.code} reason=${event.reason}");
-	} else {
-			// e.g. server process killed or network down
-			// event.code is usually 1006 in this case
-			//alert("[close] Connection died");
-		}
-};
+    socket.onclose = function(event) {
+        //document.getElementById("connected").innerHTML = "false";
+        if (event.wasClean) {
+            //alert("[close] Connection closed cleanly, code=${event.code} reason=${event.reason}");
+        } else {
+                // e.g. server process killed or network down
+                // event.code is usually 1006 in this case
+                //alert("[close] Connection died");
+            }
+    };
 }
 
 function selectGame(game){
