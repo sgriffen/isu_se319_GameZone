@@ -195,11 +195,11 @@ public class WebSocketComponent {
             
             case 202 : //user wants to start game
                 assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
-                pendGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload());
+                pendGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
                 break;
             case 203 : //user accepts or declines game
                 assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
-                startGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload());
+                startGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
                 break;
             default : //echo intent payload
                 echoIntent(whisperBackSession, intentWrap.getPayload().toString(), intentWrap.getIdentifier());
@@ -217,9 +217,8 @@ public class WebSocketComponent {
         whisper(echo, whisperBackSession);
     }
     
-    private void pendGame(Session whisperBackSession, StringIntegerWrapper wrapper) {
+    private void pendGame(Session whisperBackSession, StringIntegerWrapper wrapper, String id1) {
         
-        String id1 = wrapper.getStrings().get(0);
         String id2 = wrapper.getStrings().get(1);
         
         UserInterface requester = uService.getUser(id1);
@@ -268,9 +267,8 @@ public class WebSocketComponent {
         }
     }
     
-    private void startGame(Session whisperBackSession, StringIntegerWrapper wrapper) {
-    
-        String id1 = wrapper.getStrings().get(0);
+    private void startGame(Session whisperBackSession, StringIntegerWrapper wrapper, String id1) {
+        
         String id2 = wrapper.getStrings().get(1);
     
         UserInterface requested = uService.getUser(id1);
@@ -286,7 +284,7 @@ public class WebSocketComponent {
                     SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
                             
                             203,
-                            new ObjectReturnWrapper<Integer>(550, 0, null)
+                            new ObjectReturnWrapper<String>(200, null, null)
                     );
                     whisper(intentReturn, requesterSession);
                 } else { //requested user accepted, start game
