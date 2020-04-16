@@ -1,21 +1,15 @@
 var document;
 var game;
-var requestOptions = {
-  method: 'POST',
-  redirect: 'follow'
-};
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
 var id=0;
 var socket;
 
-function init(screen){
-	document=screen;
-	//fetch("https://coms-319-052.cs.iastate.edu:8080/user/generate/token", requestOptions)
-	fetch("https://localhost:8080/user/generate/token", requestOptions)
-	.then(response => response.text())
-	.then(result => id)
-	.catch(error => console.log('error', error));
-	//socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/identifier");//server
-	socket = new WebSocket("ws://localhost:8080/websocket/identifier");//localhost
+xhr.addEventListener("readystatechange", function() {
+  if(this.readyState === 4&&this.status===200) {
+    id=this.response.payload;
+	
+	socket = new WebSocket("ws://localhost:8080/websocket/"+id);//localhost
 	
 	socket.onopen = function(e) {
 	//document.getElementById("connected").innerHTML = "true";
@@ -27,10 +21,19 @@ function init(screen){
 		"identifier": id
 	};
 	socket.send(JSON.stringify(json));
+  }
+});
+
+function init(screen){
+	document=screen;
+	xhr.open("POST", "http://localhost:8080/user/generate/token",true);
+	//xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
+
+	xhr.send();
 };
 
 socket.onmessage = function(event) {
-	//alert("[message] Data received from server: ${event.data}");
+	alert("[message] Data received from server: ${event.data}");
 };
 
 socket.onclose = function(event) {
