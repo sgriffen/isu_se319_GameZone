@@ -12,6 +12,17 @@
 				init(document)
 				selectGame('Tic');
 			}
+			
+			function playerSelect(){
+				var e = document.getElementById("PvA");
+				var requested = e.options[e.selectedIndex].value;
+				e = document.getElementById("requestID");
+				if(requested=="player"){
+					requestHuman(e.value);
+				}else{
+					requestAI();
+				}
+			}
 		</script>
 		<div style="background-image: url('https://i.imgur.com/X6ucgYf.jpg');background-repeat: no-repeat; background-size: cover; height: 102%;">
 		
