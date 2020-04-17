@@ -113,7 +113,7 @@ public class WebSocketComponent {
         if (u != null) {
 
             listeners.put(u.getIdApp(), socketSession);
-            log.info("SOCKET: client [" + payload + "]successfully opened connection");
+            log.info("SOCKET: client [" + payload + "] successfully opened connection");
     
             SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
                     200,

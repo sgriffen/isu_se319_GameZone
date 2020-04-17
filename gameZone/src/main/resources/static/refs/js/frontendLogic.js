@@ -60,7 +60,7 @@ function socket_xhr(xhr) {
     };
 }
 
-function selectGame(game){
+function selectGame(game) {
 	document.getElementById('onCenter').innerHTML = "<h style='color:#ff9900;'>Your player ID is <h>"+id+
 	"<br>"+
 	"<br>"+
@@ -72,40 +72,9 @@ function selectGame(game){
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
-function requestAI(){
-	document.getElementById('onCenter').innerHTML =tacGame;
+function requestAI() {
+	document.getElementById('onCenter').innerHTML = tacGame;
 }
-
-function socketSetup(){
-	socket.onopen = function(e) {
-	//document.getElementById("connected").innerHTML = "true";
-	//alert("[open] Connection established");
-	//alert("Sending to server");
-	let json = {
-		"intent": 201,
-		"payload": "Hello there",
-		"identifier": id
-	};
-	socket.send(JSON.stringify(json));
-	}
- 
-  
-	socket.onmessage = function(event) {
-	alert("[message] Data received from server: ${event.data}");
-	};
-
-	socket.onclose = function(event) {
-	//document.getElementById("connected").innerHTML = "false";
-	if (event.wasClean) {
-		//alert("[close] Connection closed cleanly, code=${event.code} reason=${event.reason}");
-	} else {
-			// e.g. server process killed or network down
-			// event.code is usually 1006 in this case
-			//alert("[close] Connection died");
-		}
-};
-}
-
 
 var tacGame="<style scoped>"+
 "table {"+
