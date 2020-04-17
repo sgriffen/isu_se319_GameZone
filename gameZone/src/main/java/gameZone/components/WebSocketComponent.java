@@ -405,6 +405,7 @@ public class WebSocketComponent {
                 
                         break;
                 }
+                gService.saveGS_existing(gs);
                 
                 //get players and whisper updated game boards if applicable
                 UserInterface playerWon = uService.getUser(listeners_session.get(whisperBackSession));
@@ -423,8 +424,6 @@ public class WebSocketComponent {
                     Session otherPlayerListener = listeners_user.get(otherPlayer.getIdApp());
                     whisper(intentReturn, otherPlayerListener);
                 }
-    
-                gService.saveGS_existing(gs);
                 
                 //check game states
                 if (!aiWon) { //if the ai didn't win

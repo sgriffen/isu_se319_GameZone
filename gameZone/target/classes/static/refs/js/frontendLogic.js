@@ -95,9 +95,9 @@ function socket_xhr(xhr) {
 function updateBoard(newBoard){
 	for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(newBoard[i][j]=1)
+				if(newBoard[i][j]===1)
 					board.rows[i].cells[j].innerHTML=x
-				else if(newBoard[i][j]=2)
+				else if(newBoard[i][j]===2)
 					board.rows[i].cells[j].innerHTML=o
 				else
 					board.rows[i].cells[j].innerHTML=""
@@ -168,7 +168,7 @@ function requestAI(){
 	var myTurn = true;
 	var turnCount=0;
 	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-	var o="<img src='images/o.jpg' style='width:95%;height:95%;'>";
+	var o="<img src='images/o.png' style='width:95%;height:95%;'>";
 
 	function move(boardCell,y,z) {
 		if(updateCell(boardCell)){
@@ -180,15 +180,15 @@ function requestAI(){
 	
 	function sendBoard(){
 	    var board = document.getElementById('board');
-		let arr = [[],[],[]];
+		let arr = [[0,0,0],[0,0,0],[0,0,0]];
 		for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(board.rows[i].cells[j].innerHTML==x)
-					arr[i][j]=1
-				else if(board.rows[i].cells[j].innerHTML==o)
-					arr[i][j]=2
+				if(board.rows[i].cells[j].value==1)
+					arr[i][j] = 1;
+				else if(board.rows[i].cells[j].value==2)
+					arr[i][j] = 2;
 				else
-					arr[i][j]=0
+					arr[i][j] = 0;
 		}
 	}
 	
@@ -210,8 +210,10 @@ function requestAI(){
 		
 		if(myTurn){
 		boardCell.innerHTML =x
+		boardCell.value = 1
 		}else{
 			boardCell.innerHTML =o
+			boardCell.value = 2
 		}
 		return true
 	}
