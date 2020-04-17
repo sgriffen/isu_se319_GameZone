@@ -89,6 +89,32 @@ function requestAI(){
         socket.send(JSON.stringify(json));
 }
 
+	var board = document.getElementById('board');
+	var Xturn = true;
+	var turnCount=0;
+	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
+	var o="<img src='images/o.jpg' style='width:95%;height:95%;'>";
+
+	function move(boardCell,y,z) {
+		if(updateCell(boardCell)){
+			//winCon(y,z)
+			updateTurn();
+			turnCount++;
+		}
+	}
+	
+	function updateCell(boardCell) {
+		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
+			return false
+		
+		if(Xturn){
+		boardCell.innerHTML =x
+		}else{
+			boardCell.innerHTML =o
+		}
+		return true
+	}
+
 var tacGame="<style scoped>"+
 "table {"+
 "  text-align: center;"+
@@ -107,26 +133,26 @@ var tacGame="<style scoped>"+
 	"<br><br>"+
 	"<table id='board'>"+
 	"	<tr>"+
-    "        <td style='border-top: none; border-left: none; height:100px;' ></td>"+
-    "        <td style='border-top: none; height:100px;'></td>"+
-	"		<td style='border-top: none; border-right: none; height:100px;'></td>"+
+    "        <td style='border-top: none; border-left: none; height:100px;' onclick='move(this,0,0)'></td>"+
+    "        <td style='border-top: none; height:100px;' onclick='move(this,0,1)'></td>"+
+	"		<td style='border-top: none; border-right: none; height:100px;' onclick='move(this,0,2)'></td>"+
     "    </tr>"+
 	"	<tr>"+
-    "        <td style='border-left: none; height:100px;'></td>"+
-    "        <td style='height:100px;'></td>"+
-	"		<td style='border-right: none; height:100px;'></td>"+
+    "        <td style='border-left: none; height:100px;' onclick='move(this,1,0)'></td>"+
+    "        <td style='height:100px;' onclick='move(this,1,1)'></td>"+
+	"		<td style='border-right: none; height:100px;' onclick='move(this,1,2)'></td>"+
     "    </tr>"+
 	"	<tr>"+
-    "        <td style='border-bottom: none; border-left: none; height:100px;'></td>"+
-    "        <td style='border-bottom: none; height:100px;'></td>"+
-	"		<td style='border-bottom: none;border-right: none; height:100px;'></td>"+
+    "        <td style='border-bottom: none; border-left: none; height:100px;' onclick='move(this,2,0)'></td>"+
+    "        <td style='border-bottom: none; height:100px;' onclick='move(this,2,1)'></td>"+
+	"		<td style='border-bottom: none;border-right: none; height:100px;' onclick='move(this,2,2)'></td>"+
     "    </tr>"+
 	"</table>"+
   "<script>"+
 	"var board = document.getElementById('board');"+
 	"var Xturn = true;"+
 	"var turnCount=0;"+
-	"var x='<img src='x.jpg' style='width:95%;height:95%;'>';"+
+	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
 	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
 	"if (board != null) {"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
