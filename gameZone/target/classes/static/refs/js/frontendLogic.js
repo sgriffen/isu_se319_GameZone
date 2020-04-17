@@ -95,9 +95,9 @@ function socket_xhr(xhr) {
 function updateBoard(newBoard){
 	for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(newBoard[i][j]=1)
+				if(newBoard[i][j]==1)
 					board.rows[i].cells[j].innerHTML=x
-				else if(newBoard[i][j]=2)
+				else if(newBoard[i][j]==2)
 					board.rows[i].cells[j].innerHTML=o
 				else
 					board.rows[i].cells[j].innerHTML=""
@@ -130,7 +130,7 @@ function invitation(requestor){
 			"payload": {
 				"array": [requestor
 				],
-				"integer": 0
+				"integer": 100
 			},
 			"identifier": id
 		};
@@ -150,6 +150,22 @@ function selectGame(g){
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
+function requestHuman(requested){
+	let json = {
+            "intent": 202,
+			"payload": {
+				"array": [
+					requested
+				],
+				"integer": 0
+			},
+			"identifier": id
+
+
+        };
+        socket.send(JSON.stringify(json));
+}
+
 function requestAI(){
 	let json = {
             "intent": 202,
@@ -161,6 +177,7 @@ function requestAI(){
 			},
 			"identifier": id
 
+
         };
         socket.send(JSON.stringify(json));
 }
@@ -168,7 +185,7 @@ function requestAI(){
 	var myTurn = true;
 	var turnCount=0;
 	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-	var o="<img src='images/o.jpg' style='width:95%;height:95%;'>";
+	var o="<img src='images/o.png' style='width:95%;height:95%;'>";
 
 	function move(boardCell,y,z) {
 		if(updateCell(boardCell)){
@@ -182,7 +199,7 @@ function requestAI(){
 	    var board = document.getElementById('board');
 		let arr = [[],[],[]];
 		for (var i = 0; i < board.rows.length; i++) {
-		for (var j = 0; j < board.rows[i].cells.length; j++){
+			for (var j = 0; j < board.rows[i].cells.length; j++){
 				if(board.rows[i].cells[j].innerHTML==x)
 					arr[i][j]=1
 				else if(board.rows[i].cells[j].innerHTML==o)
@@ -191,7 +208,7 @@ function requestAI(){
 					arr[i][j]=0
 		}
 	}
-	
+	alert(arr);
 	let json = {
             "intent": 204,
 			"payload": {
@@ -208,7 +225,7 @@ function requestAI(){
 		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
 			return false
 		
-		if(myTurn){
+		if(p1){
 		boardCell.innerHTML =x
 		}else{
 			boardCell.innerHTML =o
