@@ -2,6 +2,7 @@ package gameZone.components;
 
 import gameZone.GameZone;
 import gameZone.configurations.CustomConfigurator;
+import gameZone.gameSession.GameSession;
 import gameZone.services.GameSessionService;
 import gameZone.services.UserService;
 import gameZone.user.User;
@@ -234,7 +235,7 @@ public class WebSocketComponent {
     
     private void pendGame(Session whisperBackSession, ArrayIntegerWrapper<String> wrapper, String id1) {
         
-        String id2 = wrapper.getArray().get(1);
+        String id2 = wrapper.getArray().get(0);
         
         UserInterface requester = uService.getUser(id1);
         if (requester != null) { //if requester valid
@@ -293,7 +294,7 @@ public class WebSocketComponent {
     
     private void startGame(Session whisperBackSession, ArrayIntegerWrapper<String> wrapper, String id1) {
         
-        String id2 = wrapper.getArray().get(1);
+        String id2 = wrapper.getArray().get(0);
     
         UserInterface requested = uService.getUser(id1);
         if (requested != null) { //if original requested valid
@@ -371,9 +372,21 @@ public class WebSocketComponent {
         }
     }
     
-    private void gameMove(Session whisperBackSession, int game_type, int[][] gameBoard) {
+    private void gameMove(Session whisperBackSession, int game_type, int[][] gameBoard, String game_id) {
     
+        GameSession gs = gService.getGameSession(game_id);
+        if (gs != null) {
+        
+            
+        } else {
     
+            SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
+            
+                    204,
+                    new ObjectReturnWrapper<String>(550, new String("Game Session with id [" + game_id + "] not found"), null)
+            );
+            whisper(intentReturn, whisperBackSession);
+        }
     }
     
     /* **************************************************** END PRIVATE METHODS **************************************************** */

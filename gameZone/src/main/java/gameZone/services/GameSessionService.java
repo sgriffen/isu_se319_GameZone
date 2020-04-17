@@ -72,6 +72,15 @@ public class GameSessionService {
 		return gs.getId_app();
 	}
 	
+	public GameSession getGameSession(String id) {
+	
+		for (GameSession gs : gRepo.findAll()) {
+		
+			if (gs.getId_app().equals(id)) { return gs; }
+		}
+			return null;
+	}
+	
 	public boolean saveGS_existing(GameSession gs) {
 		
 		for (GameSession g : gRepo.findAll()) {
