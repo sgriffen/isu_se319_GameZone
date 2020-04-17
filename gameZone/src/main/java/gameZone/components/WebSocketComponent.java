@@ -113,7 +113,7 @@ public class WebSocketComponent {
         if (u != null) {
 
             listeners.put(u.getIdApp(), socketSession);
-            log.info("SOCKET: client [" + payload + "]successfully opened connection");
+            log.info("SOCKET: client [" + payload + "] successfully opened connection");
     
             SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
                     200,
@@ -162,7 +162,7 @@ public class WebSocketComponent {
         }
         listeners.remove(toClose);
 
-        log.info("SOCKET: client [" + toClose + "]closed connection");
+        log.info("SOCKET: client [" + toClose + "] closed connection");
     }
     
     /* ******************************************************** END ON CLOSE ******************************************************* */
@@ -407,6 +407,12 @@ public class WebSocketComponent {
                     new ObjectReturnWrapper<ArrayList<ArrayList<Integer>>>(200, gameBoard_objectStyle, null)
             );
             whisper(intentReturn, whisperBackSession);
+            if (!gs.getAi()) {
+                
+                UserInterface player2 = gs.getPlayer2();
+                Session player2Listener = listeners.get(player2.getIdApp());
+                whisper(intentReturn, player2Listener);
+            }
         } else {
     
             SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(

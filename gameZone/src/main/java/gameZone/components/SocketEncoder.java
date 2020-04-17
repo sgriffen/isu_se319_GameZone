@@ -11,7 +11,7 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-public class SocketEncoder<T> implements Encoder.Text<SocketReturnWrapper<T>> {
+public class SocketEncoder implements Encoder.Text<SocketReturnWrapper> {
 
     /**
      * {@code Log} for this controller
@@ -24,7 +24,7 @@ public class SocketEncoder<T> implements Encoder.Text<SocketReturnWrapper<T>> {
     private static ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public String encode(SocketReturnWrapper<T> wrap) throws EncodeException {
+    public String encode(SocketReturnWrapper wrap) throws EncodeException {
 
         try { return mapper.writeValueAsString(wrap); }
         catch (JsonProcessingException e) { log.error("SOCKET: encode exception", e.getCause()); }

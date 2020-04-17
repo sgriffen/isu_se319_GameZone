@@ -85,10 +85,10 @@ public class GameSession {
 	public Integer getId_db() {
 		return id_db;
 	}
-
-	public void setId_db(int id){
+	public void setId_db(Integer id){
 		id_db = id;
 	}
+	
 	public User getPlayer1() {
 		for(int i = 0; i < users.size(); i++)
 		{

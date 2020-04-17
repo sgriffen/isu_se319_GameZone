@@ -1,6 +1,8 @@
 package gameZone.components;
 
 import gameZone.enums.GameZoneExceptionType;
+import gameZone.gameSession.GameSession;
+import gameZone.repositories.GameSessionRepository;
 import gameZone.repositories.UserRepository;
 import gameZone.user.User;
 import gameZone.user.UserInterface;
@@ -25,14 +27,16 @@ public class GlobalResources {
 
     @Autowired
     private UserRepository uRepo;
+    @Autowired
+    private GameSessionRepository gRepo;
 
-    public GlobalResources(UserRepository uRepo) {
+    public GlobalResources(UserRepository uRepo, GameSessionRepository gRepo) {
 
         this.fileSep = File.separator;
         
        /* sean */
-//        resourceLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
-//        outputLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "output";
+        resourceLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
+        outputLoc = "C:" + fileSep + "Users" + fileSep + "griff" + fileSep + "Documents" + fileSep + "school" + fileSep + "se319" + fileSep + "proj" + fileSep + "g11" + fileSep + "gameZone" + fileSep + "output";
 //        /* jamie */
 //        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        outputLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
@@ -40,13 +44,14 @@ public class GlobalResources {
 //        resourceLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        outputLoc = "gameZone" + fileSep + "src" + fileSep + "main" + fileSep + "resources" + fileSep;
 //        /* rob */
-        resourceLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"src"+ fileSep +"main"+ fileSep +"resources";
-        outputLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"output";
+//        resourceLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"src"+ fileSep +"main"+ fileSep +"resources";
+//        outputLoc = "C:"+ fileSep +"Users"+ fileSep +"robby"+ fileSep +"SE 319"+ fileSep +"Game Zone"+ fileSep +"g11"+ fileSep +"gameZone"+ fileSep +"output";
 //        /* live */
 //        resourceLoc = fileSep + "g11" + fileSep + "resources" + fileSep;
 //        outputLoc = fileSep + "g11" + fileSep + "output" + fileSep;
 
         this.uRepo = uRepo;
+        this.gRepo = gRepo;
     }
 
     /**
@@ -85,9 +90,21 @@ public class GlobalResources {
             List<User> users = uRepo.findAll();
             if (users.size() > 0) {
                 for (UserInterface uCheck : users) {
-
                     if (uCheck.getIdApp().equals(auth)) {
 
+                        isEqual = true;
+                        break;
+                    } else { isEqual = false; }
+                    if (isEqual) { break; }
+                }
+                if (isEqual) { auth = this.generateAuthenticator(); }
+            } else { isEqual = false; }
+            
+            List<GameSession> gss = gRepo.findAll();
+            if (gss.size() > 0) {
+                for (GameSession gCheck : gss) {
+                    if (gCheck.getId_app().equals(auth)) {
+        
                         isEqual = true;
                         break;
                     } else { isEqual = false; }
