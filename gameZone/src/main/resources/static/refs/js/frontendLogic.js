@@ -95,9 +95,9 @@ function socket_xhr(xhr) {
 function updateBoard(newBoard){
 	for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(newBoard[i][j]===1)
+				if(newBoard[i][j]==1)
 					board.rows[i].cells[j].innerHTML=x
-				else if(newBoard[i][j]===2)
+				else if(newBoard[i][j]==2)
 					board.rows[i].cells[j].innerHTML=o
 				else
 					board.rows[i].cells[j].innerHTML=""
@@ -130,7 +130,7 @@ function invitation(requestor){
 			"payload": {
 				"array": [requestor
 				],
-				"integer": 0
+				"integer": 100
 			},
 			"identifier": id
 		};
@@ -150,6 +150,22 @@ function selectGame(g){
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
+function requestHuman(requested){
+	let json = {
+            "intent": 202,
+			"payload": {
+				"array": [
+					requested
+				],
+				"integer": 0
+			},
+			"identifier": id
+
+
+        };
+        socket.send(JSON.stringify(json));
+}
+
 function requestAI(){
 	let json = {
             "intent": 202,
@@ -160,6 +176,7 @@ function requestAI(){
 				"integer": 0
 			},
 			"identifier": id
+
 
         };
         socket.send(JSON.stringify(json));
