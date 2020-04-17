@@ -95,13 +95,15 @@ function socket_xhr(xhr) {
 function updateBoard(newBoard){
 	for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
-		    board.rows[i].cells[j].value=newBoard[i][j];
 				if(newBoard[i][j]==1) {
 					board.rows[i].cells[j].innerHTML=x
+					board.rows[i].cells[j].value=1
 				}else if(newBoard[i][j]==2) {
 					board.rows[i].cells[j].innerHTML=o
+					board.rows[i].cells[j].value=2
 				}else{
 					board.rows[i].cells[j].innerHTML=""
+					board.rows[i].cells[j].value=0
 				}
 		}
 	}
@@ -201,8 +203,15 @@ function requestAI(){
 	    var board = document.getElementById('board');
 		let arr = [[],[],[]];
 		for (var i = 0; i < board.rows.length; i++) {
-		    for (var j = 0; j < board.rows[i].cells.length; j++){ arr[i].push(board.rows[i].cells[j].value); }
-	    }
+		for (var j = 0; j < board.rows[i].cells.length; j++){
+				if(board.rows[i].cells[j].value==1)
+					arr[i].push(1);
+				else if(board.rows[i].cells[j].value==2)
+					arr[i].push(2);
+				else
+					arr[i].push(0);
+		}
+	}
 	
 	let json = {
             "intent": 204,
@@ -223,7 +232,7 @@ function requestAI(){
 		if(p1){
 		boardCell.innerHTML =x
 		boardCell.value = 1
-		} else {
+		}else{
 			boardCell.innerHTML =o
 			boardCell.value = 2
 		}
