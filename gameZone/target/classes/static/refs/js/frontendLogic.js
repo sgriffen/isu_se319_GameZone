@@ -1,29 +1,35 @@
 var document;
 var game;
-var xhr = new XMLHttpRequest();
-xhr.withCredentials = true;
-var id=0;
+var id = 0;
 var socket;
 
-xhr.addEventListener("readystatechange", function() {
-  if(this.readyState === 4 && this.status===200) {
-        socket_xhr(this);
-  }
-});
+function init(screen) {
 
-function init(screen){
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function() {
+      if(this.readyState === 4 && this.status===200) {
+            socket_xhr(this);
+      }
+    });
+
 	document=screen;
-	xhr.open("POST", "http://localhost:8080/user/generate/token",true);
-	//xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
-
-	xhr.send();
-};
+	if (window.localStorage.getItem("userID") == null) {
+	    xhr.open("POST", "http://localhost:8080/user/generate/token",true);
+	    //xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
+	    xhr.send();
+	} else { socket_xhr(null); }
+}
 
 function socket_xhr(xhr) {
 
-    id=xhr.response.payload;
+    if (xhr != null) {
+        id = JSON.parse(xhr.response).payload;
+        window.localStorage.setItem("userID", id);
+    } else { id = window.localStorage.getItem("userID"); }
 
-    socket = new WebSocket("ws://localhost:8080/websocket/"+id);//localhost
+    socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
 
     socket.onopen = function(e) {
         //document.getElementById("connected").innerHTML = "true";
@@ -38,7 +44,7 @@ function socket_xhr(xhr) {
     }
 
     socket.onmessage = function(event) {
-    	alert("[message] Data received from server: ${event.data}");
+    	alert("[message] Data received from server: " + JSON.parse(event.data).payload.payload);
     };
 
     socket.onclose = function(event) {

@@ -1,6 +1,7 @@
 package gameZone.components;
 
 import gameZone.GameZone;
+import gameZone.configurations.CustomConfigurator;
 import gameZone.services.GameSessionService;
 import gameZone.services.UserService;
 import gameZone.user.User;
@@ -21,7 +22,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 @Component
-@ServerEndpoint(value = "/websocket/{payload}", decoders = SocketDecoder.class, encoders = SocketEncoder.class)
+@ServerEndpoint(value = "/websocket/{payload}", decoders = SocketDecoder.class, encoders = SocketEncoder.class, configurator = CustomConfigurator.class)
 public class WebSocketComponent {
     
     /* ************************************************* START INSTANCE VARIABLES ************************************************** */
@@ -64,31 +65,31 @@ public class WebSocketComponent {
     
     /* **************************************************** START CONSTRUCTORS ***************************************************** */
     
-//    /**
-//     * Default constructor
-//     */
-//    public WebSocketComponent() {
-//
-//        this.gRec = null;
-//        this.uService = null;
-//        this.gService = null;
-//
-//        log = LogFactory.getLog(GameZone.class);
-//        listeners = new HashMap<>();
-//        pendingGameList = new ArrayList<>();
-//    }
+    public WebSocketComponent() {
+    
+        log = LogFactory.getLog(GameZone.class);
+        listeners = new HashMap<>();
+        pendingGameList = new ArrayList<>();
+        startedGameList = new ArrayList<>();
+    }
     
     /**
      * Constructs a WebSocketComponent with the following parameters:
      * @param gRec
+     *      {@code GlobalResources} for this endpoint
+     *      <br>
      *      @see gameZone.components.GlobalResources GlobalResources
      * @param uService
+     *      {@code UserService} for this endpoint
+     *       <br>
      *      @see gameZone.services.UserService UserService
      * @param gService
+     *      {@code GameSessionService} for this endpoint
+     *      <br>
      *      @see gameZone.services.GameSessionService GameSessionService
      */
     public WebSocketComponent(GlobalResources gRec, UserService uService, GameSessionService gService) {
-        
+
         this.gRec = gRec;
         this.uService = uService;
         this.gService = gService;
@@ -113,7 +114,7 @@ public class WebSocketComponent {
         if (u != null) {
 
             listeners.put(u.getIdApp(), socketSession);
-            log.debug("SOCKET: client successfully opened connection");
+            log.info("SOCKET: client [" + payload + "]successfully opened connection");
     
             SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
                     200,
@@ -162,7 +163,7 @@ public class WebSocketComponent {
         }
         listeners.remove(toClose);
 
-        log.debug("SOCKET: client closed connection");
+        log.info("SOCKET: client [" + toClose + "]closed connection");
     }
     
     /* ******************************************************** END ON CLOSE ******************************************************* */
