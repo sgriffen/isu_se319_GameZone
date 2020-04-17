@@ -56,8 +56,9 @@ public class GameSessionService {
 	public String generateGS(User player1, User player2, int gameType, Boolean ai) {
 		
 		GameSession gs = new GameSession(player1, player2, gameType, ai);
+		gs.setId_app(gRec.confirmAuthenticator());
 		
-		if (!ai) {
+		if (player2 != null) {
 			
 			player1.setGameSession(gs);
 			player2.setGameSession(gs);
@@ -65,8 +66,12 @@ public class GameSessionService {
 			player2.setPlace(2);
 			uRepo.save(player1);
 			uRepo.save(player2);
+		} else {
+			
+			player1.setGameSession(gs);
+			player1.setPlace(1);
+			uRepo.save(player1);
 		}
-		gs.setId_app(gRec.confirmAuthenticator());
 		gRepo.save(gs);
 		
 		return gs.getId_app();

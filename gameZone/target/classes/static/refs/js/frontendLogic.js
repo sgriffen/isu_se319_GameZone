@@ -48,7 +48,7 @@ function socket_xhr(xhr) {
 
     socket.onmessage = function(event) {
 		msg=JSON.parse(event.data);
-    	alert("[message] Data received from server: " + msg.payload.payload);
+//    	alert("[message] Data received from server: " + msg.payload.payload);
 		switch(msg.intent){
 			case 202:
 			if(msg.payload.status>=550)

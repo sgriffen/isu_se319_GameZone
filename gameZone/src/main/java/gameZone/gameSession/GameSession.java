@@ -13,11 +13,17 @@ import java.util.List;
 public class GameSession {
 
 	/*** START INSTANCE VARIABLE ***/
-
+	
+	/**
+	 * {@code GlobalResources} {@code Component}. Grants the ability to use global variables and methods common to other {@code classes} in this Application
+	 */
+	@Transient
+	private final GlobalResources gRec = new GlobalResources(null, null);
+	
 	/**
 	 * List for the {@code GameSession} users. There should normally be 2 users.
 	 */
-	@OneToMany(targetEntity = User.class, fetch = FetchType.EAGER)
+	@OneToMany(targetEntity = User.class, fetch = FetchType.EAGER, mappedBy = "gameSession")
 	private List<User> users;
 	/**
 	 * ID for this {@code GameSession}. Used for identification in the database
@@ -109,7 +115,12 @@ public class GameSession {
 	{
 		this.ai = ai;
 	}
-	public void addPlayers(User player1, User player2) { this.users.add(player1); this.users.add(player2); }
+	public void addPlayers(User player1, User player2) {
+		ArrayList<User> toAdd = new ArrayList<>();
+		toAdd.add(player1);
+		toAdd.add(player2);
+		this.setUsers(toAdd);
+	}
 
 	public User getPlayer2() {
 		for(int i = 0; i < users.size(); i++)

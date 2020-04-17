@@ -1,5 +1,6 @@
 package gameZone.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gameZone.components.GlobalResources;
 import gameZone.gameSession.GameSession;
 
@@ -27,7 +28,8 @@ public class User implements UserInterface {
     /**
      * {@code GameSession} this {@code User} is playing in
      */
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(targetEntity = GameSession.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private GameSession gameSession;
     
     /**

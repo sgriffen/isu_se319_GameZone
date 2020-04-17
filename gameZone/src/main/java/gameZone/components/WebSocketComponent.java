@@ -244,7 +244,13 @@ public class WebSocketComponent {
                     //get session of requested
                     Session requestedSession = listeners_user.get(requested.getIdApp());
                     //store game request info
-                    pendingGameList.add(wrapper);
+                    ArrayIntegerWrapper<String> pendingWrap = new ArrayIntegerWrapper<>();
+                    ArrayList<String> ids_temp = new ArrayList<>();
+                    ids_temp.add(id1);
+                    ids_temp.add(id2);
+                    pendingWrap.setArray(ids_temp);
+                    pendingWrap.setInteger(wrapper.getInteger());
+                    pendingGameList.add(pendingWrap);
                     //whisper request to requested
                     ArrayList<String> ids = new ArrayList<>();
                     ids.add(id1);
@@ -297,7 +303,7 @@ public class WebSocketComponent {
             assert(requester != null);
             if (listeners_user.get(requester.getIdApp()) != null) { //if original requester valid
     
-                Session requesterSession = listeners_user.get(requested.getIdApp());
+                Session requesterSession = listeners_user.get(requester.getIdApp());
                 if (wrapper.getInteger() == 100) { //requested user declined, send notification to requester
                     
                     SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
@@ -322,6 +328,7 @@ public class WebSocketComponent {
                         //create game session
                         String gs_id = gService.generateGS((User) requester, (User) requested, pendingGame.getInteger(), false);
                         startedGameList.add(gs_id);
+                        pendingGameList.remove(pendingGame);
                         //send notification of started game to requester
                         SocketReturnWrapper<ObjectReturnWrapper<String>> requesterReturn = new SocketReturnWrapper<>(
             
@@ -335,7 +342,7 @@ public class WebSocketComponent {
                                 203,
                                 new ObjectReturnWrapper<>(200, gs_id, null)
                         );
-                        whisper(requestedReturn, requesterSession);
+                        whisper(requestedReturn, whisperBackSession);
                     } else {
     
                         SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
@@ -419,8 +426,8 @@ public class WebSocketComponent {
                 if (!gs.getAi()) { //whisper updated game board to player 2
                     
                     UserInterface otherPlayer;
-                    if (!listeners_session.get(whisperBackSession).equals(gs.getPlayer1().getIdApp())) { otherPlayer = gs.getPlayer2(); }
-                    else { otherPlayer = gs.getPlayer1(); }
+                    if (!listeners_session.get(whisperBackSession).equals(gs.getPlayer1().getIdApp())) { otherPlayer = gs.getPlayer1(); }
+                    else { otherPlayer = gs.getPlayer2(); }
                     Session otherPlayerListener = listeners_user.get(otherPlayer.getIdApp());
                     whisper(intentReturn, otherPlayerListener);
                 }
