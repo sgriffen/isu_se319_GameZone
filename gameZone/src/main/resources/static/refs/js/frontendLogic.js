@@ -53,7 +53,7 @@ function socket_xhr(xhr) {
 			case 202:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			invitation(msg.payload.array[0]);
+			invitation(msg.payload.payload.array[0]);
 			break;
 			case 203:
 			if(msg.payload.status>=550)
@@ -95,9 +95,9 @@ function socket_xhr(xhr) {
 function updateBoard(newBoard){
 	for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(newBoard[i][j]=1)
+				if(newBoard[i][j]==1)
 					board.rows[i].cells[j].innerHTML=x
-				else if(newBoard[i][j]=2)
+				else if(newBoard[i][j]==2)
 					board.rows[i].cells[j].innerHTML=o
 				else
 					board.rows[i].cells[j].innerHTML=""
@@ -117,7 +117,7 @@ function invitation(requestor){
 		let json = {
             "intent": 203,
 			"payload": {
-				"array": [requestor,0
+				"array": [requestor
 				],
 				"integer": 0
 			},
@@ -130,7 +130,7 @@ function invitation(requestor){
 			"payload": {
 				"array": [requestor,0
 				],
-				"integer": 0
+				"integer": 100
 			},
 			"identifier": id
 		};
@@ -150,6 +150,22 @@ function selectGame(g){
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
+function requestHuman(requested){
+	let json = {
+            "intent": 202,
+			"payload": {
+				"array": [
+					requested
+				],
+				"integer": 0
+			},
+			"identifier": id
+
+
+        };
+        socket.send(JSON.stringify(json));
+}
+
 function requestAI(){
 	let json = {
             "intent": 202,
@@ -160,6 +176,7 @@ function requestAI(){
 				"integer": 0
 			},
 			"identifier": id
+
 
         };
         socket.send(JSON.stringify(json));
@@ -180,7 +197,8 @@ function requestAI(){
 	}
 	
 	function sendBoard(){
-		let arr;
+		board = document.getElementById('board');
+		let arr=[[],[],[]];
 		for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
 				if(board.rows[i].cells[j].innerHTML==x)
@@ -195,7 +213,7 @@ function requestAI(){
 	let json = {
             "intent": 204,
 			"payload": {
-			"array": [arr],
+			"array": arr,
 				"integer": 0
 			},
 			"identifier": GSID
