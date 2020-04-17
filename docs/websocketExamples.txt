@@ -20,7 +20,7 @@ intent [202] (from frontend to backend):
 		{
 			"intent": 202,
 			"payload": {
-				"strings": [
+				"array": [
 					"requested_ID"
 				],
 				"integer": 0 [for tic tac toe], 1 [for checkers], 2 [for chess]
@@ -33,7 +33,7 @@ intent [202] (from frontend to backend):
 			"payload": {
 				"status": 200
 				"payload": {
-					"strings": [
+					"array": [
 						"requester_ID",
 						"requested_ID"
 					],
@@ -65,7 +65,7 @@ intent [203] (from frontend to backend):
 		{
 			"intent": 203,
 			"payload": {
-				"strings": [
+				"array": [
 					"requester_ID"
 				],
 				"integer": 0 [for tic tac toe], 1 [for checkers], 2 [for chess]
