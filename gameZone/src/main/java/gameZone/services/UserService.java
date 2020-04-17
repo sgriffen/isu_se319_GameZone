@@ -77,6 +77,26 @@ public class UserService {
     }
 
     /* ***************************************************** END POST HELPERS ****************************************************** */
-
+    
+    public boolean saveUser_new(UserInterface u) {
+    
+        uRepo.save((User) u);
+        return true;
+    }
+    
+    public boolean saveUser_existing(UserInterface u) {
+    
+        for (UserInterface u_db : uRepo.findAll()) {
+            
+            if (u_db.getIdApp().equals(u.getIdApp())) {
+                
+                uRepo.save((User) u);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     /* ******************************************************* END USER SERVICE **************************************************** */
 }
