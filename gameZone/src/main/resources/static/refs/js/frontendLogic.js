@@ -18,8 +18,8 @@ function init(screen) {
 
 	document=screen;
 	if (window.localStorage.getItem("userID") == null) {
-	    xhr.open("POST", "http://localhost:8080/user/generate/token",true);
-	    //xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
+//	    xhr.open("POST", "http://localhost:8080/user/generate/token",true);
+	    xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
 	    xhr.send();
 	} else { socket_xhr(null); }
 }
@@ -31,7 +31,8 @@ function socket_xhr(xhr) {
         window.localStorage.setItem("userID", id);
     } else { id = window.localStorage.getItem("userID"); }
 
-    socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
+//    socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
+    socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/" + id);//localhost
 
     socket.onopen = function(e) {
         //document.getElementById("connected").innerHTML = "true";
