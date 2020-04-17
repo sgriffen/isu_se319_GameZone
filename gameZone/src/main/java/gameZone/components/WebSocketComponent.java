@@ -407,6 +407,12 @@ public class WebSocketComponent {
                     new ObjectReturnWrapper<ArrayList<ArrayList<Integer>>>(200, gameBoard_objectStyle, null)
             );
             whisper(intentReturn, whisperBackSession);
+            if (!gs.getAi()) {
+                
+                UserInterface player2 = gs.getPlayer2();
+                Session player2Listener = listeners.get(player2.getIdApp());
+                whisper(intentReturn, player2Listener);
+            }
         } else {
     
             SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
