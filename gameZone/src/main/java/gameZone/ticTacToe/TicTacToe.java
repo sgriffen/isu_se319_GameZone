@@ -3,6 +3,7 @@ package gameZone.ticTacToe;
 import gameZone.components.GlobalResources;
 
 import javax.persistence.*;
+import java.util.Random;
 
 @Embeddable
 @Table(name = "TicTacToe")
@@ -77,5 +78,20 @@ public class TicTacToe {
 
     private boolean checkRowCol(int i1, int i2, int i3){
         return((i1 != 0) && (i1 == i2) && (i2 == i3));
+    }
+
+    public Integer[][] AImove(Integer[][] board){
+        Random r = new Random();
+        while(true)
+        {
+            int x = r.nextInt(3);
+            int y = r.nextInt(3);
+            if(board[x][y] == 0)
+            {
+                board[x][y] = 2;
+                break;
+            }
+        }
+        return board;
     }
 }
