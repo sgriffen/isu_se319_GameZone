@@ -6,21 +6,8 @@ var id=0;
 var socket;
 
 xhr.addEventListener("readystatechange", function() {
-  if(this.readyState === 4&&this.status===200) {
-    id=this.response.payload;
-	
-	socket = new WebSocket("ws://localhost:8080/websocket/"+id);//localhost
-	
-	socket.onopen = function(e) {
-	//document.getElementById("connected").innerHTML = "true";
-	//alert("[open] Connection established");
-	//alert("Sending to server");
-	let json = {
-		"intent": 201,
-		"payload": "Hello there",
-		"identifier": id
-	};
-	socket.send(JSON.stringify(json));
+  if(this.readyState === 4 && this.status===200) {
+        socket_xhr(this);
   }
 });
 
@@ -32,9 +19,27 @@ function init(screen){
 	xhr.send();
 };
 
-socket.onmessage = function(event) {
-	alert("[message] Data received from server: ${event.data}");
-};
+function socket_xhr(xhr) {
+
+    id=xhr.response.payload;
+
+    socket = new WebSocket("ws://localhost:8080/websocket/"+id);//localhost
+
+    socket.onopen = function(e) {
+        //document.getElementById("connected").innerHTML = "true";
+        //alert("[open] Connection established");
+        //alert("Sending to server");
+        let json = {
+            "intent": 201,
+            "payload": "Hello there",
+            "identifier": id
+        };
+        socket.send(JSON.stringify(json));
+    }
+
+    socket.onmessage = function(event) {
+    	alert("[message] Data received from server: ${event.data}");
+    };
 
     socket.onclose = function(event) {
         //document.getElementById("connected").innerHTML = "false";
@@ -44,7 +49,7 @@ socket.onmessage = function(event) {
                 // e.g. server process killed or network down
                 // event.code is usually 1006 in this case
                 //alert("[close] Connection died");
-            }
+        }
     };
 }
 
