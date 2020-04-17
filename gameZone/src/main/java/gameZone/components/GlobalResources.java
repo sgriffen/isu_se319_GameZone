@@ -1,6 +1,8 @@
 package gameZone.components;
 
 import gameZone.enums.GameZoneExceptionType;
+import gameZone.gameSession.GameSession;
+import gameZone.repositories.GameSessionRepository;
 import gameZone.repositories.UserRepository;
 import gameZone.user.User;
 import gameZone.user.UserInterface;
@@ -25,8 +27,10 @@ public class GlobalResources {
 
     @Autowired
     private UserRepository uRepo;
+    @Autowired
+    private GameSessionRepository gRepo;
 
-    public GlobalResources(UserRepository uRepo) {
+    public GlobalResources(UserRepository uRepo, GameSessionRepository gRepo) {
 
         this.fileSep = File.separator;
         
@@ -47,6 +51,7 @@ public class GlobalResources {
 //        outputLoc = fileSep + "g11" + fileSep + "output" + fileSep;
 
         this.uRepo = uRepo;
+        this.gRepo = gRepo;
     }
 
     /**
@@ -85,9 +90,21 @@ public class GlobalResources {
             List<User> users = uRepo.findAll();
             if (users.size() > 0) {
                 for (UserInterface uCheck : users) {
-
                     if (uCheck.getIdApp().equals(auth)) {
 
+                        isEqual = true;
+                        break;
+                    } else { isEqual = false; }
+                    if (isEqual) { break; }
+                }
+                if (isEqual) { auth = this.generateAuthenticator(); }
+            } else { isEqual = false; }
+            
+            List<GameSession> gss = gRepo.findAll();
+            if (gss.size() > 0) {
+                for (GameSession gCheck : gss) {
+                    if (gCheck.getId_app().equals(auth)) {
+        
                         isEqual = true;
                         break;
                     } else { isEqual = false; }

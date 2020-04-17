@@ -162,7 +162,7 @@ public class WebSocketComponent {
         }
         listeners.remove(toClose);
 
-        log.info("SOCKET: client [" + toClose + "]closed connection");
+        log.info("SOCKET: client [" + toClose + "] closed connection");
     }
     
     /* ******************************************************** END ON CLOSE ******************************************************* */

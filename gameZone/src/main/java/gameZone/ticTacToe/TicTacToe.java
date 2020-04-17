@@ -15,7 +15,7 @@ public class TicTacToe {
      * {@code GlobalResources} {@code Component}. Grants the ability to use global variables and methods common to other {@code classes} in this Application
      */
     @Transient
-    private final GlobalResources gRec = new GlobalResources(null);
+    private final GlobalResources gRec = new GlobalResources(null, null);
 
     /**
      * 2D array for this {@code TicTacToe}. Used to play the game. 0 is empty, 1 is cross, 2 is nought.
