@@ -11,18 +11,9 @@ xhr.addEventListener("readystatechange", function() {
 	
 	socket = new WebSocket("ws://localhost:8080/websocket/"+id);//localhost
 	
-	socket.onopen = function(e) {
-	//document.getElementById("connected").innerHTML = "true";
-	//alert("[open] Connection established");
-	//alert("Sending to server");
-	let json = {
-		"intent": 201,
-		"payload": "Hello there",
-		"identifier": id
-	};
-	socket.send(JSON.stringify(json));
-  }
-});
+	socketSetup();
+
+}});
 
 function init(screen){
 	document=screen;
@@ -32,21 +23,7 @@ function init(screen){
 	xhr.send();
 };
 
-socket.onmessage = function(event) {
-	alert("[message] Data received from server: ${event.data}");
-};
 
-socket.onclose = function(event) {
-	//document.getElementById("connected").innerHTML = "false";
-	if (event.wasClean) {
-		//alert("[close] Connection closed cleanly, code=${event.code} reason=${event.reason}");
-	} else {
-			// e.g. server process killed or network down
-			// event.code is usually 1006 in this case
-			//alert("[close] Connection died");
-		}
-};
-}
 
 function selectGame(game){
 	document.getElementById('onCenter').innerHTML = "<h style='color:#ff9900;'>Your player ID is <h>"+id+
@@ -64,7 +41,50 @@ function requestAI(){
 	document.getElementById('onCenter').innerHTML =tacGame;
 }
 
-var tacGame="<h1>Tic-Tac-Toe</h1>"+
+function socketSetup(){
+	socket.onopen = function(e) {
+	//document.getElementById("connected").innerHTML = "true";
+	//alert("[open] Connection established");
+	//alert("Sending to server");
+	let json = {
+		"intent": 201,
+		"payload": "Hello there",
+		"identifier": id
+	};
+	socket.send(JSON.stringify(json));
+	}
+ 
+  
+	socket.onmessage = function(event) {
+	alert("[message] Data received from server: ${event.data}");
+	};
+
+	socket.onclose = function(event) {
+	//document.getElementById("connected").innerHTML = "false";
+	if (event.wasClean) {
+		//alert("[close] Connection closed cleanly, code=${event.code} reason=${event.reason}");
+	} else {
+			// e.g. server process killed or network down
+			// event.code is usually 1006 in this case
+			//alert("[close] Connection died");
+		}
+};
+}
+
+
+var tacGame="<style scoped>"+
+"table {"+
+"  text-align: center;"+
+"   width: 25%;"+
+"   border-spacing: 0;"+
+"}"+
+"td {"+
+"	border: 2px solid black;"+
+"	border-collapse: collapse;"+
+"    width: 16%;"+
+"}"+
+"</style>"+
+	"<h1>Tic-Tac-Toe</h1>"+
 	"<br>"+
 	"<p id='turn'>It is X's turn</p>"+
 	"<br><br>"+
