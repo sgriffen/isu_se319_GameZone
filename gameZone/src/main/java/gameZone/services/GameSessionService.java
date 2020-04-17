@@ -99,4 +99,11 @@ public class GameSessionService {
 		gRepo.save(gs);
 		return true;
 	}
+	
+	public boolean removeGs(Integer gs_id) {
+	
+		try { gRepo.deleteById(gs_id); }
+		catch(Exception e) { return false; }
+		return true;
+	}
 }
