@@ -1,6 +1,6 @@
 var document;
 var game;
-var id = 0;
+var id = 00000;
 var socket;
 
 function init(screen) {
@@ -40,7 +40,7 @@ function socket_xhr(xhr) {
             "payload": "Hello there",
             "identifier": id
         };
-        socket.send(JSON.stringify(json));
+        //socket.send(JSON.stringify(json));
     }
 
 
@@ -60,7 +60,8 @@ function socket_xhr(xhr) {
     };
 }
 
-function selectGame(game){
+function selectGame(g){
+	game=g;
 	document.getElementById('onCenter').innerHTML = "<h style='color:#ff9900;'>Your player ID is <h>"+id+
 	"<br>"+
 	"<br>"+
@@ -74,6 +75,18 @@ function selectGame(game){
 
 function requestAI(){
 	document.getElementById('onCenter').innerHTML =tacGame;
+	let json = {
+            "intent": 202,
+			"payload": {
+				"array": [
+					"AI"
+				],
+				"integer": 0
+			},
+			"identifier": id
+
+        };
+        socket.send(JSON.stringify(json));
 }
 
 function socketSetup(){
@@ -86,7 +99,7 @@ function socketSetup(){
 		"payload": "Hello there",
 		"identifier": id
 	};
-	socket.send(JSON.stringify(json));
+	//socket.send(JSON.stringify(json));
 	}
  
   
