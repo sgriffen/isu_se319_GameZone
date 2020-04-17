@@ -65,12 +65,6 @@ public class SocketIntentWrapper<T> {
      * 		Desired {@code payload} for {@code SocketIntentWrapper}
      */
     public void setPayload(ArrayIntegerWrapper<T> payload) { this.payload = (T) payload; }
-    /**
-     * Set {@code payload} of {@code SocketIntentWrapper}
-     * @param payload
-     * 		Desired {@code payload} for {@code SocketIntentWrapper}
-     */
-    public void setPayload(Integer payload) { this.payload = (T) payload; }
     
     /**
      * Get the {@code identifier} of {@code SocketIntentWrapper}

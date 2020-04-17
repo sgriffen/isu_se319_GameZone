@@ -214,7 +214,7 @@ public class WebSocketComponent {
                 break;
             case 205:
                 assert(intentWrap.getPayload() instanceof Integer);
-                this.endGame(whisperBackSession, (Integer) intentWrap.getPayload(), intentWrap.getIdentifier());
+                this.endGame(whisperBackSession, (ArrayIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
                 break;
             default : //echo intent payload
                 this.echoIntent(whisperBackSession, intentWrap.getPayload().toString(), intentWrap.getIdentifier());
@@ -440,8 +440,10 @@ public class WebSocketComponent {
         }
     }
     
-    private void endGame(Session whisperBackSession, Integer state, String game_id) {
-    
+    private void endGame(Session whisperBackSession, ArrayIntegerWrapper stateWrapper, String game_id) {
+        
+        int state = stateWrapper.getInteger();
+        
         if (startedGameList.contains(game_id)) {
             GameSession gs = gService.getGameSession(game_id);
             if (gs != null) {
