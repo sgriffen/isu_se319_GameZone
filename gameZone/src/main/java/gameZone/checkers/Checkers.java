@@ -2,8 +2,9 @@ package gameZone.checkers;
 
 import gameZone.components.GlobalResources;
 import java.util.ArrayList;
-import java.util.List
+import java.util.List;
 import javax.persistence.*;
+import java.util.Random;
 
 @Embeddable
 @Table(name = "Checkers")
@@ -145,8 +146,9 @@ public class Checkers {
     //This is gonna get really complicated really fast
     public Integer[][] AImove()
     {
+        Random r = new Random();
         List<Move> L = getLegalMoves(board);
-        applyMove(L.get(0));
+        applyMove(L.get(r.nextInt(L.size())));
         return getBoard();
     }
 
