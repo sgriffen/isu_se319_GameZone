@@ -58,7 +58,7 @@ function socket_xhr(xhr) {
 			case 203:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			if(msg.payload.payload==""){
+			if(msg.payload.payload=="") {
 				alert("request rejected");
 				break;
 			}
@@ -128,7 +128,7 @@ function invitation(requestor){
 		let json = {
             "intent": 203,
 			"payload": {
-				"array": [requestor,0
+				"array": [requestor
 				],
 				"integer": 100
 			},
@@ -182,7 +182,6 @@ function requestAI(){
         socket.send(JSON.stringify(json));
 }
 
-	var board = document.getElementById('board');
 	var myTurn = true;
 	var turnCount=0;
 	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
@@ -197,8 +196,8 @@ function requestAI(){
 	}
 	
 	function sendBoard(){
-		board = document.getElementById('board');
-		let arr=[[],[],[]];
+	    var board = document.getElementById('board');
+		let arr = [[],[],[]];
 		for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
 				if(board.rows[i].cells[j].innerHTML==x)
