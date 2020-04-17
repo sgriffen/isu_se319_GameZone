@@ -31,12 +31,11 @@ autoDeploy:
   tags:
     - spring
   script:
-    - cd /g11
     - cd gameZone
     - sudo rm -r /g11/resources/templates
     - sudo rm -r /g11/resources/static
-    - sudo mv src/main/resources/templates /gameZone/resources/templates
-    - sudo mv src/main/resources/static /gameZone/resources/static
+    - sudo mv src/main/resources/templates /g11/resources/templates
+    - sudo mv src/main/resources/static /g11/resources/static
     - mvn package
     - sudo mv target/*.jar /g11/gameZone.jar
     - sudo chmod -R 777 /g11
