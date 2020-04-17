@@ -212,10 +212,6 @@ public class WebSocketComponent {
                 }
                 this.gameMove(whisperBackSession, gameType, gameBoard, intentWrap.getIdentifier());
                 break;
-            case 205:
-                assert(intentWrap.getPayload() instanceof Integer);
-                this.endGame(whisperBackSession, (ArrayIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
-                break;
             default : //echo intent payload
                 this.echoIntent(whisperBackSession, intentWrap.getPayload().toString(), intentWrap.getIdentifier());
                 break;
