@@ -57,13 +57,15 @@ public class GameSessionService {
 		
 		GameSession gs = new GameSession(player1, player2, gameType, ai);
 		
-		player1.setGameSession(gs);
-		player2.setGameSession(gs);
-		player1.setPlace(1);
-		player2.setPlace(2);
-		uRepo.save(player1);
-		uRepo.save(player2);
-		
+		if (!ai) {
+			
+			player1.setGameSession(gs);
+			player2.setGameSession(gs);
+			player1.setPlace(1);
+			player2.setPlace(2);
+			uRepo.save(player1);
+			uRepo.save(player2);
+		}
 		gs.setId_app(gRec.confirmAuthenticator());
 		gRepo.save(gs);
 		

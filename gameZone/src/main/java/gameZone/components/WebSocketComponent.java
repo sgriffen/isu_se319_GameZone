@@ -6,10 +6,7 @@ import gameZone.services.GameSessionService;
 import gameZone.services.UserService;
 import gameZone.user.User;
 import gameZone.user.UserInterface;
-import gameZone.wrappers.ObjectReturnWrapper;
-import gameZone.wrappers.SocketIntentWrapper;
-import gameZone.wrappers.SocketReturnWrapper;
-import gameZone.wrappers.StringIntegerWrapper;
+import gameZone.wrappers.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.net.Socket;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -52,7 +50,7 @@ public class WebSocketComponent {
      */
     private Map<String, Session> listeners;
     
-    private List<StringIntegerWrapper> pendingGameList;
+    private List<ArrayIntegerWrapper> pendingGameList;
     
     private List<String> startedGameList;
     
@@ -195,12 +193,28 @@ public class WebSocketComponent {
         switch(intentWrap.getIntent()) {
             
             case 202 : //user wants to start game
-                assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
-                pendGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
+                assert(intentWrap.getPayload() instanceof ArrayIntegerWrapper);
+                pendGame(whisperBackSession, (ArrayIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
                 break;
             case 203 : //user accepts or declines game
-                assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
-                startGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
+                assert(intentWrap.getPayload() instanceof ArrayIntegerWrapper);
+                startGame(whisperBackSession, (ArrayIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
+                break;
+            case 204:
+                assert(intentWrap.getPayload() instanceof ArrayIntegerWrapper);
+                ArrayIntegerWrapper payload = (ArrayIntegerWrapper) ((ArrayIntegerWrapper) intentWrap.getPayload()).getArray();
+                
+                ArrayList<ArrayList<Integer>> array = (ArrayList<ArrayList<Integer>>) payload.getArray();
+                Integer gameType = payload.getInteger();
+                
+                int arrayHeight = array.size();
+                int arrayWidth = array.get(0).size();
+                
+                int[][] gameBoard = new int[arrayHeight][arrayWidth];
+                for (int i = 0; i < arrayHeight; i++) {
+                    for (int j = 0; j < arrayWidth; j++) { gameBoard[i][j] = array.get(i).get(j); }
+                }
+                gameMove(whisperBackSession, gameType, gameBoard);
                 break;
             default : //echo intent payload
                 echoIntent(whisperBackSession, intentWrap.getPayload().toString(), intentWrap.getIdentifier());
@@ -218,9 +232,9 @@ public class WebSocketComponent {
         whisper(echo, whisperBackSession);
     }
     
-    private void pendGame(Session whisperBackSession, StringIntegerWrapper wrapper, String id1) {
+    private void pendGame(Session whisperBackSession, ArrayIntegerWrapper<String> wrapper, String id1) {
         
-        String id2 = wrapper.getStrings().get(1);
+        String id2 = wrapper.getArray().get(1);
         
         UserInterface requester = uService.getUser(id1);
         if (requester != null) { //if requester valid
@@ -254,8 +268,17 @@ public class WebSocketComponent {
                     whisper(intentReturn, whisperBackSession);
                 }
             } else {
-        
-            
+    
+                String gs_id = gService.generateGS((User) requester, null, wrapper.getInteger(), true);
+                startedGameList.add(gs_id);
+                
+                SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
+                    
+                    203,
+                    new ObjectReturnWrapper<String>(200, gs_id, null)
+                );
+                whisper(intentReturn, whisperBackSession);
+                
             }
         } else {
     
@@ -268,9 +291,9 @@ public class WebSocketComponent {
         }
     }
     
-    private void startGame(Session whisperBackSession, StringIntegerWrapper wrapper, String id1) {
+    private void startGame(Session whisperBackSession, ArrayIntegerWrapper<String> wrapper, String id1) {
         
-        String id2 = wrapper.getStrings().get(1);
+        String id2 = wrapper.getArray().get(1);
     
         UserInterface requested = uService.getUser(id1);
         if (requested != null) { //if original requested valid
@@ -289,12 +312,12 @@ public class WebSocketComponent {
                     );
                     whisper(intentReturn, requesterSession);
                 } else { //requested user accepted, start game
+    
+                    ArrayIntegerWrapper pendingGame = null;
+                    for (ArrayIntegerWrapper a : pendingGameList) {
                     
-                    StringIntegerWrapper pendingGame = null;
-                    for (StringIntegerWrapper s : pendingGameList) {
-                    
-                        if (s.getStrings().get(0).equals(id2) && s.getStrings().get(1).equals(id1)) {
-                            pendingGame = s;
+                        if (a.getArray().get(0).equals(id2) && a.getArray().get(1).equals(id1)) {
+                            pendingGame = a;
                             break;
                         }
                     }
@@ -302,7 +325,7 @@ public class WebSocketComponent {
                     if (pendingGame != null) { //game info entered correctly, start game
                         
                         //create game session
-                        String gs_id = gService.generateGS((User) requester, (User) requested, pendingGame.getInteger());
+                        String gs_id = gService.generateGS((User) requester, (User) requested, pendingGame.getInteger(), false);
                         startedGameList.add(gs_id);
                         //send notification of started game to requester
                         SocketReturnWrapper<String> requesterReturn = new SocketReturnWrapper<String>(
@@ -346,6 +369,11 @@ public class WebSocketComponent {
             );
             whisper(intentReturn, whisperBackSession);
         }
+    }
+    
+    private void gameMove(Session whisperBackSession, int game_type, int[][] gameBoard) {
+    
+    
     }
     
     /* **************************************************** END PRIVATE METHODS **************************************************** */
