@@ -53,9 +53,9 @@ public class GameSessionService {
 
 	/***HELPERS***/
 
-	public String generateGS(User player1, User player2, int gameType) {
+	public String generateGS(User player1, User player2, int gameType, Boolean ai) {
 		
-		GameSession gs = new GameSession(player1, player2, gameType);
+		GameSession gs = new GameSession(player1, player2, gameType, ai);
 		
 		player1.setGameSession(gs);
 		player2.setGameSession(gs);
