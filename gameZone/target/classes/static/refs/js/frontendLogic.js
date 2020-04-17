@@ -197,15 +197,15 @@ function requestAI(){
 	
 	function sendBoard(){
 	    var board = document.getElementById('board');
-		let arr = [[],[],[]];
+		let arr = [[0,0,0],[0,0,0],[0,0,0]];
 		for (var i = 0; i < board.rows.length; i++) {
 			for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(board.rows[i].cells[j].innerHTML==x)
-					arr[i][j]=1
-				else if(board.rows[i].cells[j].innerHTML==o)
-					arr[i][j]=2
+				if(board.rows[i].cells[j].value==1)
+					arr[i][j] = 1;
+				else if(board.rows[i].cells[j].value==2)
+					arr[i][j] = 2;
 				else
-					arr[i][j]=0
+					arr[i][j] = 0;
 		}
 	}
 	alert(arr);
@@ -227,8 +227,10 @@ function requestAI(){
 		
 		if(p1){
 		boardCell.innerHTML =x
+		boardCell.value = 1
 		}else{
 			boardCell.innerHTML =o
+			boardCell.value = 2
 		}
 		return true
 	}
