@@ -95,12 +95,16 @@ function socket_xhr(xhr) {
 function updateBoard(newBoard){
 	for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(newBoard[i][j]==1)
+				if(newBoard[i][j]==1) {
 					board.rows[i].cells[j].innerHTML=x
-				else if(newBoard[i][j]==2)
+					board.rows[i].cells[j].value=1
+				}else if(newBoard[i][j]==2) {
 					board.rows[i].cells[j].innerHTML=o
-				else
+					board.rows[i].cells[j].value=2
+				}else{
 					board.rows[i].cells[j].innerHTML=""
+					board.rows[i].cells[j].value=0
+				}
 		}
 	}
 	
@@ -197,15 +201,15 @@ function requestAI(){
 	
 	function sendBoard(){
 	    var board = document.getElementById('board');
-		let arr = [[0,0,0],[0,0,0],[0,0,0]];
+		let arr = [[],[],[]];
 		for (var i = 0; i < board.rows.length; i++) {
 			for (var j = 0; j < board.rows[i].cells.length; j++){
 				if(board.rows[i].cells[j].value==1)
-					arr[i][j] = 1;
+					arr[i].push(1);
 				else if(board.rows[i].cells[j].value==2)
-					arr[i][j] = 2;
+					arr[i].push(2);
 				else
-					arr[i][j] = 0;
+					arr[i].push(0);
 		}
 	}
 	alert(arr);
@@ -237,7 +241,7 @@ function requestAI(){
 	
 	function updateTurn() {
 		p=document.getElementById('turn');
-		if(myTurn){
+		if(p1){
 			myTurn=false;
 			p.innerHTML="It is O's turn"
 		}else{

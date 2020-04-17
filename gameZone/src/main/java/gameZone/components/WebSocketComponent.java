@@ -382,14 +382,14 @@ public class WebSocketComponent {
                         gs.getTic().setNumMoves(gs.getTic().getNumMoves() + 1);
                         if (gs.getAi() && !gs.getTic().checkForWin()) {
                             
-                            gs.getTic().setBoard(gs.getTic().AImove(gameBoard));
+                            gs.getTic().setBoard(gs.getTic().AImove(gs.getTic().getBoard()));
                             gs.getTic().setNumMoves(gs.getTic().getNumMoves() + 1);
                             if (gs.getTic().checkForWin()) { aiWon = true; }
                         }
                 
-                        for (int i = 0; i < gameBoard.length; i++) {
+                        for (int i = 0; i < gs.getTic().getBoard().length; i++) {
                             ArrayList<Integer> gameRow_temp = new ArrayList<>();
-                            for (int j = 0; j < gameBoard[0].length; j++) {
+                            for (int j = 0; j < gs.getTic().getBoard()[0].length; j++) {
                                 gameRow_temp.add(gs.getTic().getBoard()[i][j]);
                             }
                             gameBoard_objectStyle.add(gameRow_temp);
@@ -482,6 +482,8 @@ public class WebSocketComponent {
                         
                         uService.saveUser_existing(otherPlayer);
                     }
+    
+                    gService.removeGs(gs.getId_db());
                 }
             
                 //save database changes
