@@ -17,7 +17,7 @@ public class GameSession {
 	/**
 	 * List for the {@code GameSession} users. There should normally be 2 users.
 	 */
-	@OneToMany (targetEntity = User.class)
+	@OneToMany(targetEntity = User.class, fetch = FetchType.EAGER)
 	private List<User> users;
 	/**
 	 * ID for this {@code GameSession}. Used for identification in the database

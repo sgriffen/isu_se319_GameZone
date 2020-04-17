@@ -53,12 +53,12 @@ function socket_xhr(xhr) {
 			case 202:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			invitation(msg.payload.array[0]);
+			invitation(msg.payload.payload.array[0]);
 			break;
 			case 203:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			if(msg.payload.payload==""){
+			if(msg.payload.payload=="") {
 				alert("request rejected");
 				break;
 			}
@@ -117,7 +117,7 @@ function invitation(requestor){
 		let json = {
             "intent": 203,
 			"payload": {
-				"array": [requestor,0
+				"array": [requestor
 				],
 				"integer": 0
 			},
@@ -128,7 +128,7 @@ function invitation(requestor){
 		let json = {
             "intent": 203,
 			"payload": {
-				"array": [requestor,0
+				"array": [requestor
 				],
 				"integer": 0
 			},
@@ -165,7 +165,6 @@ function requestAI(){
         socket.send(JSON.stringify(json));
 }
 
-	var board = document.getElementById('board');
 	var myTurn = true;
 	var turnCount=0;
 	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
@@ -180,7 +179,8 @@ function requestAI(){
 	}
 	
 	function sendBoard(){
-		let arr;
+	    var board = document.getElementById('board');
+		let arr = [[],[],[]];
 		for (var i = 0; i < board.rows.length; i++) {
 		for (var j = 0; j < board.rows[i].cells.length; j++){
 				if(board.rows[i].cells[j].innerHTML==x)
@@ -195,7 +195,7 @@ function requestAI(){
 	let json = {
             "intent": 204,
 			"payload": {
-			"array": [arr],
+			"array": arr,
 				"integer": 0
 			},
 			"identifier": GSID
