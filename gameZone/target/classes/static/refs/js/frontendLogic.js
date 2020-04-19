@@ -212,7 +212,6 @@ function requestAI(){
 					arr[i].push(0);
 		}
 	}
-	alert(arr);
 	let json = {
             "intent": 204,
 			"payload": {

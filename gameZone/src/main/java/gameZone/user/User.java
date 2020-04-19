@@ -29,7 +29,7 @@ public class User implements UserInterface {
      * {@code GameSession} this {@code User} is playing in
      */
     @JsonIgnore
-    @ManyToOne(targetEntity = GameSession.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = GameSession.class)
     private GameSession gameSession;
     
     /**
