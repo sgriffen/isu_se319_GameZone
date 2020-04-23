@@ -37,6 +37,7 @@ htmlTest:
   tags:  
       - docker
   script:  
+    - cd /g11
       - cd gameZone
       - npm install
       - npm test
