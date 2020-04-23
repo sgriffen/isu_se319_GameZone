@@ -32,7 +32,7 @@ mavenTest:
     paths:  
       - gameZone/target/*.jar               
  
-frontEndTest: 
+htmlTest: 
   stage: htmlTest
   tags:  
       - docker
