@@ -37,6 +37,7 @@ frontEndTest:
   tags:  
       - docker
   script:  
+      - cd gameZone
       - npm install
       - npm test
       
