@@ -6,7 +6,7 @@ image: node:latest
 stages:
   - mavenBuild
   - mavenTest
- #- htmlTest
+  - htmlTest
   - autoDeploy
   
 cache:
@@ -34,11 +34,12 @@ mavenTest:
     paths:  
       - gameZone/target/*.jar               
       
-# testing_testing:
-#      stage: htmlTest
-#      tags:
-#        - docker
-#      script: 
+ testing_testing:
+      stage: htmlTest
+      tags:
+        - docker
+      script: 
+      - :
 #      - npm install
 #      - npm test 
 
