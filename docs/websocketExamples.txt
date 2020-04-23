@@ -1,0 +1,120 @@
+intent [201] (from frontend to backend):
+	request format (stringified JSON) - 
+		{
+			"intent": 201,
+			"payload": "toEcho",
+			"identifier": "echoTo_ID"
+		}
+	response format (stringified JSON) -  
+		{
+			"intent": 201,
+			"payload": {
+				"status": 200,
+				"payload": "ECHO: [" + toEcho + "]",
+				"exception": ""
+			}
+		}
+	
+intent [202] (from frontend to backend):
+	request format (stringified JSON) - 
+		{
+			"intent": 202,
+			"payload": {
+				"strings": [
+					"requested_ID"
+				],
+				"integer": 0 [for tic tac toe], 1 [for checkers], 2 [for chess]
+			},
+			"identifier": "requester_ID"
+		}
+	response format [valid inputs] (stringified JSON). Response to player designated requested - 
+		{
+			"intent": 202,
+			"payload": {
+				"status": 200
+				"payload": {
+					"strings": [
+						"requester_ID",
+						"requested_ID"
+					],
+					"integer": 0 [for tic tac toe], 1 [for checkers], 2 [for chess]
+				},
+				"exceptions": ""
+			}
+		}
+	response format [invalid requester_ID] (stringified JSON). Response to player designated requester - 
+		{
+			"intent": 202,
+			"payload": {
+				"status": 550
+				"payload": "Invalid user ID [" + requester_ID + "] entered",
+				"exceptions": ""
+			}
+		}
+	response format [invalid requested_ID] (stringified JSON). Response to player designated requester - 
+		{
+			"intent": 202,
+			"payload": {
+				"status": 550,
+				"payload": "Competing user with ID [" + requested_ID + "] not found",
+				"exceptions": ""
+			}
+		}
+intent [203] (from frontend to backend):
+	request format (stringified JSON) - 
+		{
+			"intent": 203,
+			"payload": {
+				"strings": [
+					"requester_ID"
+				],
+				"integer": 0 [for tic tac toe], 1 [for checkers], 2 [for chess]
+			},
+			"identifier": "requested_ID"
+		}
+	response format [valid inputs, requested accepted] (stringified JSON). Response to both players (requester and requested) - 
+		{
+			"intent": 203,
+			"payload": {
+				"status": 200,
+				"payload": "gameID",
+				"exceptions": ""
+			}
+		}
+	response format [valid inputs, requested declined] (stringified JSON). Response to player designated requester - 
+		{
+			"intent": 203,
+			"payload": {
+				"status": 200,
+				"payload": "",
+				"exceptions": ""
+			}
+		}
+	response format [invalid game info, happens when intent [203] sent without preceding intent [202]] (stringified JSON). Response to player designated requested - 
+		{
+			"intent": 203,
+			"payload": {
+				"status": 550,
+				"payload": "Invalid game info received",
+				"exceptions": ""
+			}
+		}
+	response format [invalid requester_ID] (stringified JSON). Response to player designated requested - 
+		{
+			"intent": 203,
+			"payload": {
+				"status": 550,
+				"payload": "Competing user with ID [" + requester_ID + "] not found",
+				"exceptions": ""
+			}
+		}
+	response format [invalid requested_ID] (stringified JSON). Response to player designated requested - 
+		{
+			"intent": 203,
+			"payload": {
+				"status": 550,
+				"payload": "Competing user with ID [" + requested_ID + "] not found",
+				"exceptions": ""
+			}
+		}
+		

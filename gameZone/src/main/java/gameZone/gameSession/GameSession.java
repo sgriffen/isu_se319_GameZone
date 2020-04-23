@@ -25,7 +25,11 @@ public class GameSession {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id_db;
+	
+	private String id_app;
 
+	private Boolean ai;
+	
 	/**
 	 * Game Status for this {@code GameSession}. Used for telling current status of the gameSession. -1 means the game is yet to start. 0 means playing. 1 means player 1 has won. 2 means player 2 has won.
 	 */
@@ -54,21 +58,24 @@ public class GameSession {
 		
 		this.setUsers(new ArrayList<User>());
 		this.setGameStatus(-1);
+		this.setId_app(new String());
 	}
 	
 	/**
 	 * Constructor with both Users
 	 */
-	public GameSession(User player1, User player2, int gametype) {
+	public GameSession(User player1, User player2, int gametype, Boolean ai) {
 
 		this.setUsers(new ArrayList<User>());
 		this.addPlayers(player1, player2);
 		this.setGameStatus(-1);
+		this.ai = ai;
 		this.gameType = gametype;
 		if(gametype == 0)
 		{
 			tic = new TicTacToe();
 		}
+		this.setId_app(new String());
 	}
 	
 	/***END CONSTRUCTORS***/
@@ -93,6 +100,15 @@ public class GameSession {
 		return null;
 	}
 
+	public Boolean getAi()
+	{
+		return ai;
+	}
+
+	public void setAi(Boolean ai)
+	{
+		this.ai = ai;
+	}
 	public void addPlayers(User player1, User player2) { this.users.add(player1); this.users.add(player2); }
 
 	public User getPlayer2() {
@@ -109,10 +125,24 @@ public class GameSession {
 	public Integer getGameStatus() { return gameStatus; }
 	
 	public void setGameStatus(Integer gameStatus) { this.gameStatus = gameStatus; }
-
+	
+	public String getId_app() { return id_app; }
+	
+	public void setId_app(String id_app) { this.id_app = id_app; }
+	
 	public void setUsers(ArrayList<User> users)
 	{
 		this.users = users;
+	}
+
+	public TicTacToe getTic()
+	{
+		return tic;
+	}
+
+	public void setTic(TicTacToe tic)
+	{
+		this.tic = tic;
 	}
 	
 	/***END GETTERS/SETTERS***/

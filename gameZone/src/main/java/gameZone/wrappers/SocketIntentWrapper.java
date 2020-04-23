@@ -1,16 +1,14 @@
 package gameZone.wrappers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SocketIntentWrapper {
+public class SocketIntentWrapper<T> {
 
 
     private int intent;
 
-    private String payload;
-
+    private T payload;
+    
     private String identifier;
+    
     /**
      * Default constructor
      *
@@ -36,7 +34,7 @@ public class SocketIntentWrapper {
      * @param identifier
      * 		{@code User.id_app} desired
      */
-    public SocketIntentWrapper(int intent, String payload, String identifier) {
+    public SocketIntentWrapper(int intent, T payload, String identifier) {
 
         this.setIntent(intent);
         this.setPayload(payload);
@@ -61,14 +59,14 @@ public class SocketIntentWrapper {
      * @return
      * 		{@code payload}
      */
-    public String getPayload() { return payload; }
+    public T getPayload() { return payload; }
     /**
      * Set {@code payload} of {@code SocketIntentWrapper}
      * @param payload
      * 		Desired {@code payload} for {@code SocketIntentWrapper}
      */
-    public void setPayload(String payload) { this.payload = payload; }
-
+    public void setPayload(T payload) { this.payload = payload; }
+    
     /**
      * Get the {@code identifier} of {@code SocketIntentWrapper}
      * @return
