@@ -140,7 +140,17 @@ public class GameSessionService {
 					}
 					break;
 				case 1: //game is checkers
-					
+					gs.getCheck().setBoard(gameBoard);
+					//gs.getCheck().setNumMoves(gs.getTic().getNumMoves() + 1);
+					if (gs.getCheck().checkForWin()) { gs.setGameStatus(1); }
+					if (gs.getAi() && gs.getGameStatus() != 1) {
+
+						gs.getCheck().setBoard(gs.getCheck().AImove());
+						//gs.getCheck().setNumMoves(gs.getCheck().getNumMoves() + 1);
+						if (gs.getCheck().checkForWin()) {
+							gs.setGameStatus(2);
+						}
+					}
 					break;
 				case 2: //game is chess
 					

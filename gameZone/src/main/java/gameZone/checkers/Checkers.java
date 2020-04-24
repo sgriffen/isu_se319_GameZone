@@ -14,7 +14,7 @@ public class Checkers {
      * {@code GlobalResources} {@code Component}. Grants the ability to use global variables and methods common to other {@code classes} in this Application
      */
     @Transient
-    private final GlobalResources gRec = new GlobalResources(null);
+    private final GlobalResources gRec = new GlobalResources(null, null);
 
     /**
      * 2D array for this {@code TicTacToe}. Used to play the game. 0 is empty, 1 red, 2 is black, 3 is red kings, 4 is black kings.
@@ -133,14 +133,14 @@ public class Checkers {
         return count;
     }
 
-    public int win()
+    public Boolean checkForWin()
     {
         if(redCount() == 0)
-            return 2;
+            return true;
         else if(blackCount() == 0)
-            return 1;
+            return true;
         else
-            return 0;
+            return false;
     }
 
     //This is gonna get really complicated really fast
