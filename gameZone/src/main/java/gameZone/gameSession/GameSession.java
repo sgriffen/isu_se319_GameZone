@@ -69,23 +69,6 @@ public class GameSession {
 		this.setId_app(new String());
 	}
 	
-//	/**
-//	 * Constructor with both Users
-//	 */
-//	public GameSession(User player1, User player2, int gametype, Boolean ai) {
-//
-//		this.setUsers(new ArrayList<User>());
-//		this.addPlayers(player1, player2);
-//		this.setGameStatus(-1);
-//		this.ai = ai;
-//		this.gameType = gametype;
-//		if(gametype == 0)
-//		{
-//			tic = new TicTacToe();
-//		}
-//		this.setId_app(new String());
-//	}
-	
 	/***END CONSTRUCTORS***/
 
 	/***START GETTERS/SETTERS***/
