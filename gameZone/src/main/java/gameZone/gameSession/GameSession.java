@@ -1,5 +1,6 @@
 package gameZone.gameSession;
 
+import gameZone.checkers.Checkers;
 import gameZone.components.GlobalResources;
 import gameZone.ticTacToe.TicTacToe;
 import gameZone.user.User;
@@ -53,6 +54,12 @@ public class GameSession {
 	 */
 	@Embedded
 	private TicTacToe tic;
+
+	/**
+	 * Checkers game for this {@coee GameSession}. Used for holding the Checkers game if one is being played.
+	 */
+	@Embedded
+	private Checkers check;
 
 	/***END INSTANCE VARIABLES***/
 	
@@ -119,6 +126,16 @@ public class GameSession {
 	{
 		this.tic = tic;
 	}
+
+	public Checkers getCheck()
+	{
+		return check;
+	}
+
+	public void setCheck(Checkers check)
+	{
+		this.check = check;
+	}
 	
 	/***END GETTERS/SETTERS***/
 	
@@ -127,6 +144,5 @@ public class GameSession {
 	public void startGame()
 	{
 		gameStatus = 0;
-
 	}
 }
