@@ -1,6 +1,7 @@
 package gameZone.services;
 
 import gameZone.components.GlobalResources;
+import gameZone.gameSession.GameSession;
 import gameZone.repositories.UserRepository;
 import gameZone.user.User;
 import gameZone.user.UserInterface;
@@ -77,6 +78,13 @@ public class UserService {
     }
 
     /* ***************************************************** END POST HELPERS ****************************************************** */
+    
+    public void addUserToGame(UserInterface toAdd, GameSession addTo, Integer place) {
+    
+        toAdd.setGameSession(addTo);
+        toAdd.setPlace(place);
+        uRepo.save((User) toAdd);
+    }
     
     public boolean saveUser_new(UserInterface u) {
     

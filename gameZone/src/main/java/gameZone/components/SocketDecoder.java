@@ -6,12 +6,11 @@ import gameZone.wrappers.SocketIntentWrapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 import java.io.IOException;
 
-public class SocketDecoder<T> implements Decoder.Text<SocketIntentWrapper<T>>{
+public class SocketDecoder implements Decoder.Text<SocketIntentWrapper> {
 
     /**
      * {@code Log} for this controller

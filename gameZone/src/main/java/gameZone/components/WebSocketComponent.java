@@ -2,14 +2,12 @@ package gameZone.components;
 
 import gameZone.GameZone;
 import gameZone.configurations.CustomConfigurator;
+import gameZone.gameSession.GameSession;
 import gameZone.services.GameSessionService;
 import gameZone.services.UserService;
 import gameZone.user.User;
 import gameZone.user.UserInterface;
-import gameZone.wrappers.ObjectReturnWrapper;
-import gameZone.wrappers.SocketIntentWrapper;
-import gameZone.wrappers.SocketReturnWrapper;
-import gameZone.wrappers.StringIntegerWrapper;
+import gameZone.wrappers.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.net.Socket;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -50,9 +49,15 @@ public class WebSocketComponent {
      * <br>
      * {@code K = User.id_app}, and {@code V = WebSocketComponent}
      */
-    private Map<String, Session> listeners;
+    private Map<String, Session> listeners_user;
+    /**
+     * {@code Map} of {@code User.id_apps} and {@code Sessions}. Associates a {@code User} to a {@code Session} where:
+     * <br>
+     * {@code K = User.id_app}, and {@code V = WebSocketComponent}
+     */
+    private Map<Session, String> listeners_session;
     
-    private List<StringIntegerWrapper> pendingGameList;
+    private List<ArrayIntegerWrapper> pendingGameList;
     
     private List<String> startedGameList;
     
@@ -68,7 +73,8 @@ public class WebSocketComponent {
     public WebSocketComponent() {
     
         log = LogFactory.getLog(GameZone.class);
-        listeners = new HashMap<>();
+        listeners_user = new HashMap<>();
+        listeners_session = new HashMap<>();
         pendingGameList = new ArrayList<>();
         startedGameList = new ArrayList<>();
     }
@@ -89,15 +95,12 @@ public class WebSocketComponent {
      *      @see gameZone.services.GameSessionService GameSessionService
      */
     public WebSocketComponent(GlobalResources gRec, UserService uService, GameSessionService gService) {
-
+        
+        this();
+        
         this.gRec = gRec;
         this.uService = uService;
         this.gService = gService;
-    
-        log = LogFactory.getLog(GameZone.class);
-        listeners = new HashMap<>();
-        pendingGameList = new ArrayList<>();
-        startedGameList = new ArrayList<>();
     }
     
     /* ***************************************************** END CONSTRUCTORS ****************************************************** */
@@ -113,8 +116,9 @@ public class WebSocketComponent {
         //temporary for testing
         if (u != null) {
 
-            listeners.put(u.getIdApp(), socketSession);
-            log.info("SOCKET: client [" + payload + "]successfully opened connection");
+            listeners_user.put(u.getIdApp(), socketSession);
+            listeners_session.put(socketSession, u.getIdApp());
+            log.info("SOCKET: client [" + payload + "] successfully opened connection");
     
             SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
                     200,
@@ -150,20 +154,11 @@ public class WebSocketComponent {
     @OnClose
     public void socketClose(Session socketSession) {
 
-        String toClose = new String();
+        String toClose = listeners_session.get(socketSession);
+        listeners_user.remove(toClose);
+        listeners_session.remove(socketSession);
 
-        Set<Entry<String, Session>> entrySet = listeners.entrySet();
-        for (Entry<String, Session> entry : entrySet) {
-
-            if (entry.getValue().equals(socketSession)) {
-
-                toClose = entry.getKey();
-                break;
-            }
-        }
-        listeners.remove(toClose);
-
-        log.info("SOCKET: client [" + toClose + "]closed connection");
+        log.info("SOCKET: client [" + toClose + "] closed connection");
     }
     
     /* ******************************************************** END ON CLOSE ******************************************************* */
@@ -178,10 +173,9 @@ public class WebSocketComponent {
     /* *************************************************** START PRIVATE METHODS *************************************************** */
     
     private <T> void whisperAll(SocketReturnWrapper<T> wrap) {
-
-        Set<Entry<String, Session>> listenSet = listeners.entrySet();
-        Iterator<Entry<String, Session>> listenIter = listenSet.iterator();
-        while(listenIter.hasNext()) { this.whisper(wrap, listenIter.next().getValue()); }
+        
+        Iterator<Entry<Session, String>> listenIter = listeners_session.entrySet().iterator();
+        while(listenIter.hasNext()) { this.whisper(wrap, listenIter.next().getKey()); }
     }
     
     private <T> void whisper(SocketReturnWrapper<T> wrap, Session to) {
@@ -195,106 +189,139 @@ public class WebSocketComponent {
         switch(intentWrap.getIntent()) {
             
             case 202 : //user wants to start game
-                assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
-                pendGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
+                assert(intentWrap.getPayload() instanceof ArrayIntegerWrapper);
+                this.pendGame(whisperBackSession, (ArrayIntegerWrapper<String>) intentWrap.getPayload(), intentWrap.getIdentifier());
                 break;
             case 203 : //user accepts or declines game
-                assert(intentWrap.getPayload() instanceof StringIntegerWrapper);
-                startGame(whisperBackSession, (StringIntegerWrapper) intentWrap.getPayload(), intentWrap.getIdentifier());
+                assert(intentWrap.getPayload() instanceof ArrayIntegerWrapper);
+                this.startGame(whisperBackSession, (ArrayIntegerWrapper<String>) intentWrap.getPayload(), intentWrap.getIdentifier());
+                break;
+            case 204:
+                assert(intentWrap.getPayload() instanceof ArrayIntegerWrapper);
+                ArrayIntegerWrapper payload = (ArrayIntegerWrapper) intentWrap.getPayload();
+                
+                ArrayList<ArrayList<Integer>> array = (ArrayList<ArrayList<Integer>>) payload.getArray();
+                Integer gameType = payload.getInteger();
+    
+                Integer arrayHeight = array.size();
+                Integer arrayWidth = array.get(0).size();
+    
+                Integer[][] gameBoard = new Integer[arrayHeight][arrayWidth];
+                for (int i = 0; i < arrayHeight; i++) {
+                    for (int j = 0; j < arrayWidth; j++) { gameBoard[i][j] = array.get(i).get(j); }
+                }
+                this.gameMove(whisperBackSession, gameType, gameBoard, intentWrap.getIdentifier());
                 break;
             default : //echo intent payload
-                echoIntent(whisperBackSession, intentWrap.getPayload().toString(), intentWrap.getIdentifier());
+                this.echoIntent(whisperBackSession, intentWrap.getPayload().toString(), intentWrap.getIdentifier());
                 break;
         }
     }
     
     private void echoIntent(Session whisperBackSession, String toEcho, String echoTo) {
     
-        SocketReturnWrapper<String> echo = new SocketReturnWrapper<String>(
+        SocketReturnWrapper<String> echo = new SocketReturnWrapper<>(
                 201,
-                new ObjectReturnWrapper<String>(200, new String("ECHO :[" + toEcho + "]"), null)
+                new ObjectReturnWrapper<>(200, new String("ECHO :[" + toEcho + "]"), null)
         );
     
         whisper(echo, whisperBackSession);
     }
     
-    private void pendGame(Session whisperBackSession, StringIntegerWrapper wrapper, String id1) {
+    private void pendGame(Session whisperBackSession, ArrayIntegerWrapper<String> wrapper, String id1) {
         
-        String id2 = wrapper.getStrings().get(1);
+        String id2 = wrapper.getArray().get(0);
         
         UserInterface requester = uService.getUser(id1);
         if (requester != null) { //if requester valid
             
-            if (!id2.toUpperCase().equals("AI")) {
+            if (!id2.toUpperCase().equals("AI")) { //send challenge request to desired player
     
                 UserInterface requested = uService.getUser(id2);
                 assert(requested != null);
-                if (listeners.get(requested.getIdApp()) != null) { //if requested valid
+                if (listeners_user.get(requested.getIdApp()) != null) { //if requested valid
                     
                     //get session of requested
-                    Session requestedSession = listeners.get(requested.getIdApp());
+                    Session requestedSession = listeners_user.get(requested.getIdApp());
                     //store game request info
-                    pendingGameList.add(wrapper);
+                    ArrayIntegerWrapper<String> pendingWrap = new ArrayIntegerWrapper<>();
+                    ArrayList<String> ids_temp = new ArrayList<>();
+                    ids_temp.add(id1);
+                    ids_temp.add(id2);
+                    pendingWrap.setArray(ids_temp);
+                    pendingWrap.setInteger(wrapper.getInteger());
+                    pendingGameList.add(pendingWrap);
                     //whisper request to requested
                     ArrayList<String> ids = new ArrayList<>();
                     ids.add(id1);
-                    SocketReturnWrapper<String> requestGameIntent = new SocketReturnWrapper<String>(
+                    SocketReturnWrapper<ObjectReturnWrapper<ArrayIntegerWrapper<String>>> requestGameIntent = new SocketReturnWrapper<>(
             
                             202,
-                            new ObjectReturnWrapper<StringIntegerWrapper>(200, new StringIntegerWrapper(ids, wrapper.getInteger()), null)
+                            new ObjectReturnWrapper<>(200, new ArrayIntegerWrapper(ids, wrapper.getInteger()), null)
                     );
                     whisper(requestGameIntent, requestedSession);
                 } else {
     
-                    SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
+                    SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
             
                             202,
-                            new ObjectReturnWrapper<String>(550, new String("Competing user with ID [" + id2 + "] not found"), null)
+                            new ObjectReturnWrapper<>(550, new String("Competing user with ID [" + id2 + "] not found"), null)
                     );
                     whisper(intentReturn, whisperBackSession);
                 }
-            } else {
-        
-            
+            } else { //start game with AI
+                
+                ArrayList<User> gs_players = new ArrayList<>();
+                gs_players.add((User) requester);
+                GameSession gs = new GameSession();
+                String gs_id = gService.generateGS(gs, gs_players, wrapper.getInteger(), true);
+                startedGameList.add(gs_id);
+                
+                SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
+                    
+                    203,
+                    new ObjectReturnWrapper<>(200, gs_id, null)
+                );
+                whisper(intentReturn, whisperBackSession);
             }
         } else {
     
-            SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
+            SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<>(
         
                     202,
-                    new ObjectReturnWrapper<String>(550, new String("Invalid user ID [" + id1 + "] entered"), null)
+                    new ObjectReturnWrapper<>(550, new String("Invalid user ID [" + id1 + "] entered"), null)
             );
             whisper(intentReturn, whisperBackSession);
         }
     }
     
-    private void startGame(Session whisperBackSession, StringIntegerWrapper wrapper, String id1) {
+    private void startGame(Session whisperBackSession, ArrayIntegerWrapper<String> wrapper, String id1) {
         
-        String id2 = wrapper.getStrings().get(1);
+        String id2 = wrapper.getArray().get(0);
     
         UserInterface requested = uService.getUser(id1);
         if (requested != null) { //if original requested valid
     
             UserInterface requester = uService.getUser(id2);
             assert(requester != null);
-            if (listeners.get(requester.getIdApp()) != null) { //if original requester valid
+            if (listeners_user.get(requester.getIdApp()) != null) { //if original requester valid
     
-                Session requesterSession = listeners.get(requested.getIdApp());
-                if (wrapper.getInteger() == 0) { //requested user declined, send notification to requester
+                Session requesterSession = listeners_user.get(requester.getIdApp());
+                if (wrapper.getInteger() == 100) { //requested user declined, send notification to requester
                     
-                    SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
+                    SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
                             
                             203,
-                            new ObjectReturnWrapper<String>(200, null, null)
+                            new ObjectReturnWrapper<>(200, null, null)
                     );
                     whisper(intentReturn, requesterSession);
                 } else { //requested user accepted, start game
+    
+                    ArrayIntegerWrapper pendingGame = null;
+                    for (ArrayIntegerWrapper a : pendingGameList) {
                     
-                    StringIntegerWrapper pendingGame = null;
-                    for (StringIntegerWrapper s : pendingGameList) {
-                    
-                        if (s.getStrings().get(0).equals(id2) && s.getStrings().get(1).equals(id1)) {
-                            pendingGame = s;
+                        if (a.getArray().get(0).equals(id2) && a.getArray().get(1).equals(id1)) {
+                            pendingGame = a;
                             break;
                         }
                     }
@@ -302,47 +329,169 @@ public class WebSocketComponent {
                     if (pendingGame != null) { //game info entered correctly, start game
                         
                         //create game session
-                        String gs_id = gService.generateGS((User) requester, (User) requested, pendingGame.getInteger());
+                        ArrayList<User> gs_players = new ArrayList<>();
+                        gs_players.add((User) requester);
+                        gs_players.add((User) requested);
+                        GameSession gs = new GameSession();
+                        String gs_id = gService.generateGS(gs, gs_players, wrapper.getInteger(), false);
                         startedGameList.add(gs_id);
+                        pendingGameList.remove(pendingGame);
                         //send notification of started game to requester
-                        SocketReturnWrapper<String> requesterReturn = new SocketReturnWrapper<String>(
+                        SocketReturnWrapper<ObjectReturnWrapper<String>> requesterReturn = new SocketReturnWrapper<>(
             
                                 203,
-                                new ObjectReturnWrapper<String>(200, gs_id, null)
+                                new ObjectReturnWrapper<>(200, gs_id, null)
                         );
                         whisper(requesterReturn, requesterSession);
-                        //send notification of started game to requester
-                        SocketReturnWrapper<String> requestedReturn = new SocketReturnWrapper<String>(
+                        //send notification of started game to requested
+                        SocketReturnWrapper<ObjectReturnWrapper<String>> requestedReturn = new SocketReturnWrapper<>(
             
                                 203,
-                                new ObjectReturnWrapper<String>(200, gs_id, null)
+                                new ObjectReturnWrapper<>(200, gs_id, null)
                         );
-                        whisper(requestedReturn, requesterSession);
+                        whisper(requestedReturn, whisperBackSession);
                     } else {
     
-                        SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
+                        SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
             
                                 203,
-                                new ObjectReturnWrapper<String>(550, new String("Invalid game info received"), null)
+                                new ObjectReturnWrapper<>(550, new String("Invalid game info received"), null)
                         );
                         whisper(intentReturn, whisperBackSession);
                     }
                 }
             } else {
         
-                SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
+                SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
                 
                         203,
-                        new ObjectReturnWrapper<String>(550, new String("Competing user with ID [" + id2 + "] not found"), null)
+                        new ObjectReturnWrapper<>(550, new String("Competing user with ID [" + id2 + "] not found"), null)
                 );
                 whisper(intentReturn, whisperBackSession);
             }
         } else {
     
-            SocketReturnWrapper<String> intentReturn = new SocketReturnWrapper<String>(
+            SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
             
                     203,
-                    new ObjectReturnWrapper<String>(550, new String("Invalid user ID [" + id1 + "] entered"), null)
+                    new ObjectReturnWrapper<>(550, new String("Invalid user ID [" + id1 + "] entered"), null)
+            );
+            whisper(intentReturn, whisperBackSession);
+        }
+    }
+    
+    private void gameMove(Session whisperBackSession, Integer game_type, Integer[][] gameBoard, String game_id) {
+        
+        if (startedGameList.contains(game_id)) {
+            GameSession gs = gService.gameMove(game_id, game_type, gameBoard);
+            if (gameBoard != null) {
+                
+                boolean aiWon = false;
+                if (gs.getGameStatus() == 2 && gs.getAi()) { aiWon = true; }
+    
+                ArrayList<ArrayList<Integer>> gameBoard_objectStyle = new ArrayList<>();
+                for (int i = 0; i < gs.getTic().getBoard().length; i++) {
+                    ArrayList<Integer> gameRow_temp = new ArrayList<>();
+                    for (int j = 0; j < gs.getTic().getBoard()[ 0 ].length; j++) {
+                        gameRow_temp.add(gs.getTic().getBoard()[ i ][ j ]);
+                    }
+                    gameBoard_objectStyle.add(gameRow_temp);
+                }
+                
+                //get players and whisper updated game boards if applicable
+                UserInterface playerWon = uService.getUser(listeners_session.get(whisperBackSession));
+                
+                SocketReturnWrapper<ObjectReturnWrapper<ArrayList<ArrayList<Integer>>>> intentReturn = new SocketReturnWrapper<>(
+                
+                        204,
+                        new ObjectReturnWrapper<>(200, gameBoard_objectStyle, null)
+                );
+                whisper(intentReturn, whisperBackSession); //whisper updated game board
+                if (!gs.getAi()) { //whisper updated game board to player 2
+                    
+                    UserInterface otherPlayer;
+                    if (playerWon.getIdApp().equals(gs.getUsers().get(0).getIdApp())) { otherPlayer = gs.getUsers().get(1); }
+                    else { otherPlayer = gs.getUsers().get(0); }
+                    whisper(intentReturn, listeners_user.get(otherPlayer.getIdApp()));
+                }
+                
+                //check game states
+                if (!aiWon) { //if the ai didn't win
+                    if (gs.getGameStatus() == 1) { //if game is won
+        
+                        playerWon.setWins(playerWon.getWins() + 1);
+        
+                        SocketReturnWrapper<ObjectReturnWrapper<Integer>> wonIntentReturn = new SocketReturnWrapper<>(
+                                205,
+                                new ObjectReturnWrapper(200, 1, null)
+                        );
+                        whisper(wonIntentReturn, whisperBackSession); //whisper to player that they won
+                        if (!gs.getAi()) { //whisper to other player that they lost
+    
+                            UserInterface otherPlayer;
+                            if (playerWon.getIdApp().equals(gs.getUsers().get(0).getIdApp())) { otherPlayer = gs.getUsers().get(1); }
+                            else { otherPlayer = gs.getUsers().get(0); }
+                            Session otherPlayerListener = listeners_user.get(otherPlayer.getIdApp());
+                            otherPlayer.setLosses(otherPlayer.getLosses() + 1);
+                            wonIntentReturn = new SocketReturnWrapper<>(
+                                    205,
+                                    new ObjectReturnWrapper(200, 2, null)
+                            );
+                            whisper(wonIntentReturn, otherPlayerListener);
+    
+                            uService.saveUser_existing(otherPlayer);
+                        }
+    
+                        gService.removeGs(gs.getId_db());
+                    }
+                } else { //if the ai did win
+                
+                    playerWon.setLosses(playerWon.getLosses() + 1);
+                    SocketReturnWrapper<ObjectReturnWrapper<Integer>> wonIntentReturn = new SocketReturnWrapper<>(
+                            205,
+                            new ObjectReturnWrapper(200, 2, null)
+                    );
+                    whisper(wonIntentReturn, whisperBackSession); //whisper to player that they lost
+                    
+                    gService.removeGs(gs.getId_db());
+                }
+                
+                if (gs.getTic().checkForCat()) { //if there is a cat game
+        
+                    SocketReturnWrapper<ObjectReturnWrapper<Integer>> wonIntentReturn = new SocketReturnWrapper<>(
+                            205,
+                            new ObjectReturnWrapper(200, 0, null)
+                    );
+                    whisper(wonIntentReturn, whisperBackSession); //whisper to player that it's a tie game
+                    if (!gs.getAi()) { //whisper to other player that it's a tie game
+                        UserInterface otherPlayer;
+                        if (playerWon.getIdApp().equals(gs.getUsers().get(0).getIdApp())) { otherPlayer = gs.getUsers().get(1); }
+                        else { otherPlayer = gs.getUsers().get(0); }
+                        whisper(wonIntentReturn, listeners_user.get(otherPlayer.getIdApp()));
+                        
+                        uService.saveUser_existing(otherPlayer);
+                    }
+    
+                    gService.removeGs(gs.getId_db());
+                }
+            
+                //save database changes
+                uService.saveUser_existing(playerWon);
+            } else {
+        
+                SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
+                
+                        204,
+                        new ObjectReturnWrapper<>(550, new String("Game Session with id [" + game_id + "] not found"), null)
+                );
+                whisper(intentReturn, whisperBackSession);
+            }
+        } else {
+    
+            SocketReturnWrapper<ObjectReturnWrapper<String>> intentReturn = new SocketReturnWrapper<>(
+            
+                    204,
+                    new ObjectReturnWrapper<>(550, new String("Game Session with id [" + game_id + "] not started"), null)
             );
             whisper(intentReturn, whisperBackSession);
         }

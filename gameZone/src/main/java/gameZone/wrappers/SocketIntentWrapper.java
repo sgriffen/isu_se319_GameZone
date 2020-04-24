@@ -1,8 +1,7 @@
 package gameZone.wrappers;
 
 public class SocketIntentWrapper<T> {
-
-
+    
     private int intent;
 
     private T payload;
@@ -34,7 +33,7 @@ public class SocketIntentWrapper<T> {
      * @param identifier
      * 		{@code User.id_app} desired
      */
-    public SocketIntentWrapper(int intent, T payload, String identifier) {
+    public SocketIntentWrapper(int intent, ArrayIntegerWrapper<T> payload, String identifier) {
 
         this.setIntent(intent);
         this.setPayload(payload);
@@ -65,7 +64,7 @@ public class SocketIntentWrapper<T> {
      * @param payload
      * 		Desired {@code payload} for {@code SocketIntentWrapper}
      */
-    public void setPayload(T payload) { this.payload = payload; }
+    public void setPayload(ArrayIntegerWrapper<T> payload) { this.payload = (T) payload; }
     
     /**
      * Get the {@code identifier} of {@code SocketIntentWrapper}
