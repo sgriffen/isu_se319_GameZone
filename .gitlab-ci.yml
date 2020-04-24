@@ -36,7 +36,8 @@ htmlTest:
   stage: htmlTest
   tags:  
       - docker
-  #script:  
+  script:  
+      - :
     #- cd /g11
      # - cd gameZone
      # - npm install
