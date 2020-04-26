@@ -37,9 +37,9 @@ htmlTest:
   tags:  
       - spring
   script:  
-    - cd /g11/gameZone
-      - npm install
-     - npm test
+      - cd g11/gameZone  
+      - npm install  
+      - npm test
       
 autoDeploy:
   stage: autoDeploy
