@@ -37,7 +37,7 @@ htmlTest:
   tags:  
       - spring
   script:  
-      - cd /g11/gameZone
+    - cd /g11/gameZone
       - npm install
      - npm test
       
