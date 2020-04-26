@@ -35,13 +35,12 @@ mavenTest:
 htmlTest: 
   stage: htmlTest
   tags:  
-      - docker
+      - spring
   script:  
-      - noop
-    #- cd /g11
-     # - cd gameZone
-     # - npm install
-     # - npm test
+    - cd /g11
+      - cd gameZone
+      - npm install
+     - npm test
       
 autoDeploy:
   stage: autoDeploy
