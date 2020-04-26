@@ -2,7 +2,7 @@ const{Builder, By, Key, util} = require("selenium-webdriver");
 var driver = new Builder().forBrowser("chrome").build();
 var socket;
 
-async function launch(){
+/*async function launch(){
 	var path = process.cwd()+'../../../main/resources/templates/default/home.html';
 	await driver.get( path);
 	//driver.findElement(By.id("txtFirstName")).sendKeys("Hello"); //all of this is just reference for later
@@ -39,7 +39,7 @@ async function(sent) mess {
 	};
 	
 	
-};
+};*/
 				
 
 jest.setTimeout(50000000);//this can probably be smaller but it's easier to keep it big rn
