@@ -1,46 +1,32 @@
-/*const{Builder, By, Key, util} = require("selenium-webdriver");
-var driver = new Builder().forBrowser("chrome").build();
-var socket;
+class LocalStorageMock {
+  constructor() {
+    this.store = {};
+  }
 
-async function launch(){
-	var path = process.cwd()+'../../../main/resources/templates/default/home.html';
-	await driver.get( path);
-	//driver.findElement(By.id("txtFirstName")).sendKeys("Hello"); //all of this is just reference for later
-	//driver.findElement(By.id("txtLastName")).sendKeys("There");
-	//await driver.findElement(By.id("btnValidate")).click();
-	let w = await driver.findElement(By.id('connected')).getText();
-	driver.quit()
-	return w;
-}
+  clear() {
+    this.store = {};
+  }
 
-async function() connect {
-	var connected=false;
-	socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/identifier");
-	await socket.onopen = function(e) {
-		connected=true;
-	};
-	
+  getItem(key) {
+    //return this.store[key] || null;
+	return 12345;
+  }
+
+  setItem(key, value) {
+    this.store[key] = value.toString();
+  }
+
+  removeItem(key) {
+    delete this.store[key];
+  }
 };
-	
-async function(sent) mess {
-	
-	returned="";
-	
-	let json = {
-		"intent": 201,
-		"payload": sent,
-		"identifier": 0
-	};
-	socket.send(JSON.stringify(json));
-	
-	await socket.onmessage = function(event) {
-		var jsonObject = JSON.parse(event.data);
-		returned = jsonObject.payload;
-	};
-	
-	
-};*/
-				
+
+const mockSend = jest.fn();
+
+frontendLogic.sendBackend = new mockSend
+
+global.localStorage = new LocalStorageMock;
+
 
 jest.setTimeout(50000000);//this can probably be smaller but it's easier to keep it big rn
 
