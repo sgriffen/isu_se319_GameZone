@@ -23,8 +23,6 @@ class LocalStorageMock {
 
 const mockSend = jest.fn();
 
-frontendLogic.sendBackend = new mockSend
-
 global.localStorage = new LocalStorageMock;
 
 
