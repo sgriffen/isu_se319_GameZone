@@ -23,14 +23,14 @@ class LocalStorageMock {
 
 const mockSend = jest.fn();
 
-global.localStorage = new LocalStorageMock;
+//global.localStorage = new LocalStorageMock;
 
 
 jest.setTimeout(50000000);//this can probably be smaller but it's easier to keep it big rn
 
 test('test socket connectability HTML', () => {
   //return connect().then(data => {
-    expect(true).toBeTruthy();
+    expect(getmyTurn()).toBeTruthy();
   //});
 });
 

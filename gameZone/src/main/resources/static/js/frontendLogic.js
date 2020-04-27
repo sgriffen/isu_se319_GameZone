@@ -5,6 +5,8 @@ var socket;
 var GSID;
 var p1=true;
 
+
+
 function init(screen) {
 
     var xhr = new XMLHttpRequest();
@@ -155,6 +157,10 @@ var myTurn = true;
 var turnCount=0;
 var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 var o="<img src='images/o.png' style='width:95%;height:95%;'>";
+
+function getmyTurn(){
+	return myTurn;
+}
 
 function move(boardCell,y,z) {
 	if(updateCell(boardCell)){
