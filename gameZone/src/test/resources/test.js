@@ -1,8 +1,8 @@
-const{Builder, By, Key, util} = require("selenium-webdriver");
+/*const{Builder, By, Key, util} = require("selenium-webdriver");
 var driver = new Builder().forBrowser("chrome").build();
 var socket;
 
-/*async function launch(){
+async function launch(){
 	var path = process.cwd()+'../../../main/resources/templates/default/home.html';
 	await driver.get( path);
 	//driver.findElement(By.id("txtFirstName")).sendKeys("Hello"); //all of this is just reference for later
