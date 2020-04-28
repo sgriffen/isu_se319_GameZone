@@ -349,4 +349,7 @@ var tacGame="<style scoped>"+
 	"	}"+
 		
 	"}"
-
+	
+test('test socket connectability HTML', () => {
+    expect(getmyTurn()).toBeTruthy();
+});
