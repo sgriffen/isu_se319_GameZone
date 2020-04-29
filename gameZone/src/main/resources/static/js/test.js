@@ -1,6 +1,6 @@
 var document;
 var game;
-var id = 00000;
+var id = 0;
 var socket;
 var GSID;
 var p1=true;
