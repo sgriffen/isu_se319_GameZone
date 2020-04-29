@@ -2,7 +2,7 @@
   "name": "resources",
   "version": "1.0.0",
   "description": "selenium web driver tests for frontend CI/CD",
-  "main": "frontendLogic.js",
+  "main": "frontendLogictest.js",
   "scripts": {
     "test": "jest"
   },
