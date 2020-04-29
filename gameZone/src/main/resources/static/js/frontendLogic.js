@@ -344,7 +344,7 @@ var getmyTurn=function(){
 	return myTurn;
 }
 
-var setdocument(doc){
+var setdocument=function(doc){
 	document=doc;
 }
 
