@@ -1,7 +1,4 @@
 package gameZone.chess;
-/**
- *
- */
 
 import gameZone.chess.pieces.*;
 import gameZone.chess.Tile;
@@ -70,6 +67,68 @@ public class Board {
 
         for(int i = 0; i < 8; i++) {
             tiles[i][7-1] = new Tile(new Pawn(co));
+        }
+    }
+
+    public void translateBoard(Integer[][] board)
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                if(board[i][j] == 0)
+                {
+                    tiles[i][j] = new Tile();
+                }
+                if(board[i][j] == 1)
+                {
+                    tiles[i][j] = new Tile(new Pawn(Piece.BLACK));
+                }
+                if(board[i][j] == 2)
+                {
+                    tiles[i][j] = new Tile(new Bishop(Piece.BLACK));
+                }
+                if(board[i][j] == 3)
+                {
+                    tiles[i][j] = new Tile(new Knight(Piece.BLACK));
+                }
+                if(board[i][j] == 4)
+                {
+                    tiles[i][j] = new Tile(new Rook(Piece.BLACK));
+                }
+                if(board[i][j] == 5)
+                {
+                    tiles[i][j] = new Tile(new Queen(Piece.BLACK));
+                }
+                if(board[i][j] == 6)
+                {
+                    tiles[i][j] = new Tile(new King(Piece.BLACK));
+                }
+                if(board[i][j] == 7)
+                {
+                    tiles[i][j] = new Tile(new Pawn(Piece.WHITE));
+                }
+                if(board[i][j] == 8)
+                {
+                    tiles[i][j] = new Tile(new Bishop(Piece.WHITE));
+                }
+                if(board[i][j] == 9)
+                {
+                    tiles[i][j] = new Tile(new Pawn(Piece.WHITE));
+                }
+                if(board[i][j] == 10)
+                {
+                    tiles[i][j] = new Tile(new Bishop(Piece.WHITE));
+                }
+                if(board[i][j] == 11)
+                {
+                    tiles[i][j] = new Tile(new Pawn(Piece.WHITE));
+                }
+                if(board[i][j] == 12)
+                {
+                    tiles[i][j] = new Tile(new Bishop(Piece.WHITE));
+                }
+            }
         }
     }
 
