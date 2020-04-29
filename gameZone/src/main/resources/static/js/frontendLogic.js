@@ -7,7 +7,7 @@ var p1=true;
 
 
 
-function init(screen) {
+var init=function(screen) {
 
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
@@ -100,7 +100,7 @@ function updateBoard(newBoard){
 	updateTurn();
 }
 
-function accepted(){
+var accepted=function(){
 	document.getElementById('onCenter').innerHTML=tacGame;
 }
 
@@ -132,7 +132,7 @@ function invitation(requestor){
 	}
 }
 
-function selectGame(g){
+var selectGame=function(g){
 	game=g;
 	document.getElementById('onCenter').innerHTML = "<h style='color:#ff9900;'>Your player ID is <h>"+id+
 	"<br>"+
@@ -145,11 +145,11 @@ function selectGame(g){
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
-function requestHuman(requested){
+var requestHuman=function(requested){
 	sendBackend(202,requested,0,id);
 }
 
-function requestAI(){
+var requestAI=function(){
 	sendBackend(202,"AI",0,id);
 }
 
@@ -157,10 +157,6 @@ var myTurn = true;
 var turnCount=0;
 var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 var o="<img src='images/o.png' style='width:95%;height:95%;'>";
-
-var getmyTurn=function(){
-	return myTurn;
-}
 
 function move(boardCell,y,z) {
 	if(updateCell(boardCell)){
@@ -196,7 +192,7 @@ function sendBoard(){
 	//socket.send(JSON.stringify(json));
 }
 	
-function updateCell(boardCell) {
+var updateCell=function(boardCell) {
 	if(boardCell.innerHTML==x||boardCell.innerHTML==o)
 		return false
 	
@@ -231,7 +227,7 @@ var sendBackend=function(code,arra,integ,identif) {//this code oddity was made s
 		"identifier": identif
 	};
 	
-	//socket.send(JSON.stringify(json));
+	socket.send(JSON.stringify(json));
 }
 
 var tacGame="<style scoped>"+
@@ -343,5 +339,17 @@ var tacGame="<style scoped>"+
 	"	}"+
 		
 	"}"
-	
-module.exports = { getmyTurn }
+
+var getmyTurn=function(){
+	return myTurn;
+}
+
+var setdocument(doc){
+	document=doc;
+}
+
+var getSocket=function(){
+	return socket;
+}
+
+module.exports = { getmyTurn,sendBackend,setdocument,updateCell,requestAI,requestHuman,accepted,selectGame,init,socket }

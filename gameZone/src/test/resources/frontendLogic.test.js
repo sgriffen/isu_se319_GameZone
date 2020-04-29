@@ -22,7 +22,7 @@ class LocalStorageMock {
 };
 
 const mockSend = jest.fn();
-const { getmyTurn } = require('./../../main/resources/static/js/frontendLogic.js')
+const { getmyTurn,sendBackend,setdocument,updateCell,requestAI,requestHuman,accepted,selectGame,init,socket } = require('./../../main/resources/static/js/frontendLogic.js')
 
 //global.localStorage = new LocalStorageMock;
 
