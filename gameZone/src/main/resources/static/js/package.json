@@ -1,5 +1,8 @@
 {
   "name": "resources",
+  "jest": {
+    "verbose": true
+  },
   "version": "1.0.0",
   "description": "selenium web driver tests for frontend CI/CD",
   "main": "frontendLogictest.js",
