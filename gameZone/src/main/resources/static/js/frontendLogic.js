@@ -158,7 +158,7 @@ var turnCount=0;
 var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 var o="<img src='images/o.png' style='width:95%;height:95%;'>";
 
-function getmyTurn(){
+var getmyTurn=function(){
 	return myTurn;
 }
 
@@ -231,14 +231,8 @@ var sendBackend=function(code,arra,integ,identif) {//this code oddity was made s
 		"identifier": identif
 	};
 	
-	socket.send(JSON.stringify(json));
+	//socket.send(JSON.stringify(json));
 }
-
-test('test socket connectability HTML', () => {
-  //return connect().then(data => {
-    expect(true).toBeTruthy();
-  //});
-});
 
 var tacGame="<style scoped>"+
 "table {"+
@@ -350,6 +344,4 @@ var tacGame="<style scoped>"+
 		
 	"}"
 	
-test('test socket connectability HTML', () => {
-    expect(getmyTurn()).toBeTruthy();
-});
+module.exports = { getmyTurn }
