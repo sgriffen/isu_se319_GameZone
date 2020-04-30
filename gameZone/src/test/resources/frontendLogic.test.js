@@ -27,6 +27,8 @@ const { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestH
 
 setStorage(new LocalStorageMock);
 var back=jest.fn()
+var x="<img src='images/x.png' style='width:95%;height:95%;'>";
+var o="<img src='images/o.png' style='width:95%;height:95%;'>";
 
 test('test init', () => {
 	init(null);
@@ -41,16 +43,11 @@ test('test updating cell', () => {
 	setPlayer(true);
 	setmyTurn(true);
     expect(updateCell(cell,'')).toBeTruthy();
-	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-	cell=document.createElement("div");
-	cell.appendChild(document.createTextNode(x));
 	expect(updateCell(cell,x)).toBeFalsy();
 	setPlayer(false);
-	cell="<div><img src='images/o.png' style='width:95%;height:95%;'></div>";
-	expect(updateCell(cell)).toBeFalsy();
+	expect(updateCell(cell,o)).toBeFalsy();
 	setmyTurn(false);
-	cell="<div></div>";
-	expect(updateCell(cell)).toBeFalsy();
+	expect(updateCell(cell,'')).toBeFalsy();
 });
 
 test('test request AI', () => {
