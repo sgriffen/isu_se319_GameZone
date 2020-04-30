@@ -42,7 +42,8 @@ test('test updating cell', () => {
 	setmyTurn(true);
     expect(updateCell(cell)).toBeTruthy();
 	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-	cell.innerHTML=x;
+	cell=document.createElement("div");
+	cell.appendChild(document.createTextNode(x));
 	expect(cell.innerHTML).toBe(x);
 	expect(updateCell(cell)).toBeFalsy();
 	setPlayer(false);
