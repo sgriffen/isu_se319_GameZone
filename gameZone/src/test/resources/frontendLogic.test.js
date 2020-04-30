@@ -22,12 +22,40 @@ class LocalStorageMock {
 };
 
 const mockSend = jest.fn();
-const { getmyTurn,sendBackend,setdocument,updateCell,requestAI,requestHuman,accepted,selectGame,init,socket } = require('./../../main/resources/static/js/frontendLogic.js')
+const { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestHuman,init,getSocket,setStorage,closeSocket } 
+	= require('./../../main/resources/static/js/frontendLogic.js')
 
-//global.localStorage = new LocalStorageMock;
+setStorage(new LocalStorageMock);
 
-
-
-test('test socket connectability HTML', () => {
-    expect(getmyTurn()).toBeTruthy();
+test('test init', () => {
+	var back=jest.fn(code,arra,integ,identif) {}
+	init(null);
+	expect(getSocket).toBeDefined();
+	expect(getSocket).not.toBeNull();
+	closeSocket();
 });
+
+
+test('test updating cell', () => {
+	let cell="<div></div>";
+	setPlayer(true);
+	setmyTurn(true);
+    expect(updateCell(cell)).toBeTruthy();
+	let cell="<div><img src='images/x.png' style='width:95%;height:95%;'></div>";
+	expect(updateCell(cell)).toBeFalsy();
+	setPlayer(false);
+	cell="<div><img src='images/o.png' style='width:95%;height:95%;'></div>";
+	expect(updateCell(cell)).toBeFalsy();
+	setmyTurn(false);
+	cell="<div></div>";
+	expect(updateCell(cell)).toBeFalsy();
+});
+
+test('test request AI', () => {
+	requestAI()
+	expect(back.mock.calls[0][0]).toBe(202);
+	expect(back.mock.calls[0][1]).toBe("AI");
+	expect(back.mock.calls[0][2]).toBe(0);
+	expect(back.mock.calls[0][3]).toBe(12345);
+});
+

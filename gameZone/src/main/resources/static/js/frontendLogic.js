@@ -4,7 +4,11 @@ var id = 0;
 var socket;
 var GSID;
 var p1=true;
-
+var myTurn = true;
+var turnCount=0;
+var x="<img src='images/x.png' style='width:95%;height:95%;'>";
+var o="<img src='images/o.png' style='width:95%;height:95%;'>";
+var storage=window.localStorage;
 
 
 var init=function(screen) {
@@ -19,7 +23,7 @@ var init=function(screen) {
     });
 
 	document=screen;
-	if (window.localStorage.getItem("userID") == null) {
+	if (storage.getItem("userID") == null) {
 	    xhr.open("POST", "http://localhost:8080/user/generate/token",true);
 	    //xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
 	    xhr.send();
@@ -30,8 +34,8 @@ function socket_xhr(xhr) {
 
     if (xhr != null) {
         id = JSON.parse(xhr.response).payload;
-        window.localStorage.setItem("userID", id);
-    } else { id = window.localStorage.getItem("userID"); }
+        storage.setItem("userID", id);
+    } else { id = storage.getItem("userID"); }
 
     socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
 
@@ -79,6 +83,10 @@ function socket_xhr(xhr) {
                 //alert("[close] Connection died");
         }
     };
+}
+
+var closeSocket=function(){
+	socket.close();
 }
 
 function updateBoard(newBoard){
@@ -153,16 +161,12 @@ var requestAI=function(){
 	sendBackend(202,"AI",0,id);
 }
 
-var myTurn = true;
-var turnCount=0;
-var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-var o="<img src='images/o.png' style='width:95%;height:95%;'>";
-
 function move(boardCell,y,z) {
 	if(updateCell(boardCell)){
 		//winCon(y,z)
 		sendBoard();
 		turnCount++;
+		updateTurn();
 	}
 }
 	
@@ -193,7 +197,7 @@ function sendBoard(){
 }
 	
 var updateCell=function(boardCell) {
-	if(boardCell.innerHTML==x||boardCell.innerHTML==o)
+	if(boardCell.innerHTML==x||boardCell.innerHTML==o||myTurn==false)
 		return false
 	
 	if(p1){
@@ -340,16 +344,24 @@ var tacGame="<style scoped>"+
 		
 	"}"
 
-var getmyTurn=function(){
-	return myTurn;
+var setmyTurn=function(tu){
+	myTurn=tu;
 }
 
-var setdocument=function(doc){
-	document=doc;
+var setPlayer=function(p){
+	p1=p;
+}
+
+var setBackend=function(bac){
+	sendBackend=bac;
 }
 
 var getSocket=function(){
 	return socket;
 }
 
-module.exports = { getmyTurn,sendBackend,setdocument,updateCell,requestAI,requestHuman,accepted,selectGame,init,socket }
+var setStorage=function(sto){
+	storage=sto;
+}
+
+module.exports = { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestHuman,accepted,selectGame,init,getSocket,setStorage,closeSocket }
