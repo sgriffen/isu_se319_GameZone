@@ -41,7 +41,7 @@ test('test updating cell', () => {
 	setPlayer(true);
 	setmyTurn(true);
     expect(updateCell(cell)).toBeTruthy();
-	let cell="<div><img src='images/x.png' style='width:95%;height:95%;'></div>";
+	cell="<div><img src='images/x.png' style='width:95%;height:95%;'></div>";
 	expect(updateCell(cell)).toBeFalsy();
 	setPlayer(false);
 	cell="<div><img src='images/o.png' style='width:95%;height:95%;'></div>";
