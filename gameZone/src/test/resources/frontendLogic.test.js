@@ -26,9 +26,10 @@ const { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestH
 	= require('./../../main/resources/static/js/frontendLogic.js')
 
 setStorage(new LocalStorageMock);
-var back=jest.fn((w,x,y,z)=>null);
+var back=jest.fn(();
 var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 var o="<img src='images/o.png' style='width:95%;height:95%;'>";
+setBackend(back);
 
 test('test init', () => {
 	init(null);
