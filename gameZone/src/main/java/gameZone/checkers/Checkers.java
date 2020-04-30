@@ -147,7 +147,7 @@ public class Checkers {
     public Integer[][] AImove()
     {
         Random r = new Random();
-        List<Move> L = getLegalMoves(board);
+        List<Move> L = getLegalMoves(this.board);
         applyMove(L.get(r.nextInt(L.size())));
         return getBoard();
     }
@@ -159,7 +159,7 @@ public class Checkers {
         //Iterate over the entire board
         for(int i = 0; i < 8; i++)
         {
-            for(int j =0; i < 8; j++)
+            for(int j = 0; j < 8; j++)
             {
                 if(board[i][j] == 1 || board[i][j] == 3)
                 {
@@ -172,7 +172,9 @@ public class Checkers {
                 }
             }
         }
-        return jumpMoves.isEmpty() ? slideMoves : jumpMoves;
+        if(jumpMoves.isEmpty())
+            return slideMoves;
+        return jumpMoves;
     }
 
     private void getSlides(List<Move> moves, int pieceType, int startRow, int startCol, Integer[][] state)
@@ -182,9 +184,9 @@ public class Checkers {
 
         switch(pieceType){
             case 1:
-                endRow.add(startRow + 1);
-                endRow.add(startRow + 1);
-                endRow.add(startCol + 1);
+                endRow.add(startRow - 1);
+                endRow.add(startRow - 1);
+                endCol.add(startCol + 1);
                 endCol.add(startCol - 1);
                 break;
             case 3:
@@ -206,9 +208,10 @@ public class Checkers {
             //check if inside board
             if(endRow.get(i) < 0 || endRow.get(i) > 7 || endCol.get(i) < 0 || endCol.get(i) > 7) continue;
             //check if end position is occupied
-            if(state[endRow.get(i)][endCol.get(i)] != 0) continue;
-            //move was legal so add it to list
-            moves.add(new Move(startRow, startCol, endRow.get(i), endCol.get(i), state));
+            if(state[endRow.get(i)][endCol.get(i)] == 0) {
+                //move was legal so add it to list
+                moves.add(new Move(startRow, startCol, endRow.get(i), endCol.get(i), state));
+            }
         }
     }
 
