@@ -28,7 +28,7 @@ const { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestH
 setStorage(new LocalStorageMock);
 
 test('test init', () => {
-	var back=jest.fn(code,arra,integ,identif) {}
+	var back=jest.fn()
 	init(null);
 	expect(getSocket).toBeDefined();
 	expect(getSocket).not.toBeNull();
