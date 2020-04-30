@@ -1,6 +1,7 @@
 package gameZone.gameSession;
 
 import gameZone.checkers.Checkers;
+import gameZone.chess.*;
 import gameZone.components.GlobalResources;
 import gameZone.ticTacToe.TicTacToe;
 import gameZone.user.User;
@@ -67,6 +68,11 @@ public class GameSession {
 	})
 	private Checkers check;
 
+	/**
+	 * Chess game for this {@code GameSession}. Used for holding the Checkers game if one is being played.
+	 */
+	@Embedded
+	private Chess chess;
 	/***END INSTANCE VARIABLES***/
 	
 	
@@ -79,6 +85,31 @@ public class GameSession {
 		
 		this.setUsers(new ArrayList<User>());
 		this.setGameStatus(-1);
+		this.setId_app(new String());
+	}
+
+	/**
+	 * Constructor with both Users
+	 */
+	public GameSession(User player1, User player2, int gametype, Boolean ai) {
+
+		this.setUsers(new ArrayList<User>());
+		this.addPlayers(player1, player2);
+		this.setGameStatus(-1);
+		this.ai = ai;
+		this.gameType = gametype;
+		if(gametype == 0)
+		{
+			tic = new TicTacToe();
+		}
+		if(gametype == 1)
+		{
+			check = new Checkers();
+		}
+		if(gametype == 2)
+		{
+			chess = new Chess();
+		}
 		this.setId_app(new String());
 	}
 	
@@ -142,6 +173,10 @@ public class GameSession {
 	{
 		this.check = check;
 	}
+
+	public Chess getChess() {return chess;}
+
+	public void setChess(Chess chess) {this.chess = chess;}
 	
 	/***END GETTERS/SETTERS***/
 	
