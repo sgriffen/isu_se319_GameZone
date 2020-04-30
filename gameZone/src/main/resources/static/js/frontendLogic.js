@@ -162,7 +162,7 @@ var requestAI=function(){
 }
 
 function move(boardCell,y,z) {
-	if(updateCell(boardCell)){
+	if(updateCell(boardCell,boardCell.innerHTML)){
 		//winCon(y,z)
 		sendBoard();
 		turnCount++;
@@ -196,8 +196,8 @@ function sendBoard(){
 	//socket.send(JSON.stringify(json));
 }
 	
-var updateCell=function(boardCell) {
-	if(boardCell.innerHTML==x||boardCell.innerHTML==o||myTurn==false)
+var updateCell=function(boardCell,contents) {
+	if(contents==x||contents==o||myTurn==false)
 		return false
 	
 	if(p1){
