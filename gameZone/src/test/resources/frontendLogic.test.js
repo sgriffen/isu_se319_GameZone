@@ -44,7 +44,7 @@ test('test updating cell', () => {
 	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 	cell=document.createElement("div");
 	cell.appendChild(document.createTextNode(x));
-	expect(cell.innerHTML).toBe(x);
+	expect(String(cell.innerHTML)).toBe(x);
 	expect(updateCell(cell)).toBeFalsy();
 	setPlayer(false);
 	cell="<div><img src='images/o.png' style='width:95%;height:95%;'></div>";
