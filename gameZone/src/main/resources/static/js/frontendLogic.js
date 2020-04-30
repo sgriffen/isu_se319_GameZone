@@ -108,7 +108,7 @@ function updateBoard(newBoard){
 	updateTurn();
 }
 
-var accepted=function(){
+function accepted(){
 	document.getElementById('onCenter').innerHTML=tacGame;
 }
 
@@ -140,7 +140,7 @@ function invitation(requestor){
 	}
 }
 
-var selectGame=function(g){
+function selectGame(g){
 	game=g;
 	document.getElementById('onCenter').innerHTML = "<h style='color:#ff9900;'>Your player ID is <h>"+id+
 	"<br>"+
@@ -364,4 +364,4 @@ var setStorage=function(sto){
 	storage=sto;
 }
 
-module.exports = { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestHuman,accepted,selectGame,init,getSocket,setStorage,closeSocket }
+module.exports = { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestHuman,init,getSocket,setStorage,closeSocket }
