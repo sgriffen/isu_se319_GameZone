@@ -26,9 +26,9 @@ const { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestH
 	= require('./../../main/resources/static/js/frontendLogic.js')
 
 setStorage(new LocalStorageMock);
+var back=jest.fn()
 
 test('test init', () => {
-	var back=jest.fn()
 	init(null);
 	expect(getSocket).toBeDefined();
 	expect(getSocket).not.toBeNull();
@@ -41,7 +41,7 @@ test('test updating cell', () => {
 	setPlayer(true);
 	setmyTurn(true);
     expect(updateCell(cell)).toBeTruthy();
-	cell="<div><img src='images/x.png' style='width:95%;height:95%;'></div>";
+	cell="<img src='images/x.png' style='width:95%;height:95%;'>";
 	expect(updateCell(cell)).toBeFalsy();
 	setPlayer(false);
 	cell="<div><img src='images/o.png' style='width:95%;height:95%;'></div>";
