@@ -585,7 +585,7 @@ var checkGame="<style scoped>"+
 	"		firstY = y;"+
 	"		firstZ = z;}"+
 	"	else{"+
-	"		if(updateCell(boardCell)){"+//needs heavily modified
+	"		if(updateCell(boardCell, y, z)){"+//needs heavily modified
 	"			winCon(y,z)"+
 	"			updateTurn();"+
 	"			turnCount++;"+
@@ -594,14 +594,31 @@ var checkGame="<style scoped>"+
 	"	}"+
 	"}"+
 	//TODO, update to checkers functionality
-	"function updateCell(boardCell) {"+
+	"function updateCell(boardCell, y, z) {"+
 	"	if(boardCell.innerHTML==x||boardCell.innerHTML==o)"+
 	"		return false"+
-		
 	"	if(myTurn){"+
-	"		boardCell.innerHTML =x"+
+	"		if(board.rows[firstY+1].cells[firstZ+1].innerHTML == o && (y ==firstY+2 && z == firstZ+2)){"+
+	"			boardCell.innerHTML =x"+
+	"		else if(board.rows[firstY+1].cells[firstZ-1].innerHTML == o && (y ==firstY+2 && z == firstZ-2)){"+
+	"			boardCell.innerHTML =x"+
+	"		else if(y == firstY + 1 && z == firstZ + 1){" +
+	"			boardCell.innerHTML =x"+
+	"		else if(y == firstY + 1 && z == firstZ - 1){" +
+	"			boardCell.innerHTML =x"+
+	"		else{"+
+	"			return false;}" +
 	"	}else{"+
-	"		boardCell.innerHTML =o"+
+	"		if(board.rows[firstY-1].cells[firstZ+1].innerHTML == o && (y ==firstY-2 && z == firstZ+2)){"+
+	"			boardCell.innerHTML =o"+
+	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == o && (y ==firstY-2 && z == firstZ-2)){"+
+	"			boardCell.innerHTML =o"+
+	"		else if(y == firstY - 1 && z == firstZ + 1){" +
+	"			boardCell.innerHTML =o"+
+	"		else if(y == firstY - 1 && z == firstZ - 1){" +
+	"			boardCell.innerHTML =o"+
+	"		else{"+
+	"			return false;}" +
 	"	}"+
 	"	return true"+
 	"}"+
