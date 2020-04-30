@@ -248,6 +248,19 @@ function requestAI(){
 			p.innerHTML="It is X's turn"
 		}
 	}
+	
+	var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
+	let json = {
+        "intent": code,
+		"payload": {
+			"array": arra,
+			"integer": integ
+		},
+		"identifier": identif
+	};
+	
+	socket.send(JSON.stringify(json));
+}
 
 var tacGame="<style scoped>"+
 "table {"+
