@@ -66,7 +66,9 @@ public class DefaultController {
     /* **************************************************** START GET MAPPINGS ***************************************************** */
 
     @GetMapping(value = "")
-    public String index() { return dService.index(); }
+    public String index_html() { return dService.index_html(); }
+    @GetMapping(value = "/chess")
+    public String chess_html() { return dService.chess_html(); }
 
     /* ***************************************************** END GET MAPPINGS ****************************************************** */
 

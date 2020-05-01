@@ -3,12 +3,15 @@
 <html lang="en">
 	<head>
 		<title>gGaM3_zZoN3</title>
+		<link rel="stylesheet" type="text/css" href="/refs/css/default.css">
 	</head>
 
 	<body style="background-color:DarkBlue; height: 95vh">
 		<script src="/refs/js/frontendLogic.js" type="text/javascript"></script>
+		<script src="/refs/js/chess.js" type="text/javascript"></script>
+		
 		<script>
-			function ticTrans(){
+			function ticTrans() {
 				init(document)
 				selectGame(0);
 			}
@@ -17,7 +20,7 @@
 				selectGame(1);
 			}
 			
-			function playerSelect(){
+			function playerSelect() {
 				var e = document.getElementById("PvA");
 				var requested = e.options[e.selectedIndex].value;
 				e = document.getElementById("requestID");

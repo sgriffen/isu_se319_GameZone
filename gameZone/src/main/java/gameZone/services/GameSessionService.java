@@ -4,9 +4,14 @@ import gameZone.components.GlobalResources;
 import gameZone.repositories.GameSessionRepository;
 import gameZone.gameSession.GameSession;
 import gameZone.repositories.UserRepository;
+import gameZone.ticTacToe.TicTacToe;
 import gameZone.user.User;
+import gameZone.user.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /* 
  * Service for {@code SessionController}
@@ -53,23 +58,27 @@ public class GameSessionService {
 
 	/***HELPERS***/
 
-	public String generateGS(User player1, User player2, int gameType, Boolean ai) {
+	public String generateGS(GameSession gs_setup, ArrayList<User> players, int gameType, Boolean ai) {
 		
-		GameSession gs = new GameSession(player1, player2, gameType, ai);
-		
-		if (!ai) {
-			
-			player1.setGameSession(gs);
-			player2.setGameSession(gs);
-			player1.setPlace(1);
-			player2.setPlace(2);
-			uRepo.save(player1);
-			uRepo.save(player2);
+		gs_setup.setAi(ai);
+		gs_setup.setId_app(gRec.confirmAuthenticator());
+		gs_setup.setUsers(players);
+		switch(gameType) {
+			default:
+				gs_setup.setTic(new TicTacToe());
+				break;
 		}
-		gs.setId_app(gRec.confirmAuthenticator());
-		gRepo.save(gs);
+		gRepo.save(gs_setup);
 		
-		return gs.getId_app();
+		int i = 1;
+		for (UserInterface u : players) {
+		
+			u.setPlace(i);
+			u.setGameSession(gs_setup);
+			uRepo.save((User) u);
+		}
+		
+		return gs_setup.getId_app();
 	}
 	
 	public GameSession getGameSession(String id) {
@@ -105,5 +114,63 @@ public class GameSessionService {
 		try { gRepo.deleteById(gs_id); }
 		catch(Exception e) { return false; }
 		return true;
+	}
+	
+	public GameSession gameMove(String gs_id, Integer game_type, Integer[][] gameBoard) {
+		
+		GameSession gs = getGameSession(gs_id);
+		
+		if (gs != null) {
+			
+			boolean aiWon = false;
+			
+			switch (game_type) {
+				
+				case 0: //game is tic tac toe
+					gs.getTic().setBoard(gameBoard);
+					gs.getTic().setNumMoves(gs.getTic().getNumMoves() + 1);
+					if (gs.getTic().checkForWin()) { gs.setGameStatus(1); }
+					if (gs.getAi() && gs.getGameStatus() != 1) {
+						
+						gs.getTic().setBoard(gs.getTic().AImove(gs.getTic().getBoard()));
+						gs.getTic().setNumMoves(gs.getTic().getNumMoves() + 1);
+						if (gs.getTic().checkForWin()) {
+							gs.setGameStatus(2);
+						}
+					}
+					break;
+				case 1: //game is checkers
+					gs.getCheck().setBoard(gameBoard);
+					//gs.getCheck().setNumMoves(gs.getTic().getNumMoves() + 1);
+					if (gs.getCheck().checkForWin()) { gs.setGameStatus(1); }
+					if (gs.getAi() && gs.getGameStatus() != 1) {
+
+						gs.getCheck().setBoard(gs.getCheck().AImove());
+						//gs.getCheck().setNumMoves(gs.getCheck().getNumMoves() + 1);
+						if (gs.getCheck().checkForWin()) {
+							gs.setGameStatus(2);
+						}
+					}
+					break;
+				case 2: //game is chess
+					gs.getChess().setBoard(gameBoard);
+					if(gs.getChess().checkForWin()) {gs.setGameStatus(1);}
+					if(gs.getAi() && gs.getGameStatus() != 1){
+						gs.getCheck().setBoard(gs.getChess().AImove());
+						if(gs.getChess().checkForWin()){
+							gs.setGameStatus(2);
+						}
+					}
+					break;
+				default: //game is ultimate tic tac toe
+					
+					break;
+			}
+			gRepo.save(gs);
+			
+			return gs;
+		}
+		
+		return null;
 	}
 }
