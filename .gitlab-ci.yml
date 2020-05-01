@@ -32,14 +32,14 @@ mavenTest:
     paths:  
       - gameZone/target/*.jar               
  
-htmlTest: 
-  stage: htmlTest
-  tags:  
-      - spring
-  script:  
-      - cd gameZone/src/test/resources
-      - npm install  
-      - npm test
+#htmlTest: 
+#  stage: htmlTest
+#  tags:  
+#      - spring
+#  script:  
+#      - cd gameZone/src/test/resources
+#      - npm install  
+#      - npm test
       
 autoDeploy:
   stage: autoDeploy
@@ -51,8 +51,10 @@ autoDeploy:
     - cd gameZone
     - sudo rm -r /g11/resources/templates
     - sudo rm -r /g11/resources/static
+    - sudo rm -r /g11/resources/images
     - sudo mv src/main/resources/templates /g11/resources/templates
     - sudo mv src/main/resources/static /g11/resources/static
+    - sudo mv src/main/resources/static /g11/resources/images
     - mvn package
     - sudo mv target/*.jar /g11/gameZone.jar
     - sudo chmod -R 777 /g11
