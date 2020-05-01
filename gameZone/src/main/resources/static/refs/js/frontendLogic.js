@@ -292,10 +292,10 @@ function requestAI(){
 		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
 			return false
 		
-		if(p1){
-		boardCell.innerHTML =x
-		boardCell.value = 1
-		}else{
+		if (p1) {
+		    boardCell.innerHTML =x
+		    boardCell.value = 1
+		} else {
 			boardCell.innerHTML =o
 			boardCell.value = 2
 		}
@@ -420,7 +420,7 @@ var tacGame="<style scoped>"+
 "</style>"+
 	"<h1>Tic-Tac-Toe</h1>"+
 	"<br>"+
-	"<p id='turn'>It is X's turn</p>"+
+	"<p id='turn'>It's your turn</p>"+
 	"<br><br>"+
 	"<table id='board'>"+
 	"	<tr>"+
@@ -441,8 +441,6 @@ var tacGame="<style scoped>"+
 	"</table>"+
   "<script>"+
 	"var board = document.getElementById('board');"+
-	"var myTurn = true;"+
-	"var turnCount=0;"+
 	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
 	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
 	"if (board != null) {"+
@@ -473,17 +471,7 @@ var tacGame="<style scoped>"+
 	"	}"+
 	"	return true"+
 	"}"+
-	
-	"function updateTurn() {"+
-	"	p=document.getElementById('turn');"+
-	"	if(myTurn){"+
-	"		myTurn=false;"+
-	"		p.innerHTML='It is O's turn'"+
-	"	}else{"+
-	"		myTurn=true;"+
-	"		p.innerHTML='It is X's turn'"+
-	"	}"+
-	"}"+
+
 	
 	"function winCon(y,z) {"+
 	"	if(turnCount>=8){"+
