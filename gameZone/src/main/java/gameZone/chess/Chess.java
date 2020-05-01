@@ -1,5 +1,6 @@
 package gameZone.chess;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gameZone.chess.player.*;
 import gameZone.chess.pieces.*;
 import gameZone.components.GlobalResources;
@@ -36,12 +37,14 @@ public class Chess {
     /**
      * FEN
      */
+    @JsonIgnore
     private String fen;
 
     /**
      * Turn
      */
-    private int turn = 0;
+    @JsonIgnore
+    private Integer turn = 0;
 
     public Chess()
     {

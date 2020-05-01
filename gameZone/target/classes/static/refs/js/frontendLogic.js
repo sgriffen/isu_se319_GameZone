@@ -266,8 +266,8 @@ var requestAI=function(){
 
 
 var updateCell = function(boardCell,contents) {
-	let ex="<img src='images/x.png' style='width:95%;height:95%;'>";
-	let oh="<img src='images/o.png' style='width:95%;height:95%;'>";
+	let ex="<img src='images/tictactoe/x.png' class='game_piece'>";
+	let oh="<img src='images/tictactoe/o.png' class='game_piece'>";
     if(contents==ex||contents==oh||myTurn==false)
         return false
 

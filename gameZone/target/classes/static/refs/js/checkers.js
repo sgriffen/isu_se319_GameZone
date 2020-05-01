@@ -1,6 +1,4 @@
 
-var x;
-var o;
 var xKing;
 var oKing;
 var first;  //click one button that contains a piece and then another
@@ -11,10 +9,10 @@ function check_init() {
 
     turnCount=0;
     board = document.getElementById('board');
-    x = "<img src='/images/checkers/blackCheck.jpg' class='game_piece'>";
-    o = "<img src='/images/checkers/whiteCheck.jpg' class='game_piece'>";
+//    x = "<img src='/images/checkers/blackCheck.jpg' class='game_piece'>";
+//    o = "<img src='/images/checkers/whiteCheck.jpg' class='game_piece'>";
     xKing = "<img src='/images/checkers/blackKing.jpg' class='game_piece'>";
-    oKing = "<img src='/images/checkers/whiteKing.jpg' class='game_piece'>";
+   oKing = "<img src='/images/checkers/whiteKing.jpg' class='game_piece'>";
 
     if (board != null) {
         for (var i = 0; i < board.rows.length; i++) {
