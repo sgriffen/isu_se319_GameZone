@@ -71,6 +71,9 @@ public class GameSession {
 	/**
 	 * Chess game for this {@code GameSession}. Used for holding the Checkers game if one is being played.
 	 */
+	@AttributeOverrides({
+			@AttributeOverride(name="board", column=@Column(name="chess_board"))
+	})
 	@Embedded
 	private Chess chess;
 	/***END INSTANCE VARIABLES***/

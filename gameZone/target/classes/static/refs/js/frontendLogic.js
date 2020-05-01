@@ -206,7 +206,7 @@ function selectGame(g) {
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
-function requestHuman(requested){
+function requestHuman(requested) {
 	let json = {
             "intent": 202,
 			"payload": {
@@ -216,8 +216,6 @@ function requestHuman(requested){
 				"integer": game
 			},
 			"identifier": id
-
-
         };
         socket.send(JSON.stringify(json));
 }
@@ -247,8 +245,6 @@ function requestAI(){
 			turnCount++;
 		}
 	}
-	
-<<<<<<< HEAD
 	function sendBoard() {
 	    switch (game) {
 
@@ -282,29 +278,6 @@ function requestAI(){
                 };
                 break;
 	    }
-=======
-	function sendBoard(){
-	    var board = document.getElementById('board');
-		let arr = [[],[],[]];
-		for (var i = 0; i < board.rows.length; i++) {
-			for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(board.rows[i].cells[j].value==1)
-					arr[i].push(1);
-				else if(board.rows[i].cells[j].value==2)
-					arr[i].push(2);
-				else
-					arr[i].push(0);
-		}
-	}
-	let json = {
-            "intent": 204,
-			"payload": {
-			"array": arr,
-				"integer": 0
-			},
-			"identifier": GSID
-		};
->>>>>>> before_master
 	
 	socket.send(JSON.stringify(json));
 	}
@@ -328,7 +301,7 @@ function requestAI(){
 		myTurn = !myTurn;
 		if (myTurn) { p.innerHTML="It's your turn"; }
 		else { p.innerHTML="It's your opponent's turn"; }
-	}	 
+    }
 
 var tacGame="<style scoped>"+
 "table {"+
