@@ -30,8 +30,8 @@ public class Chess {
     /**
      * True board
      */
+    @Transient
     private Board trueBoard;
-
 
     public Chess()
     {

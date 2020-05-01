@@ -3,17 +3,24 @@
 <html lang="en">
 	<head>
 		<title>gGaM3_zZoN3</title>
+		<link rel="stylesheet" type="text/css" href="/refs/css/default.css">
 	</head>
 
 	<body style="background-color:DarkBlue; height: 95vh">
 		<script src="/refs/js/frontendLogic.js" type="text/javascript"></script>
+		<script src="/refs/js/chess.js" type="text/javascript"></script>
+		
 		<script>
-			function ticTrans(){
+			function ticTrans() {
 				init(document)
 				selectGame(0);
 			}
+			function checkTrans(){
+				init(document)
+				selectGame(1);
+			}
 			
-			function playerSelect(){
+			function playerSelect() {
 				var e = document.getElementById("PvA");
 				var requested = e.options[e.selectedIndex].value;
 				e = document.getElementById("requestID");
@@ -36,7 +43,7 @@
 			<div id="onCenter" class="wrapper" align="center">
 				<button style="font-size:24px;width:150px;" type="button" onclick="ticTrans()" id="tic">>TicTacToe!</button>
 			<br>
-				<button style="font-size:24px;width:150px;" type="button" id="check">Checkers!</button>
+				<button style="font-size:24px;width:150px;" type="button" onclick="checkTrans()" id="check">Checkers!</button>
 			<br>
 			
 				<button style="font-size:24px;width:150px;" type="button" id="chess">Chess!</button>
@@ -48,10 +55,7 @@
 			<br>
 			<br>
 			<br>
-			<!img src="Twitter-icon.png" style="width:50px;height:50px; vertical-align:middle;"><!a style="padding-left:5px; font-size:160%; vertical-align:middle; color:white;" href="https://twitter.com/KiraPierce16"><!Twitter><!/a>
-			<!br>
-			<!img src="Discord-icon.png" style="padding-left:2px; width:46px;height:46px; vertical-align:middle;"><!a style="padding-left:7px; font-size:160%; vertical-align:middle; color:white;" href="https://discord.gg/PaGhZ3e"><!Discord><!/a>
-		</fieldset>
+			</fieldset>
 		</div>
 	</body>
 </html>
