@@ -272,14 +272,15 @@ var updateCell = function(boardCell,contents) {
         return false
 
     if(p1){
-        boardCell.innerHTML =x
+        boardCell.innerHTML=ex
         boardCell.value = 1
     }else{
-        boardCell.innerHTML =o
+       boardCell.innerHTML=oh
         boardCell.value = 2
     }
     return true
 }
+
 function updateTurn() {
     if (!ai_opponent) {
         p=document.getElementById('turn');
