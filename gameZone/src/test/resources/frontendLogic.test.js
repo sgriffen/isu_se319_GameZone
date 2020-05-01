@@ -25,7 +25,8 @@ const mockSend = jest.fn();
 const { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestHuman,init,getSocket,setStorage,closeSocket } 
 	= require('./../../main/resources/static/refs/js/frontendLogic.js')
 
-setStorage(new LocalStorageMock);
+sto=new LocalStorageMock
+setStorage(sto);
 var back=jest.fn();
 var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 var o="<img src='images/o.png' style='width:95%;height:95%;'>";
@@ -33,6 +34,7 @@ setBackend(back);
 
 test('test init', () => {
 	init(null);
+	expect(sto.getItem("userID")).not.toBeNull()
 	expect(getSocket).toBeDefined();
 	expect(getSocket).not.toBeNull();
 	closeSocket();
