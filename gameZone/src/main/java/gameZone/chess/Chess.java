@@ -7,6 +7,7 @@ import gameZone.components.GlobalResources;
 import javax.persistence.Embeddable;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.Random;
 
 @Embeddable
 @Table(name = "Chess")
@@ -191,10 +192,10 @@ public class Chess {
 
     public Boolean checkForWin()
     {
-        AlphaBetaPlayer abp = new AlphaBetaPlayer(false, 1);
-        AlphaBetaPlayer a = new AlphaBetaPlayer(true, 1);
-        Move m = abp.getNextMove(trueBoard);
-        Move m2 = a.getNextMove(trueBoard);
+        RandomPlayer rp = new RandomPlayer(false);
+        RandomPlayer r = new RandomPlayer(true);
+        Move m = rp.getNextMove(trueBoard);
+        Move m2 = r.getNextMove(trueBoard);
         if(m == null && trueBoard.isCheck(Piece.BLACK))
             return true;
         if(m2 == null && trueBoard.isCheck(Piece.WHITE))

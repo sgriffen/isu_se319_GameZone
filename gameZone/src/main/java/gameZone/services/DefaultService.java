@@ -51,6 +51,18 @@ public class DefaultService {
      */
     public String index_html() { return htmlPrefix + "HomeScreen"; }
     /**
+     * HTML page for tic tac toe {@code DefaultController} request
+     * @return
+     * 		{@code String}
+     */
+    public String tictactoe_html() { return htmlPrefix + "tictactoe"; }
+    /**
+     * HTML page for checkers {@code DefaultController} request
+     * @return
+     * 		{@code String}
+     */
+    public String checkers_html() { return htmlPrefix + "checkers"; }
+    /**
      * HTML page for chess {@code DefaultController} request
      * @return
      * 		{@code String}

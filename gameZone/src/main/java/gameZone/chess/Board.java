@@ -114,19 +114,19 @@ public class Board {
                 }
                 if(board[i][j] == 9)
                 {
-                    tiles[i][j] = new Tile(new Pawn(Piece.WHITE));
+                    tiles[i][j] = new Tile(new Knight(Piece.WHITE));
                 }
                 if(board[i][j] == 10)
                 {
-                    tiles[i][j] = new Tile(new Bishop(Piece.WHITE));
+                    tiles[i][j] = new Tile(new Rook(Piece.WHITE));
                 }
                 if(board[i][j] == 11)
                 {
-                    tiles[i][j] = new Tile(new Pawn(Piece.WHITE));
+                    tiles[i][j] = new Tile(new Queen(Piece.WHITE));
                 }
                 if(board[i][j] == 12)
                 {
-                    tiles[i][j] = new Tile(new Bishop(Piece.WHITE));
+                    tiles[i][j] = new Tile(new King(Piece.WHITE));
                 }
             }
         }
