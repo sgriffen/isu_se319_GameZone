@@ -295,7 +295,7 @@ public class Chess {
             if(i != 7)
                 fen += "/";
         }
-        fen += " w ---- - " + turn +  " 1";
+        fen += " w - - " + turn +  " 1";
         turn ++;
     }
 
