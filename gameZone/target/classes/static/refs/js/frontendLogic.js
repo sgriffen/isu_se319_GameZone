@@ -1,11 +1,25 @@
 var document;
 var game;
-var id = 00000;
+var id = 0;
 var socket;
 var GSID;
-var p1=true;
+var tacGame;
+var checkGame;
+var chessBoard;
+var requestPrefix = "localhost:8080/";
+//var requestPrefix = "coms-319-052.cs.iastate.edu:8080/";
+var myTurn = true;
+var turnCount=0;
+var storage=window.localStorage;
+var turnCount = 0;
+var p1 = true;
+var ai_opponent = false;
 
-function init(screen) {
+var init=function(screen) {
+
+    getTicHtml();
+//    getCheckHtml();
+    getChessHtml();
 
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
@@ -17,9 +31,8 @@ function init(screen) {
     });
 
 	document=screen;
-	if (window.localStorage.getItem("userID") == null) {
-//	    xhr.open("POST", "http://localhost:8080/user/generate/token",true);
-	    xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
+	if (storage.getItem("userID") == null) {
+	    xhr.open("POST", "http://" + requestPrefix + "user/generate/token",true);
 	    xhr.send();
 	} else { socket_xhr(null); }
 }
@@ -28,24 +41,10 @@ function socket_xhr(xhr) {
 
     if (xhr != null) {
         id = JSON.parse(xhr.response).payload;
-        window.localStorage.setItem("userID", id);
-    } else { id = window.localStorage.getItem("userID"); }
+        storage.setItem("userID", id);
+    } else { id = storage.getItem("userID"); }
 
-//    socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
-    socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/" + id);//localhost
-
-    socket.onopen = function(e) {
-        //document.getElementById("connected").innerHTML = "true";
-        //alert("[open] Connection established");
-        //alert("Sending to server");
-        let json = {
-            "intent": 201,
-            "payload": "Hello there",
-            "identifier": id
-        };
-        //socket.send(JSON.stringify(json));
-    }
-
+    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);
 
     socket.onmessage = function(event) {
 		msg=JSON.parse(event.data);
@@ -54,7 +53,7 @@ function socket_xhr(xhr) {
 			case 202:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			invitation(msg.payload);
+			invitation(msg);
 			break;
 			case 203:
 			if(msg.payload.status>=550)
@@ -74,7 +73,12 @@ function socket_xhr(xhr) {
 			case 205:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			alert("you lose");
+			if(msg.payload.payload==2)
+				alert("you lose");
+			if(msg.payload.payload==1)
+				alert("you win");
+			if(msg.payload.payload==0)
+				alert("Tie game");
 			GSID=0;
 			location.reload();
 			break;
@@ -101,6 +105,7 @@ function updateBoard(newBoard) {
             break;
         case 2: //chess
 
+            chess_updateBoard(newBoard);
             break;
         default : //tic tac toe
             for (var i = 0; i < board.rows.length; i++) {
@@ -118,33 +123,43 @@ function updateBoard(newBoard) {
                 }
             }
             break;
-	}
-	
-	updateTurn();
+    }
+
+    updateTurn();
+}
+var closeSocket=function(){
+	socket.close();
 }
 
 //Sets the page to display game based on selection.
 function accepted(){
 	if(game == 0){
 		document.getElementById('onCenter').innerHTML=tacGame;
+		tac_init();
 	}
 	else if(game == 1){
 		document.getElementById('onCenter').innerHTML=checkGame;
+		//check_init();
+	}
+	else if(game == 2) {
+	    document.getElementById('onCenter').innerHTML=chessBoard;
+        chess_init();
 	}
 }
 
-function invitation(payload){
-    switch (payload.payload.integer) {
+function invitation(msg){
+    switch (msg.payload.payload.integer) {
 
         case 1: //checkers
-             if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Checkers. Accept?")) {
+             if (confirm("Player " + msg.payload.payload.array[0] + " challenges you to a game of Checkers. Accept?")) {
                 p1 = false;
-                socket.send(JSON.stringify(payload));
+                myTurn = false
+                sendBackend(203, msg.payload.payload.array, msg.payload.payload.integer, msg.payload.payload.array[1]);
             } else {
                 let json = {
                     "intent": 203,
                     "payload": {
-                        "array": [payload.payload.array[0]
+                        "array": [msg.payload.payload.array[0]
                         ],
                         "integer": 100
                     },
@@ -155,14 +170,15 @@ function invitation(payload){
             }
             break;
         case 2: //chess
-             if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Chess. Accept?")) {
+             if (confirm("Player " + msg.payload.payload.array[0] + " challenges you to a game of Chess. Accept?")) {
                     p1 = false;
-                    socket.send(JSON.stringify(payload));
+                    myTurn = false;
+                    sendBackend(203, msg.payload.payload.array, msg.payload.payload.integer, msg.payload.payload.array[1]);
              } else {
                 let json = {
                     "intent": 203,
                     "payload": {
-                        "array": [payload.payload.array[0]
+                        "array": [msg.payload.payload.array[0]
                         ],
                         "integer": 100
                     },
@@ -173,14 +189,15 @@ function invitation(payload){
              }
             break;
         default: //tic tac toe
-            if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Tic Tac Toe. Accept?")) {
+            if (confirm("Player " + msg.payload.payload.array[0] + " challenges you to a game of Tic Tac Toe. Accept?")) {
                 p1 = false;
-                socket.send(JSON.stringify(payload));
+                myTurn = false;
+                sendBackend(203, msg.payload.payload.array, msg.payload.payload.integer, msg.payload.payload.array[1]);
             } else {
                 let json = {
                     "intent": 203,
                     "payload": {
-                        "array": [payload.payload.array[0]
+                        "array": [msg.payload.payload.array[0]
                         ],
                         "integer": 100
                     },
@@ -190,7 +207,7 @@ function invitation(payload){
                 socket.send(JSON.stringify(json));
             }
             break;
-	}
+    }
 }
 
 function selectGame(g) {
@@ -205,115 +222,71 @@ function selectGame(g) {
 	"<label for='requestID' style='color:#ff9900;'>if player, input their ID <input type='text' id='requestID'></label>"+
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
-
-function requestHuman(requested) {
-	let json = {
-            "intent": 202,
-			"payload": {
-				"array": [
-					requested
-				],
-				"integer": game
-			},
-			"identifier": id
-        };
-        socket.send(JSON.stringify(json));
-}
-
-function requestAI(){
-	let json = {
-            "intent": 202,
-			"payload": {
-				"array": [
-					"AI"
-				],
-				"integer": game
-			},
-			"identifier": id
-
-
-        };
-        socket.send(JSON.stringify(json));
-}
-
-	var myTurn = true;
-	var turnCount = 0;
-
-	function move(boardCell,y,z) {
-		if(updateCell(boardCell)){
-			sendBoard();
-			turnCount++;
-		}
-	}
+	
 	function sendBoard() {
 	    switch (game) {
 
-	        case 1: //checkers
 
+        case 1: //checkers
 
-	        case 2: //chess
+            break;
+        case 2: //chess
 
-
-	        default: //tic tac toe
-                var board = document.getElementById('board');
-                let arr = [[],[],[]];
-                for (var i = 0; i < board.rows.length; i++) {
-                    for (var j = 0; j < board.rows[i].cells.length; j++){
-                            if(board.rows[i].cells[j].value==1)
-                                arr[i].push(1);
-                            else if(board.rows[i].cells[j].value==2)
-                                arr[i].push(2);
-                            else
-                                arr[i].push(0);
-                    }
+            chess_sendBoard();
+            break;
+        default: //tic tac toe
+            var board = document.getElementById('board');
+            let arr = [[],[],[]];
+            for (var i = 0; i < board.rows.length; i++) {
+                for (var j = 0; j < board.rows[i].cells.length; j++){
+                        if(board.rows[i].cells[j].value==1)
+                            arr[i].push(1);
+                        else if(board.rows[i].cells[j].value==2)
+                            arr[i].push(2);
+                        else
+                            arr[i].push(0);
                 }
-
-                let json = {
-                        "intent": 204,
-                        "payload": {
-                        "array": arr,
-                            "integer": 0
-                        },
-                        "identifier": GSID
-                };
-                break;
-	    }
-	
-	socket.send(JSON.stringify(json));
-	}
-	
-	function updateCell(boardCell) {
-		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
-			return false
-		
-		if (p1) {
-		    boardCell.innerHTML =x
-		    boardCell.value = 1
-		} else {
-			boardCell.innerHTML =o
-			boardCell.value = 2
-		}
-		return true
-	}
-	
-	function updateTurn() {
-		p=document.getElementById('turn');
-<<<<<<< HEAD
-		myTurn = !myTurn;
-		if (myTurn) { p.innerHTML="It's your turn"; }
-		else { p.innerHTML="It's your opponent's turn"; }
+            }
+            sendBackend(204,arr,0,GSID);
+            break;
     }
-=======
-		if(p1){
-			myTurn=false;
-			p.innerHTML="It is O's turn"
-		}else{
-			myTurn=true;
-			p.innerHTML="It is X's turn"
-		}
-	}
+}
 	
-	var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
+var requestHuman=function(requested){
+    let array = [requested];
+	sendBackend(202,array,game,id);
+}
+
+var requestAI=function(){
+    ai_opponent = true;
+    let ai = ["AI"];
+	sendBackend(202,ai,game,id);
+}
+
+
+var updateCell = function(boardCell,contents) {
+    if(contents==x||contents==o||myTurn==false)
+        return false
+
+    if(p1){
+        boardCell.innerHTML =x
+        boardCell.value = 1
+    }else{
+        boardCell.innerHTML =o
+        boardCell.value = 2
+    }
+    return true
+}
+function updateTurn() {
+    if (!ai_opponent) {
+        p=document.getElementById('turn');
+        myTurn = !myTurn;
+        if (myTurn) { p.innerHTML="It's your turn"; }
+        else { p.innerHTML="It's your opponent's turn"; }
+    }
+}
+
+var sendBackend = function(code,arra,integ,identif) {//this code oddity was made solely for testing
 	let json = {
         "intent": code,
 		"payload": {
@@ -325,209 +298,138 @@ function requestAI(){
 	
 	socket.send(JSON.stringify(json));
 }
->>>>>>> 0874a06b69b87b22609fa4396f06ab163ac18862
 
-var tacGame="<style scoped>"+
-"table {"+
-"  text-align: center;"+
-"   width: 25%;"+
-"   border-spacing: 0;"+
-"}"+
-"td {"+
-"	border: 2px solid black;"+
-"	border-collapse: collapse;"+
-"    width: 16%;"+
-"}"+
-"</style>"+
-	"<h1>Tic-Tac-Toe</h1>"+
-	"<br>"+
-	"<p id='turn'>It's your turn</p>"+
-	"<br><br>"+
-	"<table id='board'>"+
-	"	<tr>"+
-    "        <td style='border-top: none; border-left: none; height:100px;' onclick='move(this,0,0)'></td>"+
-    "        <td style='border-top: none; height:100px;' onclick='move(this,0,1)'></td>"+
-	"		<td style='border-top: none; border-right: none; height:100px;' onclick='move(this,0,2)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='border-left: none; height:100px;' onclick='move(this,1,0)'></td>"+
-    "        <td style='height:100px;' onclick='move(this,1,1)'></td>"+
-	"		<td style='border-right: none; height:100px;' onclick='move(this,1,2)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='border-bottom: none; border-left: none; height:100px;' onclick='move(this,2,0)'></td>"+
-    "        <td style='border-bottom: none; height:100px;' onclick='move(this,2,1)'></td>"+
-	"		<td style='border-bottom: none;border-right: none; height:100px;' onclick='move(this,2,2)'></td>"+
-    "    </tr>"+
-	"</table>"+
-  "<script>"+
-	"var board = document.getElementById('board');"+
-	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
-	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
-	"if (board != null) {"+
-	"	for (var i = 0; i < board.rows.length; i++) {"+
-	"		for (var j = 0; j < board.rows[i].cells.length; j++)"+
-	"			board.rows[i].cells[j].onclick = function () {"+
-	"			move(this,i,j);"+
-	"			};"+
-	"	}"+
-	"}"+
+function getTicHtml() {
 
-	"function move(boardCell,y,z) {"+
-	"	if(updateCell(boardCell)){"+
-	"		updateTurn();"+
-	"		turnCount++;"+
-	"	}"+
-	"}"+
-	
-	"function updateCell(boardCell) {"+
-	"	if(boardCell.innerHTML==x||boardCell.innerHTML==o)"+
-	"		return false"+
-		
-	"	if(myTurn){"+
-	"		boardCell.innerHTML =x"+
-	"	}else{"+
-	"		boardCell.innerHTML =o"+
-	"	}"+
-	"	return true"+
-	"}"+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
 
-	
-	"function winCon(y,z) {"+
-	"	if(turnCount>=8){"+
-	"		if(confirm('Cats game\nNew game?')){"+
-	"			location.reload();"+
-	"		}"+
-	"	}"+
-	"	for (var i = 0; i < 3; i++) {"+
-	"		if((board.rows[i].cells[0].innerHTML==x&&board.rows[i].cells[1].innerHTML==x&&board.rows[i].cells[2].innerHTML==x)||"+
-	"		(board.rows[0].cells[i].innerHTML==x&&board.rows[1].cells[i].innerHTML==x&&board.rows[2].cells[i].innerHTML==x)){"+
-	"			if(confirm('X wins\nNew game?'))"+
-	"				location.reload();"+
-	"		}"+
-	"		if((board.rows[i].cells[0].innerHTML==o&&board.rows[i].cells[1].innerHTML==o&&board.rows[i].cells[2].innerHTML==o)||"+
-	"		(board.rows[0].cells[i].innerHTML==o&&board.rows[1].cells[i].innerHTML==o&&board.rows[2].cells[i].innerHTML==o)){"+
-	"			if(confirm('O wins\nNew game?'))"+
-	"				location.reload();"+
-	"		}"+
-	"	}"+
-		
-	"	if((board.rows[0].cells[0].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[2].innerHTML==o)||"+
-	"	(board.rows[0].cells[2].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[0].innerHTML==o)){"+
-	"		if(confirm('O wins\nNew game?'))"+
-	"			location.reload();"+
-	"	}else if((board.rows[0].cells[0].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[2].innerHTML==x)||"+
-	"	(board.rows[0].cells[2].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[0].innerHTML==x)){"+
-	"		if(confirm('X wins\nNew game?'))"+
-	"			location.reload();"+
-	"	}"+
-		
-	"}"
+    xhr.open("GET", "http://" + requestPrefix + "html/tictactoe",false);
+    xhr.send();
+    tacGame = xhr.response;
+}
 
-var checkGame="<style scoped>"+
-"table {"+
-"  text-align: center;"+
-"   width: 25%;"+
-"   border-spacing: 0;"+
-"}"+
-"td {"+
-"	border: 2px solid black;"+
-"	border-collapse: collapse;"+
-"    width: 16%;"+
-"}"+
-"</style>"+
+function getCheckHtml() {
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.open("GET", "http://" + requestPrefix + "html/checkers",false);
+    xhr.send();
+    checkGame = xhr.response;
+}
+
+function getChessHtml() {
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.open("GET", "http://" + requestPrefix + "html/chess",false);
+    xhr.send();
+    chessBoard = xhr.response;
+}
+
+function createFromHTML(htmlString) {
+
+    let temp = document.createElement("template");
+    temp.innerHTML = htmlString.trim();
+
+    return temp.content.firstElementChild.innerHTML;
+}
+
+checkGame=
 	"<h1>Checkers</h1>"+
 	"<br>"+
 	"<p id='turn'>It is Player 1's turn</p>"+
 	"<br><br>"+
 	"<table id='board'>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,0,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,0,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,0,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,0,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,0,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,0,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,0,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,0,7)'></td>"+
+	"	<tr >"+
+    "        <td class='tile-light' onclick='checkers_move(this,0,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,0,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,0,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,0,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,0,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,0,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,0,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,0,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-dark' onclick='checkers_move(this,1,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,1,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,1,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,1,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,1,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,1,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,1,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,1,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-light' onclick='checkers_move(this,2,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,2,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,2,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,2,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,2,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,2,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,2,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,2,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-dark' onclick='checkers_move(this,3,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,3,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,3,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,3,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,3,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,3,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,3,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,3,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-light' onclick='checkers_move(this,4,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,4,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,4,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,4,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,4,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,4,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,4,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,4,7)'></td>"+
+    "    </tr>"+
+    "    <tr >"+
+    "        <td class='tile-dark' onclick='checkers_move(this,5,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,5,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,5,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,5,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,5,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,5,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,5,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,5,7)'></td>"+
     "    </tr>"+
 	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,1,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,1,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,1,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,1,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,1,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,1,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,1,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,1,7)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,6,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,6,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,6,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,6,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,6,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,6,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,6,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,6,7)'></td>"+
     "    </tr>"+
 	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,2,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,2,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,2,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,2,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,2,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,2,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,2,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,2,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,3,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,3,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,3,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,3,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,3,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,3,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,3,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,3,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,4,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,4,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,4,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,4,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,4,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,4,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,4,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,4,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,5,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,5,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,5,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,5,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,5,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,5,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,5,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,5,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,6,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,6,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,6,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,6,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,6,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,6,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,6,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,6,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,7,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,7,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,7,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,7,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,7,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,7,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,7,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,7,7)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,7,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,7,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,7,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,7,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,7,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,7,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,7,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,7,7)'></td>"+
     "    </tr>"+
 	"</table>"+
   "<script>"+
 	"var board = document.getElementById('board');"+
 	"var myTurn = true;"+
 	"var turnCount=0;"+
-	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
-	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
+	"var x='<img class='game_piece' src='x.png'>';"+
+	"var o='<img class='game_piece' src='o.png'>';"+
 	"if (board != null) {"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
 	"		for (var j = 0; j < board.rows[i].cells.length; j++){"+
@@ -536,21 +438,20 @@ var checkGame="<style scoped>"+
 	"			if(i%2 != 0 && j >= 5){"+
 	"				board.rows[i].cells[j].innerHTML = o;}"
 	"			board.rows[i].cells[j].onclick = function () {"+
-	"			move(this,i,j);"+
+	"			checkers_move(this,i,j);"+
 	"			};"+
 	"	}}"+
 	"}"+
 	"var first = true;"+  //click one button that contains a piece and then another
 	"var firstY = -1;"+
 	"var firstZ = -1;"+
-	"function move(boardCell,y,z) {"+
+	"function checkers_move(boardCell,y,z) {"+
 	"	if(first == true){"+
-	"		first = false;"+
 	"		firstY = y;"+
 	"		firstZ = z;}"+
 	"	else{"+
-	"		if(updateCell(boardCell, y, z)){"+
-	"			winCon();"+
+	"		if(checkers_updateCell(boardCell, y, z)){"+
+	"			checkers_winCon();"+
 	"			updateTurn();"+
 	"			turnCount++;"+
 	"			first = true;"+
@@ -558,7 +459,7 @@ var checkGame="<style scoped>"+
 	"	}"+
 	"}"+
 	//TODO, update to checkers functionality
-	"function updateCell(boardCell, y, z) {"+
+	"function checkers_updateCell(boardCell, y, z) {"+
 	"	if(boardCell.innerHTML==x||boardCell.innerHTML==o)"+
 	"		return false"+
 	"	if(myTurn){"+
@@ -613,8 +514,6 @@ var checkGame="<style scoped>"+
 	"					boardCell.innerHTML =o;"+
 	"					c-=2;}"+
 	"				else{return true;}}}"+
-	
-	
 	"			boardCell.innerHTML =o;"+
 	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == x && (y ==firstY-2 && z == firstZ-2)){"+
 	"			boardCell.innerHTML =o;"+
@@ -627,19 +526,7 @@ var checkGame="<style scoped>"+
 	"	}"+
 	"	return true"+
 	"}"+
-	
-	"function updateTurn() {"+
-	"	p=document.getElementById('turn');"+
-	"	if(myTurn){"+
-	"		myTurn=false;"+
-	"		p.innerHTML='It is Player 2's turn'"+
-	"	}else{"+
-	"		myTurn=true;"+
-	"		p.innerHTML='It is Player 1's turn'"+
-	"	}"+
-	"}"+
-	
-	"function winCon() {"+
+	"function checkers_winCon() {"+
 	
 	" var found = false;"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
@@ -654,5 +541,56 @@ var checkGame="<style scoped>"+
 	"	if(found == false && myturn == false){"+
 	"		if(confirm('Player 2 wins\nNew game?'))"+
 	"			location.reload();}"+
-	
 	"	}"
+	"function winCon(y,z) {"+
+	"	if(turnCount>=8){"+
+	"		if(confirm('Cats game\nNew game?')){"+
+	"			location.reload();"+
+	"		}"+
+	"	}"+
+	"	for (var i = 0; i < 3; i++) {"+
+	"		if((board.rows[i].cells[0].innerHTML==x&&board.rows[i].cells[1].innerHTML==x&&board.rows[i].cells[2].innerHTML==x)||"+
+	"		(board.rows[0].cells[i].innerHTML==x&&board.rows[1].cells[i].innerHTML==x&&board.rows[2].cells[i].innerHTML==x)){"+
+	"			if(confirm('X wins\nNew game?'))"+
+	"				location.reload();"+
+	"		}"+
+	"		if((board.rows[i].cells[0].innerHTML==o&&board.rows[i].cells[1].innerHTML==o&&board.rows[i].cells[2].innerHTML==o)||"+
+	"		(board.rows[0].cells[i].innerHTML==o&&board.rows[1].cells[i].innerHTML==o&&board.rows[2].cells[i].innerHTML==o)){"+
+	"			if(confirm('O wins\nNew game?'))"+
+	"				location.reload();"+
+	"		}"+
+	"	}"+
+		
+	"	if((board.rows[0].cells[0].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[2].innerHTML==o)||"+
+	"	(board.rows[0].cells[2].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[0].innerHTML==o)){"+
+	"		if(confirm('O wins\nNew game?'))"+
+	"			location.reload();"+
+	"	}else if((board.rows[0].cells[0].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[2].innerHTML==x)||"+
+	"	(board.rows[0].cells[2].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[0].innerHTML==x)){"+
+	"		if(confirm('X wins\nNew game?'))"+
+	"			location.reload();"+
+	"	}"+
+		
+	"}"
+
+var setmyTurn=function(tu){
+	myTurn=tu;
+}
+
+var setPlayer=function(p){
+	p1=p;
+}
+
+var setBackend=function(bac){
+	sendBackend=bac;
+}
+
+var getSocket=function(){
+	return socket;
+}
+
+var setStorage=function(sto){
+	storage=sto;
+}
+
+module.exports = { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestHuman,init,getSocket,setStorage,closeSocket }
