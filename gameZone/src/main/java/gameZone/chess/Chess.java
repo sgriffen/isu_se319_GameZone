@@ -39,6 +39,12 @@ public class Chess {
     @Transient
     private String fen;
 
+    /**
+     * Turn
+     */
+    @Transient
+    private int turn = 0;
+
     public Chess()
     {
         this.trueBoard = new Board();
@@ -289,7 +295,8 @@ public class Chess {
             if(i != 7)
                 fen += "/";
         }
-        fen += " w ---- - - -";
+        fen += " w ---- - " + turn +  " 1";
+        turn ++;
     }
 
     /*
