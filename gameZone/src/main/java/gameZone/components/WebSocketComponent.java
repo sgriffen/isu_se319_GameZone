@@ -442,7 +442,7 @@ public class WebSocketComponent {
                 } else { //for chess
     
                     ArrayList<String> gameFenArray = new ArrayList<>();
-                    gameFenArray.add(gs.getFEN());
+                    gameFenArray.add(gs.getChess().getFEN());
     
                     SocketReturnWrapper<ObjectReturnWrapper<ArrayList<String>>> intentReturn = new SocketReturnWrapper<>(
             

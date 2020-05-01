@@ -289,7 +289,7 @@ public class Chess {
             if(i != 0)
                 fen += "/";
         }
-        fen += "----";
+        fen += " - ---- - - -";
     }
 
     /*
