@@ -37,7 +37,8 @@ function socket_xhr(xhr) {
         storage.setItem("userID", id);
     } else { id = storage.getItem("userID"); }
 
-    socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
+//    socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
+    socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/" + id);//localhost
 
     socket.onmessage = function(event) {
 		msg=JSON.parse(event.data);
