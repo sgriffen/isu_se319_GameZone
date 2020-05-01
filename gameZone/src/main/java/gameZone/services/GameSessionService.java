@@ -1,5 +1,7 @@
 package gameZone.services;
 
+import gameZone.checkers.Checkers;
+import gameZone.chess.Chess;
 import gameZone.components.GlobalResources;
 import gameZone.repositories.GameSessionRepository;
 import gameZone.gameSession.GameSession;
@@ -64,6 +66,12 @@ public class GameSessionService {
 		gs_setup.setId_app(gRec.confirmAuthenticator());
 		gs_setup.setUsers(players);
 		switch(gameType) {
+			case 1:
+				gs_setup.setCheck(new Checkers());
+				break;
+			case 2:
+				gs_setup.setChess(new Chess());
+				break;
 			default:
 				gs_setup.setTic(new TicTacToe());
 				break;
@@ -156,7 +164,7 @@ public class GameSessionService {
 					gs.getChess().setBoard(gameBoard);
 					if(gs.getChess().checkForWin()) {gs.setGameStatus(1);}
 					if(gs.getAi() && gs.getGameStatus() != 1){
-						gs.getCheck().setBoard(gs.getChess().AImove());
+						gs.getChess().setBoard(gs.getChess().AImove());
 						if(gs.getChess().checkForWin()){
 							gs.setGameStatus(2);
 						}
