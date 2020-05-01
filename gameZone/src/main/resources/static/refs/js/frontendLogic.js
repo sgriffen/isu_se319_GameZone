@@ -154,7 +154,7 @@ function selectGame(g){
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
-function requestHuman(requested){
+function requestHuman(requested) {
 	let json = {
             "intent": 202,
 			"payload": {
@@ -164,8 +164,6 @@ function requestHuman(requested){
 				"integer": 0
 			},
 			"identifier": id
-
-
         };
         socket.send(JSON.stringify(json));
 }
@@ -262,6 +260,14 @@ function requestAI(){
 	socket.send(JSON.stringify(json));
 }
 
+function createElementFromHTML(htmlString) {
+
+    let temp = document.createElement("div");
+    temp.innerHTML = htmlString.trim();
+
+    return temp.firstChild;
+}
+
 var tacGame="<style scoped>"+
 "table {"+
 "  text-align: center;"+
@@ -299,8 +305,8 @@ var tacGame="<style scoped>"+
 	"var board = document.getElementById('board');"+
 	"var myTurn = true;"+
 	"var turnCount=0;"+
-	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
-	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
+	"var x='<img src='x.png' class='game_piece' style='width:95%;height:95%;'>';"+
+	"var o='<img src='o.jpg' class='game_piece' style='width:95%;height:95%;'>';"+
 	"if (board != null) {"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
 	"		for (var j = 0; j < board.rows[i].cells.length; j++)"+

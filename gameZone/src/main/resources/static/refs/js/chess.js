@@ -1,3 +1,9 @@
+/*
+    Copyright (c) 2020, Jeff Hlywa (jhlywa@gmail.com)
+    All rights reserved.
+
+    Found at https://github.com/jhlywa/chess.js/blob/master/chess.js
+*/
 var Chess = function(fen) {
   var BLACK = 'b'
   var WHITE = 'w'
