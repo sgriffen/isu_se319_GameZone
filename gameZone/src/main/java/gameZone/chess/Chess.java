@@ -33,6 +33,12 @@ public class Chess {
     @Transient
     private Board trueBoard;
 
+    /**
+     * FEN
+     */
+    @Transient
+    private String fen;
+
     public Chess()
     {
         this.trueBoard = new Board();
@@ -101,6 +107,16 @@ public class Chess {
         board[0][5] = 8;
         board[0][6] = 9;
         board[0][7] = 10;
+    }
+
+    public String getFEN()
+    {
+        return fen;
+    }
+
+    public void setFEN(String fen)
+    {
+        this.fen = fen;
     }
 
     public Integer[][] getBoard()
@@ -187,6 +203,7 @@ public class Chess {
                 }
             }
         }
+        this.generateFEN();
         return board;
     }
 
@@ -202,6 +219,79 @@ public class Chess {
             return true;
         return false;
     }
+
+    private void generateFEN(){
+        fen = "";
+        int empty = 0;
+        for(int i = 7; i >= 0; i--) {
+            int emptyCounter = 0;
+            for (int j = 0; j < 8; j++) {
+                if(emptyCounter != 0){
+                    fen += emptyCounter;
+                    emptyCounter = 0;
+                }
+                int x = board[i][j];
+                if(x == 0)
+                {
+                    emptyCounter++;
+                }
+                else if(x == 1)
+                {
+                    fen += 'p';
+                }
+                else if(x == 2)
+                {
+                    fen += 'b';
+                }
+                else if(x == 3)
+                {
+                    fen += 'n';
+                }
+                else if(x == 4)
+                {
+                    fen += 'r';
+                }
+                else if(x == 5)
+                {
+                    fen += 'q';
+                }
+                else if(x == 6)
+                {
+                    fen += 'k';
+                }
+                else if(x == 7)
+                {
+                    fen += 'P';
+                }
+                else if(x == 8)
+                {
+                    fen += 'B';
+                }
+                else if(x == 9)
+                {
+                    fen += 'N';
+                }
+                else if(x == 10)
+                {
+                    fen += 'R';
+                }
+                else if(x == 11)
+                {
+                    fen += 'Q';
+                }
+                else if(x == 12)
+                {
+                    fen += 'K';
+                }
+            }
+            if(emptyCounter != 0)
+                fen += emptyCounter;
+            if(i != 0)
+                fen += "/";
+        }
+        fen += "----";
+    }
+
     /*
     public static void main(String[] args) {
         int iter = 100;
