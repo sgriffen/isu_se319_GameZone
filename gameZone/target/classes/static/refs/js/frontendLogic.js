@@ -298,10 +298,34 @@ function requestAI(){
 	
 	function updateTurn() {
 		p=document.getElementById('turn');
+<<<<<<< HEAD
 		myTurn = !myTurn;
 		if (myTurn) { p.innerHTML="It's your turn"; }
 		else { p.innerHTML="It's your opponent's turn"; }
     }
+=======
+		if(p1){
+			myTurn=false;
+			p.innerHTML="It is O's turn"
+		}else{
+			myTurn=true;
+			p.innerHTML="It is X's turn"
+		}
+	}
+	
+	var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
+	let json = {
+        "intent": code,
+		"payload": {
+			"array": arra,
+			"integer": integ
+		},
+		"identifier": identif
+	};
+	
+	socket.send(JSON.stringify(json));
+}
+>>>>>>> 0874a06b69b87b22609fa4396f06ab163ac18862
 
 var tacGame="<style scoped>"+
 "table {"+
