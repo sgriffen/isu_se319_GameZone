@@ -1,8 +1,10 @@
 package gameZone.gameSession;
 
+import gameZone.checkers.Checkers;
 import gameZone.components.GlobalResources;
 import gameZone.ticTacToe.TicTacToe;
 import gameZone.user.User;
+import gameZone.user.UserInterface;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,12 +15,19 @@ import java.util.List;
 public class GameSession {
 
 	/*** START INSTANCE VARIABLE ***/
-
+	
+	/**
+	 * {@code GlobalResources} {@code Component}. Grants the ability to use global variables and methods common to other {@code classes} in this Application
+	 */
+	@Transient
+	private final GlobalResources gRec = new GlobalResources(null, null);
+	
 	/**
 	 * List for the {@code GameSession} users. There should normally be 2 users.
 	 */
-	@OneToMany(targetEntity = User.class, fetch = FetchType.EAGER)
-	private List<User> users;
+	@OneToMany(targetEntity = User.class,
+			fetch = FetchType.EAGER, mappedBy = "gameSession")
+	private List<UserInterface> users;
 	/**
 	 * ID for this {@code GameSession}. Used for identification in the database
 	 */
@@ -46,6 +55,12 @@ public class GameSession {
 	@Embedded
 	private TicTacToe tic;
 
+	/**
+	 * Checkers game for this {@coee GameSession}. Used for holding the Checkers game if one is being played.
+	 */
+	@Embedded
+	private Checkers check;
+
 	/***END INSTANCE VARIABLES***/
 	
 	
@@ -60,7 +75,7 @@ public class GameSession {
 		this.setGameStatus(-1);
 		this.setId_app(new String());
 	}
-	
+
 	/**
 	 * Constructor with both Users
 	 */
@@ -75,6 +90,10 @@ public class GameSession {
 		{
 			tic = new TicTacToe();
 		}
+		if(gametype == 1)
+		{
+			check = new Checkers();
+		}
 		this.setId_app(new String());
 	}
 	
@@ -85,19 +104,8 @@ public class GameSession {
 	public Integer getId_db() {
 		return id_db;
 	}
-	public void setId_db(Integer id){
+	public void setId_db(int id){
 		id_db = id;
-	}
-	
-	public User getPlayer1() {
-		for(int i = 0; i < users.size(); i++)
-		{
-			if (users.get(i).getPlace() == 1)
-			{
-				return users.get(i);
-			}
-		}
-		return null;
 	}
 
 	public Boolean getAi()
@@ -109,17 +117,11 @@ public class GameSession {
 	{
 		this.ai = ai;
 	}
-	public void addPlayers(User player1, User player2) { this.users.add(player1); this.users.add(player2); }
-
-	public User getPlayer2() {
-		for(int i = 0; i < users.size(); i++)
-		{
-			if (users.get(i).getPlace() == 2)
-			{
-				return users.get(i);
-			}
-		}
-		return null;
+	public void addPlayers(UserInterface player1, UserInterface player2) {
+		ArrayList<User> toAdd = new ArrayList<>();
+		toAdd.add((User) player1);
+		toAdd.add((User) player2);
+		this.setUsers(toAdd);
 	}
 
 	public Integer getGameStatus() { return gameStatus; }
@@ -130,9 +132,10 @@ public class GameSession {
 	
 	public void setId_app(String id_app) { this.id_app = id_app; }
 	
+	public List<UserInterface> getUsers() { return this.users; }
 	public void setUsers(ArrayList<User> users)
 	{
-		this.users = users;
+		this.users = new ArrayList<>(users);
 	}
 
 	public TicTacToe getTic()
@@ -144,6 +147,16 @@ public class GameSession {
 	{
 		this.tic = tic;
 	}
+
+	public Checkers getCheck()
+	{
+		return check;
+	}
+
+	public void setCheck(Checkers check)
+	{
+		this.check = check;
+	}
 	
 	/***END GETTERS/SETTERS***/
 	
@@ -152,6 +165,5 @@ public class GameSession {
 	public void startGame()
 	{
 		gameStatus = 0;
-
 	}
 }

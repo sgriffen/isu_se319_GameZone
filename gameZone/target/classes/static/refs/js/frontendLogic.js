@@ -48,7 +48,7 @@ function socket_xhr(xhr) {
 
     socket.onmessage = function(event) {
 		msg=JSON.parse(event.data);
-    	alert("[message] Data received from server: " + msg.payload.payload);
+//    	alert("[message] Data received from server: " + msg.payload.payload);
 		switch(msg.intent){
 			case 202:
 			if(msg.payload.status>=550)
@@ -203,7 +203,7 @@ function requestAI(){
 	    var board = document.getElementById('board');
 		let arr = [[],[],[]];
 		for (var i = 0; i < board.rows.length; i++) {
-		for (var j = 0; j < board.rows[i].cells.length; j++){
+			for (var j = 0; j < board.rows[i].cells.length; j++){
 				if(board.rows[i].cells[j].value==1)
 					arr[i].push(1);
 				else if(board.rows[i].cells[j].value==2)
@@ -212,7 +212,6 @@ function requestAI(){
 					arr[i].push(0);
 		}
 	}
-	
 	let json = {
             "intent": 204,
 			"payload": {
