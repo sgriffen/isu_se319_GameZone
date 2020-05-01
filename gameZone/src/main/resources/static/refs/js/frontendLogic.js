@@ -404,7 +404,7 @@ var tacGame="<style scoped>"+
 
 	"function move(boardCell,y,z) {"+
 	"	if(updateCell(boardCell)){"+
-	"		winCon(y,z)"+
+	"		winCon(y,z);"+
 	"		updateTurn();"+
 	"		turnCount++;"+
 	"	}"+
@@ -570,11 +570,15 @@ var checkGame="<style scoped>"+
 	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
 	"if (board != null) {"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
-	"		for (var j = 0; j < board.rows[i].cells.length; j++)"+
+	"		for (var j = 0; j < board.rows[i].cells.length; j++){"+
+	"			if(i%2 != 0 && j <= 2){"+
+	"				board.rows[i].cells[j].innerHTML = x;}"
+	"			if(i%2 != 0 && j >= 5){"+
+	"				board.rows[i].cells[j].innerHTML = o;}"
 	"			board.rows[i].cells[j].onclick = function () {"+
 	"			move(this,i,j);"+
 	"			};"+
-	"	}"+
+	"	}}"+
 	"}"+
 	"var first = true;"+  //click one button that contains a piece and then another
 	"var firstY = -1;"+
@@ -585,8 +589,8 @@ var checkGame="<style scoped>"+
 	"		firstY = y;"+
 	"		firstZ = z;}"+
 	"	else{"+
-	"		if(updateCell(boardCell, y, z)){"+//needs heavily modified
-	"			winCon(y,z)"+
+	"		if(updateCell(boardCell, y, z)){"+
+	"			winCon();"+
 	"			updateTurn();"+
 	"			turnCount++;"+
 	"			first = true;"+
@@ -598,25 +602,66 @@ var checkGame="<style scoped>"+
 	"	if(boardCell.innerHTML==x||boardCell.innerHTML==o)"+
 	"		return false"+
 	"	if(myTurn){"+
+	
 	"		if(board.rows[firstY+1].cells[firstZ+1].innerHTML == o && (y ==firstY+2 && z == firstZ+2)){"+
-	"			boardCell.innerHTML =x"+
+	"			var c = firstZ;"+
+	"			for(i=1; i<=7-firstY; i++){"+
+	"				if(board.rows[firstY+i].cells[c+1].innerHTML == o && (y ==firstY+i+1 && z == c+2)){"+
+	"					board.rows[firstY+i].cells[c+1].innerHTML = null;"+
+	"					boardCell.innerHTML =x;"+
+	"					c++;}"+
+	"				else if(board.rows[firstY+i].cells[c-1].innerHTML == o && (y ==firstY+i+1 && z == c-2)){"+
+	"					board.rows[firstY+i].cells[c-1].innerHTML = null;"+
+	"					boardCell.innerHTML =x;"+
+	"					c++;}"+
+	"				else{return true;}}}"+
+	
 	"		else if(board.rows[firstY+1].cells[firstZ-1].innerHTML == o && (y ==firstY+2 && z == firstZ-2)){"+
-	"			boardCell.innerHTML =x"+
+	
+	"			var c = firstZ;"+
+	"			for(i=1; i<=7-firstY; i+=2){"+
+	"				if(board.rows[firstY+i].cells[c+1].innerHTML == o && (y ==firstY+i+1 && z == c+2)){"+
+	"					board.rows[firstY+i].cells[c+1].innerHTML = null;"+
+	"					boardCell.innerHTML =x;"+
+	"					c+=2;}"+
+	"				else if(board.rows[firstY+i].cells[c-1].innerHTML == o && (y ==firstY+i+1 && z == c-2)){"+
+	"					board.rows[firstY+i].cells[c-1].innerHTML = null;"+
+	"					boardCell.innerHTML =x;"+
+	"					c-=2;}}"+
+	"				else{return true;}}"+
+	
+	
 	"		else if(y == firstY + 1 && z == firstZ + 1){" +
-	"			boardCell.innerHTML =x"+
+	"			boardCell.innerHTML =x;"+
+	"			return true;}"+
 	"		else if(y == firstY + 1 && z == firstZ - 1){" +
-	"			boardCell.innerHTML =x"+
+	"			boardCell.innerHTML =x;"+
+	"			return true;}"+
 	"		else{"+
 	"			return false;}" +
 	"	}else{"+
-	"		if(board.rows[firstY-1].cells[firstZ+1].innerHTML == o && (y ==firstY-2 && z == firstZ+2)){"+
-	"			boardCell.innerHTML =o"+
-	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == o && (y ==firstY-2 && z == firstZ-2)){"+
-	"			boardCell.innerHTML =o"+
+	"		if(board.rows[firstY-1].cells[firstZ+1].innerHTML == x && (y ==firstY-2 && z == firstZ+2)){"+
+	
+	"			var c = firstZ;"+
+	"			for(i=firstY; i>=0; i-=2){"+
+	"				if(board.rows[firstY-i].cells[c+1].innerHTML == x && (y ==firstY-i-1 && z == c+2)){"+
+	"					board.rows[firstY-i].cells[c+1].innerHTML = null;"+
+	"					boardCell.innerHTML =o;"+
+	"					c+=2;}"+
+	"				else if(board.rows[firstY-i].cells[c-1].innerHTML == x && (y ==firstY-i-1 && z == c-2)){"+
+	"					board.rows[firstY-i].cells[c-1].innerHTML = null;"+
+	"					boardCell.innerHTML =o;"+
+	"					c-=2;}"+
+	"				else{return true;}}}"+
+	
+	
+	"			boardCell.innerHTML =o;"+
+	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == x && (y ==firstY-2 && z == firstZ-2)){"+
+	"			boardCell.innerHTML =o;"+
 	"		else if(y == firstY - 1 && z == firstZ + 1){" +
-	"			boardCell.innerHTML =o"+
+	"			boardCell.innerHTML =o;"+
 	"		else if(y == firstY - 1 && z == firstZ - 1){" +
-	"			boardCell.innerHTML =o"+
+	"			boardCell.innerHTML =o;"+
 	"		else{"+
 	"			return false;}" +
 	"	}"+
@@ -634,33 +679,20 @@ var checkGame="<style scoped>"+
 	"	}"+
 	"}"+
 	
-	"function winCon(y,z) {"+
-	"	if(turnCount>=8){"+
-	"		if(confirm('Cats game\nNew game?')){"+
-	"			location.reload();"+
-	"		}"+
-	"	}"+
-	"	for (var i = 0; i < 3; i++) {"+
-	"		if((board.rows[i].cells[0].innerHTML==x&&board.rows[i].cells[1].innerHTML==x&&board.rows[i].cells[2].innerHTML==x)||"+
-	"		(board.rows[0].cells[i].innerHTML==x&&board.rows[1].cells[i].innerHTML==x&&board.rows[2].cells[i].innerHTML==x)){"+
-	"			if(confirm('X wins\nNew game?'))"+
-	"				location.reload();"+
-	"		}"+
-	"		if((board.rows[i].cells[0].innerHTML==o&&board.rows[i].cells[1].innerHTML==o&&board.rows[i].cells[2].innerHTML==o)||"+
-	"		(board.rows[0].cells[i].innerHTML==o&&board.rows[1].cells[i].innerHTML==o&&board.rows[2].cells[i].innerHTML==o)){"+
-	"			if(confirm('O wins\nNew game?'))"+
-	"				location.reload();"+
-	"		}"+
-	"	}"+
-		
-	"	if((board.rows[0].cells[0].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[2].innerHTML==o)||"+
-	"	(board.rows[0].cells[2].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[0].innerHTML==o)){"+
-	"		if(confirm('O wins\nNew game?'))"+
-	"			location.reload();"+
-	"	}else if((board.rows[0].cells[0].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[2].innerHTML==x)||"+
-	"	(board.rows[0].cells[2].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[0].innerHTML==x)){"+
-	"		if(confirm('X wins\nNew game?'))"+
-	"			location.reload();"+
-	"	}"+
-		
-	"}"
+	"function winCon() {"+
+	
+	" var found = false;"+
+	"	for (var i = 0; i < board.rows.length; i++) {"+
+	"		for (var j = 0; j < board.rows[i].cells.length; j++){"+
+	"			if(myturn==true){"+
+	"				if(board.rows[i].cells[j].innerHTML == o){found = true;}}"+
+	"			if(myturn==false){"+
+	"				if(board.rows[i].cells[j].innerHTML == x){found = true;}}}}"+
+	"	if(found == false && myturn == true){"+
+	"		if(confirm('Player 1 wins\nNew game?'))"+
+	"			location.reload();}"+
+	"	if(found == false && myturn == false){"+
+	"		if(confirm('Player 2 wins\nNew game?'))"+
+	"			location.reload();}"+
+	
+	"	}"
