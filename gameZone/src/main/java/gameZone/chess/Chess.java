@@ -223,14 +223,14 @@ public class Chess {
     private void generateFEN(){
         fen = "";
         int empty = 0;
-        for(int i = 7; i >= 0; i--) {
+        for(int i = 0; i < 8; i++) {
             int emptyCounter = 0;
             for (int j = 0; j < 8; j++) {
-                if(emptyCounter != 0){
+                int x = board[i][j];
+                if(emptyCounter != 0 && x != 0){
                     fen += emptyCounter;
                     emptyCounter = 0;
                 }
-                int x = board[i][j];
                 if(x == 0)
                 {
                     emptyCounter++;
@@ -289,7 +289,7 @@ public class Chess {
             if(i != 0)
                 fen += "/";
         }
-        fen += "----";
+        fen += " w ---- - - -";
     }
 
     /*
