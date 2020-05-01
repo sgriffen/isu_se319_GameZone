@@ -475,7 +475,7 @@ public class WebSocketComponent {
                     gService.removeGs(gs.getId_db());
                 }
                 
-                if (gs.getTic().checkForCat()) { //if there is a cat game
+                if (gs.getTic() != null && gs.getTic().checkForCat()) { //if there is a cat game in tic tac toe
         
                     SocketReturnWrapper<ObjectReturnWrapper<Integer>> wonIntentReturn = new SocketReturnWrapper<>(
                             205,

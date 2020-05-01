@@ -1,5 +1,4 @@
 var chessGame;
-var board;
 var pending;
 
 var w_pawn;
@@ -89,6 +88,8 @@ function chess_move(cell) {
             chessGame.move({ from: pending.position, to: pos });
             cell.innerHTML = pending.cell.innerHTML;
             pending.cell.innerHTML = "";
+
+            sendBoard();
         }
         pending.cell.style = "";
         pending = null;
@@ -135,73 +136,71 @@ function chess_updateBoard(updateTo) {
     let j = 0;
 
     chess_clearBoard();
-    for (i = 0; i < updateTo.length; i++) {
-        for (j = 0; j < updateTo[i].length; j++) {
-            let letter;
-            if      (i == 0) { letter = 'a'; }
-            else if (i == 1) { letter = 'b'; }
-            else if (i == 2) { letter = 'c'; }
-            else if (i == 3) { letter = 'd'; }
-            else if (i == 4) { letter = 'e'; }
-            else if (i == 5) { letter = 'f'; }
-            else if (i == 6) { letter = 'g'; }
-            else if (i == 7) { letter = 'h'; }
+    for (i = 0; i < updateTo[i].length; i++) {
+        let letter;
+        if      (i == 0) { letter = 'a'; }
+        else if (i == 1) { letter = 'b'; }
+        else if (i == 2) { letter = 'c'; }
+        else if (i == 3) { letter = 'd'; }
+        else if (i == 4) { letter = 'e'; }
+        else if (i == 5) { letter = 'f'; }
+        else if (i == 6) { letter = 'g'; }
+        else if (i == 7) { letter = 'h'; }
+        for (j = 0; j < updateTo.length; j++) {
             let cell = updateTo[i][j];
             switch(cell) {
 
                 case 1:
-                    chessGame.put({ type:  'p', color: 'b' }, letter + j);
+                    chessGame.put({ type: 'p', color: 'b' }, letter + j);
                     board.rows[i].cells[j].innerHTML = b_pawn;
                     break;
                 case 2:
-                    chessGame.put({ type:  'b', color: 'b' }, letter + j);
+                    chessGame.put({ type: 'b', color: 'b' }, letter + j);
                     board.rows[i].cells[j].innerHTML = b_bishop;
                     break;
                 case 3:
-                    chessGame.put({ type:  'n', color: 'b' }, letter + j);
+                    chessGame.put({ type: 'n', color: 'b' }, letter + j);
                     board.rows[i].cells[j].innerHTML = b_knight;
                     break;
                 case 4:
-                    chessGame.put({ type:  'r', color: 'b' }, letter + j);
+                    chessGame.put({ type: 'r', color: 'b' }, letter + j);
                     board.rows[i].cells[j].innerHTML = b_rook;
                     break;
                 case 5:
-                    chessGame.put({ type:  'q', color: 'b' }, letter + j);
+                    chessGame.put({ type: 'q', color: 'b' }, letter + j);
                     board.rows[i].cells[j].innerHTML = b_queen;
                     break;
                 case 6:
-                    chessGame.put({ type:  'k', color: 'b' }, letter + j);
+                    chessGame.put({ type: 'k', color: 'b' }, letter + j);
                     board.rows[i].cells[j].innerHTML = b_king;
                     break;
                 case 7:
-                    chessGame.put({ type:  'p', color: 'w' }, letter + j);
+                    chessGame.put({ type: 'p', color: 'w' }, letter + j);
                     board.rows[i].cells[j].innerHTML = w_pawn;
                     break;
                 case 8:
-                    chessGame.put({ type:  'b', color: 'w' }, letter + j);
+                    chessGame.put({ type: 'b', color: 'w' }, letter + j);
                     board.rows[i].cells[j].innerHTML = w_bishop;
                     break;
                 case 9:
-                    chessGame.put({ type:  'n', color: 'w' }, letter + j);
+                    chessGame.put({ type: 'n', color: 'w' }, letter + j);
                     board.rows[i].cells[j].innerHTML = w_knight;
                     break;
                 case 10:
-                    chessGame.put({ type:  'r', color: 'w' }, letter + j);
+                    chessGame.put({ type: 'r', color: 'w' }, letter + j);
                     board.rows[i].cells[j].innerHTML = w_rook;
                     break;
                 case 11:
-                    chessGame.put({ type:  'q', color: 'w' }, letter + j);
+                    chessGame.put({ type: 'q', color: 'w' }, letter + j);
                     board.rows[i].cells[j].innerHTML = w_queen;
                     break;
                 case 12:
-                    chessGame.put({ type:  'k', color: 'w' }, letter + j);
+                    chessGame.put({ type: 'k', color: 'w' }, letter + j);
                     board.rows[i].cells[j].innerHTML = w_king;
                     break;
             }
         }
     }
-
-    updateTurn();
 }
 function chess_clearBoard() {
 
@@ -209,7 +208,7 @@ function chess_clearBoard() {
     let j = 0;
 
     for (i = 0; i < board.rows.length; i++) {
-        for(j = 0; j < board.rows.rows[i].cells.length; j++) { board.rows[i].cells[j].innerHTML = ""; }
+        for(j = 0; j < board.rows[i].cells.length; j++) { board.rows[i].cells[j].innerHTML = null; }
     }
 
     chessGame.clear();
