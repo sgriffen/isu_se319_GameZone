@@ -1,5 +1,4 @@
 var chessGame;
-var board;
 var pending;
 
 var w_pawn;
