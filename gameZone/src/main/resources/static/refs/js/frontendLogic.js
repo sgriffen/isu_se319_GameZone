@@ -539,13 +539,13 @@ var checkGame="<style scoped>"+
 	"function updateCell(boardCell, y, z) {"+
 	"	if(boardCell.innerHTML==(x||xKing)||boardCell.innerHTML==(o||oKing))"+
 	"		return false"+
-	"	if(myTurn){"+
+	"	if(myTurn && board.rows[firstY].cells[firstZ] == x){"+
 	
 	"		if(board.rows[firstY+1].cells[firstZ+1].innerHTML == (o||oKing) && (y ==firstY+2 && z == firstZ+2)){"+
 	"			var newY = y;"+
 	"			var newZ = z;"+
 	"			var c = firstZ;"+
-	"			for(i=1; i<=7-firstY; i+=2){"+
+	"			for(var i=1; i<=7-firstY; i+=2){"+
 	"				if(board.rows[firstY+i].cells[c+1].innerHTML == (o||oKing) && (newY ==firstY+i+1 && newZ == c+2) && !board.rows[firstY+i+1].cells[c+2].innerHTML==(x||xKing)||!board.rows[firstY+i+1].cells[c+2].innerHTML==(o||oKing)){"+
 	"					board.rows[firstY+i].cells[c+1].innerHTML = null;"+
 	"					if(firstY+i+1==7){board.rows[firstY+i+1].cells[c+2].innerHTML = xKing;}"+
@@ -568,7 +568,7 @@ var checkGame="<style scoped>"+
 	"			var newZ = z;"+
 	
 	"			var c = firstZ;"+
-	"			for(i=1; i<=7-firstY; i+=2){"+
+	"			for(var i=1; i<=7-firstY; i+=2){"+
 	"				if(board.rows[firstY+i].cells[c+1].innerHTML == (o||oKing) && (newY ==firstY+i+1 && newZ == c+2) && !board.rows[firstY+i+1].cells[c+2].innerHTML==(x||xKing)||!board.rows[firstY+i+1].cells[c+2].innerHTML==(o||oKing)){"+
 	"					board.rows[firstY+i].cells[c+1].innerHTML = null;"+
 	"					if(firstY+i+1==7){board.rows[firstY+i+1].cells[c+2].innerHTML = xKing;}"+
@@ -586,30 +586,26 @@ var checkGame="<style scoped>"+
 	"				else{return true;}}"+
 	
 	
-	"		else if(y == firstY + 1 && z == firstZ + 1){" +
-	"			if(y==7){boardCell.innerHTML = xKing;}"+
-	"			else{boardCell.innerHTML =x;}"+
-	"			return true;}"+
-	"		else if(y == firstY + 1 && z == firstZ - 1){" +
+	"		else if((y == firstY + 1 && z == firstZ + 1)||(y == firstY + 1 && z == firstZ - 1)){" +
 	"			if(y==7){boardCell.innerHTML = xKing;}"+
 	"			else{boardCell.innerHTML =x;}"+
 	"			return true;}"+
 	"		else{"+
 	"			return false;}" +
-	"	}else{"+
-	"		if(board.rows[firstY-1].cells[firstZ+1].innerHTML == x && (y ==firstY-2 && z == firstZ+2)){"+
+	"	}else if(!myTurn && board.rows[firstY].cells[firstZ] == o){"+
+	"		if(board.rows[firstY-1].cells[firstZ+1].innerHTML == (x||xKing) && (y ==firstY-2 && z == firstZ+2)){"+
 	"			var newY = y;"+
 	"			var newZ = z;"+
 	"			var c = firstZ;"+
-	"			for(i=firstY; i>=0; i-=2){"+
-	"				if(board.rows[firstY-i].cells[c+1].innerHTML == x && (newY ==firstY-i-1 && newZ == c+2)){"+
+	"			for(var i=firstY; i>=0; i-=2){"+
+	"				if(board.rows[firstY-i].cells[c+1].innerHTML == (x||xKing) && (newY ==firstY-i-1 && newZ == c+2) && !board.rows[firstY-i-1].cells[c+2].innerHTML==(x||xKing)||!board.rows[firstY-i-1].cells[c+2].innerHTML==(o||oKing)){"+
 	"					board.rows[firstY-i].cells[c+1].innerHTML = null;"+
 	"					if(firstY-i-1==0){board.rows[firstY-i-1].cells[c+2].innerHTML =oKing;}"+
 	"					else{board.rows[firstY-i-1].cells[c+2].innerHTML =o;}}"+
 	"					newY-=2;"+
 	"					newZ+=2;"+
 	"					c+=2;}"+
-	"				else if(board.rows[firstY-i].cells[c-1].innerHTML == x && (newY ==firstY-i-1 && newZ == c-2)){"+
+	"				else if(board.rows[firstY-i].cells[c-1].innerHTML == (x||xKing) && (newY ==firstY-i-1 && newZ == c-2) && !board.rows[firstY-i-1].cells[c-2].innerHTML==(x||xKing)||!board.rows[firstY-i-1].cells[c-2].innerHTML==(o||oKing)){"+
 	"					board.rows[firstY-i].cells[c-1].innerHTML = null;"+
 	"					if(firstY-i-1==0){board.rows[firstY-i-1].cells[c-2].innerHTML =oKing;}"+
 	"					else{board.rows[firstY-i-1].cells[c-2].innerHTML =o;}}"+
@@ -618,19 +614,19 @@ var checkGame="<style scoped>"+
 	"					c-=2;}"+
 	"				else{return true;}}}"+
 	
-	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == x && (y ==firstY-2 && z == firstZ-2)){"+
+	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == (x||xKing) && (y ==firstY-2 && z == firstZ-2)){"+
 	"			var newY = y;"+
 	"			var newZ = z;"+
 	"			var c = firstZ;"+
-	"			for(i=firstY; i>=0; i-=2){"+
-	"				if(board.rows[firstY-i].cells[c+1].innerHTML == x && (newY ==firstY-i-1 && newZ == c+2)){"+
+	"			for(var i=firstY; i>=0; i-=2){"+
+	"				if(board.rows[firstY-i].cells[c+1].innerHTML == (x||xKing) && (newY ==firstY-i-1 && newZ == c+2) && !board.rows[firstY-i-1].cells[c+2].innerHTML==(x||xKing)||!board.rows[firstY-i-1].cells[c+2].innerHTML==(o||oKing)){"+
 	"					board.rows[firstY-i].cells[c+1].innerHTML = null;"+
 	"					if(firstY-i-1==0){board.rows[firstY-i-1].cells[c+2].innerHTML =oKing;}"+
 	"					else{board.rows[firstY-i-1].cells[c+2].innerHTML =o;}}"+
 	"					newY-=2;"+
 	"					newZ+=2;"+
 	"					c+=2;}"+
-	"				else if(board.rows[firstY-i].cells[c-1].innerHTML == x && (newY ==firstY-i-1 && newZ == c-2)){"+
+	"				else if(board.rows[firstY-i].cells[c-1].innerHTML == (x||xKing) && (newY ==firstY-i-1 && newZ == c-2) && !board.rows[firstY-i-1].cells[c-2].innerHTML==(x||xKing)||!board.rows[firstY-i-1].cells[c-2].innerHTML==(o||oKing)){"+
 	"					board.rows[firstY-i].cells[c-1].innerHTML = null;"+
 	"					if(firstY-i-1==0){board.rows[firstY-i-1].cells[c-2].innerHTML =oKing;}"+
 	"					else{board.rows[firstY-i-1].cells[c-2].innerHTML =o;}}"+
@@ -639,14 +635,11 @@ var checkGame="<style scoped>"+
 	"					c-=2;}"+
 	"				else{return true;}}}"+
 	
-	"		else if(y == firstY - 1 && z == firstZ + 1){" +
+	"		else if((y == firstY - 1 && z == firstZ + 1)||(y == firstY - 1 && z == firstZ - 1)){" +
 	
 	"			if(y==0){boardCell.innerHTML = oKing;}"+
-	"			else{boardCell.innerHTML =o;}}"+
-	
-	"		else if(y == firstY - 1 && z == firstZ - 1){" +
-	"			if(y==0){boardCell.innerHTML = oKing;}"+
-	"			else{boardCell.innerHTML =o;}}"+
+	"			else{boardCell.innerHTML =o;}"+
+	"			return true;}"+
 	"		else{"+
 	"			return false;}" +
 	"	}"+
