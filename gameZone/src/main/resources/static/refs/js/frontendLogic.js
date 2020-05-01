@@ -13,7 +13,8 @@ var turnCount=0;
 var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 var o="<img src='images/o.png' style='width:95%;height:95%;'>";
 var storage=window.localStorage;
-
+var myTurn = true;
+var turnCount = 0;
 
 var init=function(screen) {
 
@@ -31,9 +32,8 @@ var init=function(screen) {
     });
 
 	document=screen;
-	if (window.localStorage.getItem("userID") == null) {
+	if (storage.getItem("userID") == null) {
 	    xhr.open("POST", "http://" + requestPrefix + "user/generate/token",true);
-//	    xhr.open("POST", "http://" + requestPrefix + "user/generate/token");
 	    xhr.send();
 	} else { socket_xhr(null); }
 }
@@ -45,8 +45,7 @@ function socket_xhr(xhr) {
         storage.setItem("userID", id);
     } else { id = storage.getItem("userID"); }
 
-    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);//localhost
-//    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);//localhost
+    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);
 
     socket.onmessage = function(event) {
 		msg=JSON.parse(event.data);
@@ -107,6 +106,7 @@ function updateBoard(newBoard) {
             break;
         case 2: //chess
 
+            chess_updateBoard(newBoard);
             break;
         default : //tic tac toe
             for (var i = 0; i < board.rows.length; i++) {
@@ -131,8 +131,6 @@ function updateBoard(newBoard) {
 var closeSocket=function(){
 	socket.close();
 }
-
-
 
 //Sets the page to display game based on selection.
 function accepted(){
@@ -207,6 +205,8 @@ function invitation(payload){
                 socket.send(JSON.stringify(json));
             }
             break;
+    }
+}
 
 function selectGame(g) {
 	game=g;
@@ -220,41 +220,34 @@ function selectGame(g) {
 	"<label for='requestID' style='color:#ff9900;'>if player, input their ID <input type='text' id='requestID'></label>"+
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
-	var myTurn = true;
-	var turnCount = 0;
 
-	function move(boardCell,y,z) {
-		if(updateCell(boardCell)){
-			sendBoard();
-			turnCount++;
-		}
-	}
-	function sendBoard() {
-	    switch (game) {
+function sendBoard() {
+    switch (game) {
 
-	        case 1: //checkers
+        case 1: //checkers
 
 
-	        case 2: //chess
+        case 2: //chess
 
-
-	        default: //tic tac toe
-                var board = document.getElementById('board');
-                let arr = [[],[],[]];
-                for (var i = 0; i < board.rows.length; i++) {
-                    for (var j = 0; j < board.rows[i].cells.length; j++){
-                            if(board.rows[i].cells[j].value==1)
-                                arr[i].push(1);
-                            else if(board.rows[i].cells[j].value==2)
-                                arr[i].push(2);
-                            else
-                                arr[i].push(0);
-                    }
+            chess_sendBoard();
+        default: //tic tac toe
+            var board = document.getElementById('board');
+            let arr = [[],[],[]];
+            for (var i = 0; i < board.rows.length; i++) {
+                for (var j = 0; j < board.rows[i].cells.length; j++){
+                        if(board.rows[i].cells[j].value==1)
+                            arr[i].push(1);
+                        else if(board.rows[i].cells[j].value==2)
+                            arr[i].push(2);
+                        else
+                            arr[i].push(0);
                 }
+            }
 
-                sendBackend(204,arr,0,GSID);
-                break;
-	    }
+            sendBackend(204,arr,0,GSID);
+            break;
+    }
+}
 var requestHuman=function(requested){
 	sendBackend(202,requested,0,id);
 }
@@ -264,62 +257,32 @@ var requestAI=function(){
 }
 
 function move(boardCell,y,z) {
-	if(updateCell(boardCell,boardCell.innerHTML)){
-		//winCon(y,z)
+	if(updateCell(boardCell, boardCell.innerHTML)){
 		sendBoard();
 		turnCount++;
 	}
 }
-	
-function sendBoard(){
-	var board = document.getElementById('board');
-	let arr = [[],[],[]];
-	for (var i = 0; i < board.rows.length; i++) {
-		for (var j = 0; j < board.rows[i].cells.length; j++){
-			if(board.rows[i].cells[j].value==1)
-				arr[i].push(1);
-			else if(board.rows[i].cells[j].value==2)
-				arr[i].push(2);
-			else
-				arr[i].push(0);
-		}
-	}
-	sendBackend(204,arr,0,GSID);
-}
 
-function updateCell(boardCell) {
-		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
-			return false
-		
-		if (p1) {
-		    boardCell.innerHTML =x
-		    boardCell.value = 1
-		} else {
-			boardCell.innerHTML =o
-			boardCell.value = 2
-		}
-		return true
-var updateCell=function(boardCell,contents) {
-	if(contents==x||contents==o||myTurn==false)
-		return false
-	
-	if(p1){
-		boardCell.innerHTML =x
-		boardCell.value = 1
-	}else{
-		boardCell.innerHTML =o
-		boardCell.value = 2
-	}
-	return true
-}
+var updateCell = function(boardCell,contents) {
+    if(contents==x||contents==o||myTurn==false)
+        return false
 
+    if(p1){
+        boardCell.innerHTML =x
+        boardCell.value = 1
+    }else{
+        boardCell.innerHTML =o
+        boardCell.value = 2
+    }
+    return true
+}
 function updateTurn() {
     p=document.getElementById('turn');
     myTurn = !myTurn;
     if (myTurn) { p.innerHTML="It's your turn"; }
     else { p.innerHTML="It's your opponent's turn"; }
 }
-var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
+var sendBackend = function(code,arra,integ,identif) {//this code oddity was made solely for testing
 	let json = {
         "intent": code,
 		"payload": {
