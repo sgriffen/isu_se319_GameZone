@@ -1,5 +1,7 @@
 package gameZone.user;
 
+import gameZone.gameSession.GameSession;
+
 public interface UserInterface {
 
     /* *************************************************** START GETTERS/SETTERS *************************************************** */
@@ -16,7 +18,20 @@ public interface UserInterface {
      *      Desired {@code id_db} for {@code User}
      */
     void setIdDB(int id_db);
-
+    
+    /**
+     * Get {@code gameSession} of {@code User}
+     * @return
+     *      {@code gameSession}
+     */
+    GameSession getGameSession();
+    /**
+     * Set {@code gameSession} of {@code User}
+     * @param gameSession
+     *      Desired {@code gameSession} for {@code User}
+     */
+    void setGameSession(GameSession gameSession);
+    
     /**
      * Get {@code id_app} of {@code User}
      * @return {
@@ -56,6 +71,19 @@ public interface UserInterface {
      *      Desired {@code losses} for {@code User}
      */
     void setLosses(int losses);
+    
+    /**
+     * Get {@code place} of {@code User}
+     * @return
+     *      {@code place}
+     */
+    Integer getPlace();
+    /**
+     * Set {@code place} of {@code User}
+     * @param place
+     *      Desired {@code place} for {@code User}
+     */
+    void setPlace(Integer place);
 
     /* **************************************************** END GETTERS/SETTERS **************************************************** */
 

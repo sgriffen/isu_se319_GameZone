@@ -34,7 +34,7 @@ public class DefaultController {
     /**
      * {@code Log} for this controller
      */
-    private Log log = LogFactory.getLog(GameZone.class);
+    private Log log;
 
     /**
      * Directory {@code HTML} resources are in for this {@code Controller}
@@ -54,8 +54,10 @@ public class DefaultController {
      */
     public DefaultController(GlobalResources gRec, DefaultService dService) {
 
+        this.gRec = gRec;
         this.dService = dService;
 
+        this.log = LogFactory.getLog(GameZone.class);
         resourcePrefix = "templates" + gRec.getFileSep() + "default" + gRec.getFileSep();
     }
 
@@ -64,7 +66,9 @@ public class DefaultController {
     /* **************************************************** START GET MAPPINGS ***************************************************** */
 
     @GetMapping(value = "")
-    public String index() { return dService.index(); }
+    public String index_html() { return dService.index_html(); }
+    @GetMapping(value = "/chess")
+    public String chess_html() { return dService.chess_html(); }
 
     /* ***************************************************** END GET MAPPINGS ****************************************************** */
 

@@ -1,6 +1,7 @@
 package gameZone.services;
 
 import gameZone.components.GlobalResources;
+import gameZone.gameSession.GameSession;
 import gameZone.repositories.UserRepository;
 import gameZone.user.User;
 import gameZone.user.UserInterface;
@@ -41,6 +42,7 @@ public class UserService {
     public UserService(GlobalResources gRec, UserRepository uRepo) {
 
         this.gRec = gRec;
+
         this.uRepo = uRepo;
     }
 
@@ -65,7 +67,44 @@ public class UserService {
         return u.getIdApp();
     }
 
-    /* ***************************************************** END POST HELPERS ****************************************************** */
+    public UserInterface getUser(String id) {
 
+        for (UserInterface u : uRepo.findAll()) {
+
+            if (u.getIdApp().equals(id)) { return u; }
+        }
+
+        return null;
+    }
+
+    /* ***************************************************** END POST HELPERS ****************************************************** */
+    
+    public void addUserToGame(UserInterface toAdd, GameSession addTo, Integer place) {
+    
+        toAdd.setGameSession(addTo);
+        toAdd.setPlace(place);
+        uRepo.save((User) toAdd);
+    }
+    
+    public boolean saveUser_new(UserInterface u) {
+    
+        uRepo.save((User) u);
+        return true;
+    }
+    
+    public boolean saveUser_existing(UserInterface u) {
+    
+        for (UserInterface u_db : uRepo.findAll()) {
+            
+            if (u_db.getIdApp().equals(u.getIdApp())) {
+                
+                uRepo.save((User) u);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     /* ******************************************************* END USER SERVICE **************************************************** */
 }

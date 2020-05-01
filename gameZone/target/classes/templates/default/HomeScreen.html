@@ -3,64 +3,50 @@
 <html lang="en">
 	<head>
 		<title>gGaM3_zZoN3</title>
+		<link rel="stylesheet" type="text/css" href="/refs/css/default.css">
 	</head>
-	<body style="background-color:DarkBlue;">
+
+	<body style="background-color:DarkBlue; height: 95vh">
+		<script src="/refs/js/frontendLogic.js" type="text/javascript"></script>
+		<script src="/refs/js/chess.js" type="text/javascript"></script>
+		
 		<script>
-			var requestOptions = {
-				method: 'GET',
-				redirect: 'follow'
-			};
-			var id=0;
+			function ticTrans() {
+				init(document)
+				selectGame(0);
+			}
+			function checkTrans(){
+				init(document)
+				selectGame(1);
+			}
 			
-			//fetch("https://coms-319-052.cs.iastate.edu:8080/user/generate/token", requestOptions)
-			//fetch("https://localhost:8080/user/generate/token", requestOptions)
-			//	.then(response => response.text())
-			//	.then(result => id)
-			//	.catch(error => console.log('error', error));
-			let socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/identifier");//server
-			//let socket = new WebSocket("ws://localhost:8080/websocket/identifier");//localhost
-			
-			socket.onopen = function(e) {
-				document.getElementById("connected").innerHTML = "true";
-				alert("[open] Connection established");
-				alert("Sending to server");
-				let json = {
-					"intent": 201,
-					"payload": "Hello there",
-					"identifier": id
-				};
-				socket.send(JSON.stringify(json));
-			};
-			socket.onmessage = function(event) {
-				alert("[message] Data received from server: ${event.data}");
-			};
-			socket.onclose = function(event) {
-				document.getElementById("connected").innerHTML = "false";
-				if (event.wasClean) {
-					alert("[close] Connection closed cleanly, code=${event.code} reason=${event.reason}");
-				} else {
-				// e.g. server process killed or network down
-				// event.code is usually 1006 in this case
-					alert("[close] Connection died");
+			function playerSelect() {
+				var e = document.getElementById("PvA");
+				var requested = e.options[e.selectedIndex].value;
+				e = document.getElementById("requestID");
+				if(requested=="player"){
+					requestHuman(e.value);
+				}else{
+					requestAI();
 				}
-			};
+			}
 		</script>
-		<dom id="connected" >false</dom>
-		<div style="background-image: url('https://i.imgur.com/X6ucgYf.jpg');">
+		<div style="background-image: url('https://i.imgur.com/X6ucgYf.jpg');background-repeat: no-repeat; background-size: cover; height: 102%;">
 		
 		<div class="rainbow-text" style="text-align:center; font-size:40px;">
 			<b style="color:#ff00ff">g</b><b style="color:#ff00cc">G</b><b style="color:#ff0099">a</b><b style="color:#ff0066">M</b><b style="color:#ff0033">3</b> <b style="color:#ff0000">z</b><b style="color:#ff3300">Z</b><b style="color:#ff6600">o</b><b style="color:#ff9900">N</b><b style="color:#ffcc00">3</b>
 		</div>
 		<h2 style=" text-align:center; color:#ff9900;">Jamie Peterson, Rob Barton, Sean Griffen, A. Kira Pierce</h2>
 		
-		<fieldset style="border-color: #ff9900;">
+		<fieldset id="set" style="border-color: #ff9900;height: 80%;">
 			
-			<div class="wrapper" align="center">
-				<button style="font-size:24px;width:150px;" type="button">TicTacToe!</button>
+			<div id="onCenter" class="wrapper" align="center">
+				<button style="font-size:24px;width:150px;" type="button" onclick="ticTrans()" id="tic">>TicTacToe!</button>
 			<br>
-				<button style="font-size:24px;width:150px;" type="button">Checkers!</button>
+				<button style="font-size:24px;width:150px;" type="button" onclick="checkTrans()" id="check">Checkers!</button>
 			<br>
-				<button style="font-size:24px;width:150px;" type="button">Chess!</button>
+			
+				<button style="font-size:24px;width:150px;" type="button" id="chess">Chess!</button>
 			</div>
 			
 			<br>
@@ -69,9 +55,7 @@
 			<br>
 			<br>
 			<br>
-			<!img src="Twitter-icon.png" style="width:50px;height:50px; vertical-align:middle;"><!a style="padding-left:5px; font-size:160%; vertical-align:middle; color:white;" href="https://twitter.com/KiraPierce16"><!Twitter><!/a>
-			<!br>
-			<!img src="Discord-icon.png" style="padding-left:2px; width:46px;height:46px; vertical-align:middle;"><!a style="padding-left:7px; font-size:160%; vertical-align:middle; color:white;" href="https://discord.gg/PaGhZ3e"><!Discord><!/a>
-		</fieldset>
+			</fieldset>
+		</div>
 	</body>
 </html>
