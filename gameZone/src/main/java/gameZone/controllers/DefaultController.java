@@ -67,8 +67,14 @@ public class DefaultController {
 
     @GetMapping(value = "")
     public String index_html() { return dService.index_html(); }
-    @GetMapping(value = "/chess")
+    
+    @GetMapping(value = "/html/tictactoe")
+    public String tictactoe_html() { return dService.tictactoe_html(); }
+    @GetMapping(value = "/html/checkers")
+    public String checkers_html() { return dService.checkers_html(); }
+    @GetMapping(value = "/html/chess")
     public String chess_html() { return dService.chess_html(); }
+    
 
     /* ***************************************************** END GET MAPPINGS ****************************************************** */
 

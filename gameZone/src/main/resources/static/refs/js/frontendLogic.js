@@ -4,8 +4,17 @@ var id = 00000;
 var socket;
 var GSID;
 var p1=true;
+var tacGame;
+var checkGame;
+var chessBoard;
+var requestPrefix = "localhost:8080/";
+//var requestPrefix = "coms-319-052.cs.iastate.edu:8080/";
 
 function init(screen) {
+
+    getTicHtml();
+//    getCheckHtml();
+    getChessHtml();
 
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
@@ -18,8 +27,8 @@ function init(screen) {
 
 	document=screen;
 	if (window.localStorage.getItem("userID") == null) {
-//	    xhr.open("POST", "http://localhost:8080/user/generate/token",true);
-	    xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
+	    xhr.open("POST", "http://" + requestPrefix + "user/generate/token",true);
+//	    xhr.open("POST", "http://" + requestPrefix + "user/generate/token");
 	    xhr.send();
 	} else { socket_xhr(null); }
 }
@@ -31,8 +40,8 @@ function socket_xhr(xhr) {
         window.localStorage.setItem("userID", id);
     } else { id = window.localStorage.getItem("userID"); }
 
-//    socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
-    socket = new WebSocket("ws://coms-319-052.cs.iastate.edu:8080/websocket/" + id);//localhost
+    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);//localhost
+//    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);//localhost
 
     socket.onopen = function(e) {
         //document.getElementById("connected").innerHTML = "true";
@@ -127,9 +136,15 @@ function updateBoard(newBoard) {
 function accepted(){
 	if(game == 0){
 		document.getElementById('onCenter').innerHTML=tacGame;
+		tac_init();
 	}
 	else if(game == 1){
 		document.getElementById('onCenter').innerHTML=checkGame;
+		//check_init();
+	}
+	else if(game == 2) {
+	    document.getElementById('onCenter').innerHTML=chessBoard;
+        chess_init();
 	}
 }
 
@@ -303,207 +318,135 @@ function requestAI(){
 		else { p.innerHTML="It's your opponent's turn"; }
     }
 
-var tacGame="<style scoped>"+
-"table {"+
-"  text-align: center;"+
-"   width: 25%;"+
-"   border-spacing: 0;"+
-"}"+
-"td {"+
-"	border: 2px solid black;"+
-"	border-collapse: collapse;"+
-"    width: 16%;"+
-"}"+
-"</style>"+
-	"<h1>Tic-Tac-Toe</h1>"+
-	"<br>"+
-	"<p id='turn'>It's your turn</p>"+
-	"<br><br>"+
-	"<table id='board'>"+
-	"	<tr>"+
-    "        <td style='border-top: none; border-left: none; height:100px;' onclick='move(this,0,0)'></td>"+
-    "        <td style='border-top: none; height:100px;' onclick='move(this,0,1)'></td>"+
-	"		<td style='border-top: none; border-right: none; height:100px;' onclick='move(this,0,2)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='border-left: none; height:100px;' onclick='move(this,1,0)'></td>"+
-    "        <td style='height:100px;' onclick='move(this,1,1)'></td>"+
-	"		<td style='border-right: none; height:100px;' onclick='move(this,1,2)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='border-bottom: none; border-left: none; height:100px;' onclick='move(this,2,0)'></td>"+
-    "        <td style='border-bottom: none; height:100px;' onclick='move(this,2,1)'></td>"+
-	"		<td style='border-bottom: none;border-right: none; height:100px;' onclick='move(this,2,2)'></td>"+
-    "    </tr>"+
-	"</table>"+
-  "<script>"+
-	"var board = document.getElementById('board');"+
-	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
-	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
-	"if (board != null) {"+
-	"	for (var i = 0; i < board.rows.length; i++) {"+
-	"		for (var j = 0; j < board.rows[i].cells.length; j++)"+
-	"			board.rows[i].cells[j].onclick = function () {"+
-	"			move(this,i,j);"+
-	"			};"+
-	"	}"+
-	"}"+
+function getTicHtml() {
 
-	"function move(boardCell,y,z) {"+
-	"	if(updateCell(boardCell)){"+
-	"		updateTurn();"+
-	"		turnCount++;"+
-	"	}"+
-	"}"+
-	
-	"function updateCell(boardCell) {"+
-	"	if(boardCell.innerHTML==x||boardCell.innerHTML==o)"+
-	"		return false"+
-		
-	"	if(myTurn){"+
-	"		boardCell.innerHTML =x"+
-	"	}else{"+
-	"		boardCell.innerHTML =o"+
-	"	}"+
-	"	return true"+
-	"}"+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
 
-	
-	"function winCon(y,z) {"+
-	"	if(turnCount>=8){"+
-	"		if(confirm('Cats game\nNew game?')){"+
-	"			location.reload();"+
-	"		}"+
-	"	}"+
-	"	for (var i = 0; i < 3; i++) {"+
-	"		if((board.rows[i].cells[0].innerHTML==x&&board.rows[i].cells[1].innerHTML==x&&board.rows[i].cells[2].innerHTML==x)||"+
-	"		(board.rows[0].cells[i].innerHTML==x&&board.rows[1].cells[i].innerHTML==x&&board.rows[2].cells[i].innerHTML==x)){"+
-	"			if(confirm('X wins\nNew game?'))"+
-	"				location.reload();"+
-	"		}"+
-	"		if((board.rows[i].cells[0].innerHTML==o&&board.rows[i].cells[1].innerHTML==o&&board.rows[i].cells[2].innerHTML==o)||"+
-	"		(board.rows[0].cells[i].innerHTML==o&&board.rows[1].cells[i].innerHTML==o&&board.rows[2].cells[i].innerHTML==o)){"+
-	"			if(confirm('O wins\nNew game?'))"+
-	"				location.reload();"+
-	"		}"+
-	"	}"+
-		
-	"	if((board.rows[0].cells[0].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[2].innerHTML==o)||"+
-	"	(board.rows[0].cells[2].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[0].innerHTML==o)){"+
-	"		if(confirm('O wins\nNew game?'))"+
-	"			location.reload();"+
-	"	}else if((board.rows[0].cells[0].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[2].innerHTML==x)||"+
-	"	(board.rows[0].cells[2].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[0].innerHTML==x)){"+
-	"		if(confirm('X wins\nNew game?'))"+
-	"			location.reload();"+
-	"	}"+
-		
-	"}"
+    xhr.open("GET", "http://" + requestPrefix + "html/tictactoe",false);
+    xhr.send();
+    tacGame = xhr.response;
+}
+function getCheckHtml() {
 
-var checkGame="<style scoped>"+
-"table {"+
-"  text-align: center;"+
-"   width: 25%;"+
-"   border-spacing: 0;"+
-"}"+
-"td {"+
-"	border: 2px solid black;"+
-"	border-collapse: collapse;"+
-"    width: 16%;"+
-"}"+
-"</style>"+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.open("GET", "http://" + requestPrefix + "html/checkers",false);
+    xhr.send();
+    checkGame = xhr.response;
+}
+function getChessHtml() {
+
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.open("GET", "http://" + requestPrefix + "html/chess",false);
+    xhr.send();
+    chessBoard = xhr.response;
+}
+
+function createFromHTML(htmlString) {
+
+    let temp = document.createElement("template");
+    temp.innerHTML = htmlString.trim();
+
+    return temp.content.firstElementChild.innerHTML;
+}
+
+checkGame=
 	"<h1>Checkers</h1>"+
 	"<br>"+
 	"<p id='turn'>It is Player 1's turn</p>"+
 	"<br><br>"+
 	"<table id='board'>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,0,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,0,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,0,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,0,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,0,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,0,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,0,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,0,7)'></td>"+
+	"	<tr >"+
+    "        <td class='tile-light' onclick='checkers_move(this,0,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,0,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,0,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,0,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,0,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,0,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,0,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,0,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-dark' onclick='checkers_move(this,1,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,1,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,1,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,1,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,1,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,1,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,1,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,1,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-light' onclick='checkers_move(this,2,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,2,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,2,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,2,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,2,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,2,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,2,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,2,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-dark' onclick='checkers_move(this,3,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,3,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,3,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,3,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,3,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,3,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,3,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,3,7)'></td>"+
+    "    </tr>"+
+	"	<tr >"+
+    "        <td class='tile-light' onclick='checkers_move(this,4,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,4,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,4,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,4,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,4,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,4,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,4,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,4,7)'></td>"+
+    "    </tr>"+
+    "    <tr >"+
+    "        <td class='tile-dark' onclick='checkers_move(this,5,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,5,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,5,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,5,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,5,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,5,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,5,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,5,7)'></td>"+
     "    </tr>"+
 	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,1,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,1,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,1,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,1,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,1,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,1,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,1,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,1,7)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,6,0)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,6,1)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,6,2)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,6,3)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,6,4)'></td>"+
+	"        <td class='tile-dark' onclick='checkers_move(this,6,5)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,6,6)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,6,7)'></td>"+
     "    </tr>"+
 	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,2,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,2,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,2,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,2,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,2,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,2,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,2,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,2,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,3,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,3,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,3,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,3,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,3,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,3,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,3,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,3,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,4,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,4,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,4,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,4,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,4,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,4,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,4,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,4,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,5,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,5,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,5,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,5,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,5,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,5,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,5,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,5,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,6,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,6,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,6,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,6,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,6,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,6,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,6,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,6,7)'></td>"+
-    "    </tr>"+
-	"	<tr>"+
-    "        <td style='height:50px;' onclick='move(this,7,0)'></td>"+
-    "        <td style='height:50px;' onclick='move(this,7,1)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,7,2)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,7,3)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,7,4)'></td>"+
-	"        <td style='height:50px;' onclick='move(this,7,5)'></td>"+
-	"		 <td style='height:50px;' onclick='move(this,7,6)'></td>"+
-	"		<td style='height:50px;' onclick='move(this,7,7)'></td>"+
+    "        <td class='tile-dark' onclick='checkers_move(this,7,0)'></td>"+
+    "        <td class='tile-light' onclick='checkers_move(this,7,1)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,7,2)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,7,3)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,7,4)'></td>"+
+	"        <td class='tile-light' onclick='checkers_move(this,7,5)'></td>"+
+	"		 <td class='tile-dark' onclick='checkers_move(this,7,6)'></td>"+
+	"		 <td class='tile-light' onclick='checkers_move(this,7,7)'></td>"+
     "    </tr>"+
 	"</table>"+
   "<script>"+
 	"var board = document.getElementById('board');"+
 	"var myTurn = true;"+
 	"var turnCount=0;"+
-	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
-	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
+	"var x='<img class='game_piece' src='x.png'>';"+
+	"var o='<img class='game_piece' src='o.png'>';"+
 	"if (board != null) {"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
 	"		for (var j = 0; j < board.rows[i].cells.length; j++){"+
@@ -512,21 +455,20 @@ var checkGame="<style scoped>"+
 	"			if(i%2 != 0 && j >= 5){"+
 	"				board.rows[i].cells[j].innerHTML = o;}"
 	"			board.rows[i].cells[j].onclick = function () {"+
-	"			move(this,i,j);"+
+	"			checkers_move(this,i,j);"+
 	"			};"+
 	"	}}"+
 	"}"+
 	"var first = true;"+  //click one button that contains a piece and then another
 	"var firstY = -1;"+
 	"var firstZ = -1;"+
-	"function move(boardCell,y,z) {"+
+	"function checkers_move(boardCell,y,z) {"+
 	"	if(first == true){"+
-	"		first = false;"+
 	"		firstY = y;"+
 	"		firstZ = z;}"+
 	"	else{"+
-	"		if(updateCell(boardCell, y, z)){"+
-	"			winCon();"+
+	"		if(checkers_updateCell(boardCell, y, z)){"+
+	"			checkers_winCon();"+
 	"			updateTurn();"+
 	"			turnCount++;"+
 	"			first = true;"+
@@ -534,7 +476,7 @@ var checkGame="<style scoped>"+
 	"	}"+
 	"}"+
 	//TODO, update to checkers functionality
-	"function updateCell(boardCell, y, z) {"+
+	"function checkers_updateCell(boardCell, y, z) {"+
 	"	if(boardCell.innerHTML==x||boardCell.innerHTML==o)"+
 	"		return false"+
 	"	if(myTurn){"+
@@ -589,8 +531,6 @@ var checkGame="<style scoped>"+
 	"					boardCell.innerHTML =o;"+
 	"					c-=2;}"+
 	"				else{return true;}}}"+
-	
-	
 	"			boardCell.innerHTML =o;"+
 	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == x && (y ==firstY-2 && z == firstZ-2)){"+
 	"			boardCell.innerHTML =o;"+
@@ -603,19 +543,7 @@ var checkGame="<style scoped>"+
 	"	}"+
 	"	return true"+
 	"}"+
-	
-	"function updateTurn() {"+
-	"	p=document.getElementById('turn');"+
-	"	if(myTurn){"+
-	"		myTurn=false;"+
-	"		p.innerHTML='It is Player 2's turn'"+
-	"	}else{"+
-	"		myTurn=true;"+
-	"		p.innerHTML='It is Player 1's turn'"+
-	"	}"+
-	"}"+
-	
-	"function winCon() {"+
+	"function checkers_winCon() {"+
 	
 	" var found = false;"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
