@@ -1,11 +1,17 @@
 var document;
 var game;
-var id = 00000;
+var id = 0;
 var socket;
 var GSID;
 var p1=true;
+var myTurn = true;
+var turnCount=0;
+var x="<img src='images/x.png' style='width:95%;height:95%;'>";
+var o="<img src='images/o.png' style='width:95%;height:95%;'>";
+var storage=window.localStorage;
 
-function init(screen) {
+
+var init=function(screen) {
 
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
@@ -17,7 +23,7 @@ function init(screen) {
     });
 
 	document=screen;
-	if (window.localStorage.getItem("userID") == null) {
+	if (storage.getItem("userID") == null) {
 	    xhr.open("POST", "http://localhost:8080/user/generate/token",true);
 	    //xhr.open("POST", "http://coms-319-052.cs.iastate.edu:8080/user/generate/token");
 	    xhr.send();
@@ -28,23 +34,10 @@ function socket_xhr(xhr) {
 
     if (xhr != null) {
         id = JSON.parse(xhr.response).payload;
-        window.localStorage.setItem("userID", id);
-    } else { id = window.localStorage.getItem("userID"); }
+        storage.setItem("userID", id);
+    } else { id = storage.getItem("userID"); }
 
     socket = new WebSocket("ws://localhost:8080/websocket/" + id);//localhost
-
-    socket.onopen = function(e) {
-        //document.getElementById("connected").innerHTML = "true";
-        //alert("[open] Connection established");
-        //alert("Sending to server");
-        let json = {
-            "intent": 201,
-            "payload": "Hello there",
-            "identifier": id
-        };
-        //socket.send(JSON.stringify(json));
-    }
-
 
     socket.onmessage = function(event) {
 		msg=JSON.parse(event.data);
@@ -73,7 +66,12 @@ function socket_xhr(xhr) {
 			case 205:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			alert("you lose");
+			if(msg.payload.payload==2)
+				alert("you lose");
+			if(msg.payload.payload==1)
+				alert("you win");
+			if(msg.payload.payload==0)
+				alert("Tie game");
 			GSID=0;
 			location.reload();
 			break;
@@ -90,6 +88,10 @@ function socket_xhr(xhr) {
                 //alert("[close] Connection died");
         }
     };
+}
+
+var closeSocket=function(){
+	socket.close();
 }
 
 function updateBoard(newBoard){
@@ -118,6 +120,7 @@ function accepted(){
 function invitation(requestor){
 	if (confirm("Press a button!")) {
 		p1=false;
+		sendBackend(203,requestor,0,id);
 		let json = {
             "intent": 203,
 			"payload": {
@@ -127,8 +130,9 @@ function invitation(requestor){
 			},
 			"identifier": id
 		};
-		socket.send(JSON.stringify(json));
+		//socket.send(JSON.stringify(json));
 	} else {
+		sendBackend(203,requestor,100,id);
 		let json = {
             "intent": 203,
 			"payload": {
@@ -154,102 +158,74 @@ function selectGame(g){
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
-function requestHuman(requested){
-	let json = {
-            "intent": 202,
-			"payload": {
-				"array": [
-					requested
-				],
-				"integer": 0
-			},
-			"identifier": id
-
-
-        };
-        socket.send(JSON.stringify(json));
+var requestHuman=function(requested){
+	sendBackend(202,requested,0,id);
 }
 
-function requestAI(){
-	let json = {
-            "intent": 202,
-			"payload": {
-				"array": [
-					"AI"
-				],
-				"integer": 0
-			},
-			"identifier": id
-
-
-        };
-        socket.send(JSON.stringify(json));
+var requestAI=function(){
+	sendBackend(202,"AI",0,id);
 }
 
-	var myTurn = true;
-	var turnCount=0;
-	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-	var o="<img src='images/o.png' style='width:95%;height:95%;'>";
-
-	function move(boardCell,y,z) {
-		if(updateCell(boardCell)){
-			//winCon(y,z)
-			sendBoard();
-			turnCount++;
-		}
+function move(boardCell,y,z) {
+	if(updateCell(boardCell,boardCell.innerHTML)){
+		//winCon(y,z)
+		sendBoard();
+		turnCount++;
 	}
+}
 	
-	function sendBoard(){
-	    var board = document.getElementById('board');
-		let arr = [[],[],[]];
-		for (var i = 0; i < board.rows.length; i++) {
-			for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(board.rows[i].cells[j].value==1)
-					arr[i].push(1);
-				else if(board.rows[i].cells[j].value==2)
-					arr[i].push(2);
-				else
-					arr[i].push(0);
+function sendBoard(){
+	var board = document.getElementById('board');
+	let arr = [[],[],[]];
+	for (var i = 0; i < board.rows.length; i++) {
+		for (var j = 0; j < board.rows[i].cells.length; j++){
+			if(board.rows[i].cells[j].value==1)
+				arr[i].push(1);
+			else if(board.rows[i].cells[j].value==2)
+				arr[i].push(2);
+			else
+				arr[i].push(0);
 		}
 	}
+	sendBackend(204,arr,0,GSID);
 	let json = {
-            "intent": 204,
-			"payload": {
+        "intent": 204,
+		"payload": {
 			"array": arr,
-				"integer": 0
-			},
-			"identifier": GSID
-		};
+			"integer": 0
+		},
+		"identifier": GSID
+	};
 	
-	socket.send(JSON.stringify(json));
-	}
+	//socket.send(JSON.stringify(json));
+}
 	
-	function updateCell(boardCell) {
-		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
-			return false
-		
-		if(p1){
+var updateCell=function(boardCell,contents) {
+	if(contents==x||contents==o||myTurn==false)
+		return false
+	
+	if(p1){
 		boardCell.innerHTML =x
 		boardCell.value = 1
-		}else{
-			boardCell.innerHTML =o
-			boardCell.value = 2
-		}
-		return true
+	}else{
+		boardCell.innerHTML =o
+		boardCell.value = 2
 	}
+	return true
+}
 	
-	function updateTurn() {
-		p=document.getElementById('turn');
-		if(p1){
-			myTurn=false;
-			p.innerHTML="It is O's turn"
-		}else{
-			myTurn=true;
-			p.innerHTML="It is X's turn"
-		}
+function updateTurn() {
+	p=document.getElementById('turn');
+	if(p1){
+		myTurn=false;
+		p.innerHTML="It is O's turn"
+	}else{
+		myTurn=true;
+		p.innerHTML="It is X's turn"
 	}
-	
-	var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
+}
+
+var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
 	let json = {
         "intent": code,
 		"payload": {
@@ -372,3 +348,24 @@ var tacGame="<style scoped>"+
 		
 	"}"
 
+var setmyTurn=function(tu){
+	myTurn=tu;
+}
+
+var setPlayer=function(p){
+	p1=p;
+}
+
+var setBackend=function(bac){
+	sendBackend=bac;
+}
+
+var getSocket=function(){
+	return socket;
+}
+
+var setStorage=function(sto){
+	storage=sto;
+}
+
+module.exports = { setmyTurn,setPlayer,sendBackend,setBackend,updateCell,requestAI,requestHuman,init,getSocket,setStorage,closeSocket }
