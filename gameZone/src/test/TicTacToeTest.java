@@ -1,5 +1,6 @@
 package gameZone.ticTacToe;
 
+import gameZone.ticTacToe.*;
 import static org.junit.Assert.*;
 
 public class TicTacToeTest {

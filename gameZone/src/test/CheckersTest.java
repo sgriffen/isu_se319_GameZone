@@ -1,7 +1,7 @@
 package gameZone.checkers;
 
 import org.junit.Test;
-
+import gameZone.checkers.*;
 import static org.junit.Assert.*;
 
 public class CheckersTest {

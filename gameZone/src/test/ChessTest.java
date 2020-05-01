@@ -1,7 +1,7 @@
 package gameZone.chess;
 
 import org.junit.Test;
-
+import gameZone.chess.*;
 import static org.junit.Assert.*;
 
 public class ChessTest {
