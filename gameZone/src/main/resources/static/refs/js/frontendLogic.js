@@ -742,7 +742,7 @@ var checkGame="<style scoped>"+
 	
 	
 	
-	"	else if(myTurn && board.rows[firstY].cells[firstZ] == oKing){"+
+	"	else if(!myTurn && board.rows[firstY].cells[firstZ] == oKing){"+
 	
 	"		if(board.rows[firstY+1].cells[firstZ+1].innerHTML == (x||xKing) && (y ==firstY+2 && z == firstZ+2)){"+
 	"			var newY = y;"+
