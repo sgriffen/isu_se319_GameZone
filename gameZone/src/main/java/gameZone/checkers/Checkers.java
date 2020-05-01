@@ -226,12 +226,12 @@ public class Checkers {
 
         switch(pieceType){
             case 1:
-                endRow.add(startRow + 2);
-                endRow.add(startRow + 2);
+                endRow.add(startRow - 2);
+                endRow.add(startRow - 2);
                 endCol.add(startCol - 2);
                 endCol.add(startCol + 2);
-                captureRow.add(startRow + 1);
-                captureRow.add(startRow + 1);
+                captureRow.add(startRow - 1);
+                captureRow.add(startRow - 1);
                 captureCol.add(startCol - 1);
                 captureCol.add(startCol + 1);
                 break;
