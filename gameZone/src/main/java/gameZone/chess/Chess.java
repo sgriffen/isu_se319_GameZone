@@ -109,6 +109,16 @@ public class Chess {
         board[0][7] = 10;
     }
 
+    public String getFEN()
+    {
+        return fen;
+    }
+
+    public void setFEN(String fen)
+    {
+        this.fen = fen;
+    }
+
     public Integer[][] getBoard()
     {
         return board;
