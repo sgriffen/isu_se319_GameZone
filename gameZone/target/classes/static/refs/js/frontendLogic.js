@@ -54,7 +54,7 @@ function socket_xhr(xhr) {
 			case 202:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			invitation(msg.payload.payload.array[0]);
+			invitation(msg.payload);
 			break;
 			case 203:
 			if(msg.payload.status>=550)
@@ -93,20 +93,31 @@ function socket_xhr(xhr) {
     };
 }
 
-function updateBoard(newBoard){
-	for (var i = 0; i < board.rows.length; i++) {
-		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(newBoard[i][j]==1) {
-					board.rows[i].cells[j].innerHTML=x
-					board.rows[i].cells[j].value=1
-				}else if(newBoard[i][j]==2) {
-					board.rows[i].cells[j].innerHTML=o
-					board.rows[i].cells[j].value=2
-				}else{
-					board.rows[i].cells[j].innerHTML=""
-					board.rows[i].cells[j].value=0
-				}
-		}
+function updateBoard(newBoard) {
+    switch (game) {
+
+        case 1: //checkers
+
+            break;
+        case 2: //chess
+
+            break;
+        default : //tic tac toe
+            for (var i = 0; i < board.rows.length; i++) {
+                for (var j = 0; j < board.rows[i].cells.length; j++){
+                        if(newBoard[i][j]==1) {
+                            board.rows[i].cells[j].innerHTML=x
+                            board.rows[i].cells[j].value=1
+                        }else if(newBoard[i][j]==2) {
+                            board.rows[i].cells[j].innerHTML=o
+                            board.rows[i].cells[j].value=2
+                        }else{
+                            board.rows[i].cells[j].innerHTML=""
+                            board.rows[i].cells[j].value=0
+                        }
+                }
+            }
+            break;
 	}
 	
 	updateTurn();
@@ -122,33 +133,67 @@ function accepted(){
 	}
 }
 
-function invitation(requestor){
-	if (confirm("Press a button!")) {
-		p1=false;
-		let json = {
-            "intent": 203,
-			"payload": {
-				"array": [requestor
-				],
-				"integer": 0
-			},
-			"identifier": id
-		};
-		socket.send(JSON.stringify(json));
-	} else {
-		let json = {
-            "intent": 203,
-			"payload": {
-				"array": [requestor
-				],
-				"integer": 100
-			},
-			"identifier": id
-		};
+function invitation(payload){
+    switch (payload.payload.integer) {
+
+        case 1: //checkers
+             if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Checkers. Accept?")) {
+                p1 = false;
+                socket.send(JSON.stringify(payload));
+            } else {
+                let json = {
+                    "intent": 203,
+                    "payload": {
+                        "array": [payload.payload.array[0]
+                        ],
+                        "integer": 100
+                    },
+                    "identifier": id
+                };
+
+                socket.send(JSON.stringify(json));
+            }
+            break;
+        case 2: //chess
+             if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Chess. Accept?")) {
+                    p1 = false;
+                    socket.send(JSON.stringify(payload));
+             } else {
+                let json = {
+                    "intent": 203,
+                    "payload": {
+                        "array": [payload.payload.array[0]
+                        ],
+                        "integer": 100
+                    },
+                    "identifier": id
+                };
+
+                socket.send(JSON.stringify(json));
+             }
+            break;
+        default: //tic tac toe
+            if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Tic Tac Toe. Accept?")) {
+                p1 = false;
+                socket.send(JSON.stringify(payload));
+            } else {
+                let json = {
+                    "intent": 203,
+                    "payload": {
+                        "array": [payload.payload.array[0]
+                        ],
+                        "integer": 100
+                    },
+                    "identifier": id
+                };
+
+                socket.send(JSON.stringify(json));
+            }
+            break;
 	}
 }
 
-function selectGame(g){
+function selectGame(g) {
 	game=g;
 	document.getElementById('onCenter').innerHTML = "<h style='color:#ff9900;'>Your player ID is <h>"+id+
 	"<br>"+
@@ -168,7 +213,7 @@ function requestHuman(requested){
 				"array": [
 					requested
 				],
-				"integer": 0
+				"integer": game
 			},
 			"identifier": id
 
@@ -184,7 +229,7 @@ function requestAI(){
 				"array": [
 					"AI"
 				],
-				"integer": 0
+				"integer": game
 			},
 			"identifier": id
 
@@ -194,40 +239,48 @@ function requestAI(){
 }
 
 	var myTurn = true;
-	var turnCount=0;
-	var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-	var o="<img src='images/o.png' style='width:95%;height:95%;'>";
+	var turnCount = 0;
 
 	function move(boardCell,y,z) {
 		if(updateCell(boardCell)){
-			//winCon(y,z)
 			sendBoard();
 			turnCount++;
 		}
 	}
 	
-	function sendBoard(){
-	    var board = document.getElementById('board');
-		let arr = [[],[],[]];
-		for (var i = 0; i < board.rows.length; i++) {
-		for (var j = 0; j < board.rows[i].cells.length; j++){
-				if(board.rows[i].cells[j].value==1)
-					arr[i].push(1);
-				else if(board.rows[i].cells[j].value==2)
-					arr[i].push(2);
-				else
-					arr[i].push(0);
-		}
-	}
-	
-	let json = {
-            "intent": 204,
-			"payload": {
-			"array": arr,
-				"integer": 0
-			},
-			"identifier": GSID
-		};
+	function sendBoard() {
+	    switch (game) {
+
+	        case 1: //checkers
+
+
+	        case 2: //chess
+
+
+	        default: //tic tac toe
+                var board = document.getElementById('board');
+                let arr = [[],[],[]];
+                for (var i = 0; i < board.rows.length; i++) {
+                    for (var j = 0; j < board.rows[i].cells.length; j++){
+                            if(board.rows[i].cells[j].value==1)
+                                arr[i].push(1);
+                            else if(board.rows[i].cells[j].value==2)
+                                arr[i].push(2);
+                            else
+                                arr[i].push(0);
+                    }
+                }
+
+                let json = {
+                        "intent": 204,
+                        "payload": {
+                        "array": arr,
+                            "integer": 0
+                        },
+                        "identifier": GSID
+                };
+                break;
+	    }
 	
 	socket.send(JSON.stringify(json));
 	}
@@ -236,10 +289,10 @@ function requestAI(){
 		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
 			return false
 		
-		if(p1){
-		boardCell.innerHTML =x
-		boardCell.value = 1
-		}else{
+		if (p1) {
+		    boardCell.innerHTML =x
+		    boardCell.value = 1
+		} else {
 			boardCell.innerHTML =o
 			boardCell.value = 2
 		}
@@ -248,111 +301,10 @@ function requestAI(){
 	
 	function updateTurn() {
 		p=document.getElementById('turn');
-		if(p1){
-			myTurn=false;
-			p.innerHTML="It is O's turn"
-		}else{
-			myTurn=true;
-			p.innerHTML="It is X's turn"
-		}
-	}
-	
-	/* function winCon(y,z) {
-		if(turnCount>=8){
-			let json = {
-            "intent": 205,
-			"payload": {
-				"array": ,
-				"integer": 0
-			},
-			"identifier": GSID
-		};
-			socket.send(JSON.stringify(json));
-		}
-		for (var i = 0; i < 3; i++) {
-			if((board.rows[i].cells[0].innerHTML==x&&board.rows[i].cells[1].innerHTML==x&&board.rows[i].cells[2].innerHTML==x)||
-			(board.rows[0].cells[i].innerHTML==x&&board.rows[1].cells[i].innerHTML==x&&board.rows[2].cells[i].innerHTML==x)){
-				if(p1){
-				let json = {
-            "intent": 204,
-			"payload": {
-			"array": [arr]
-				"integer": 1
-			},
-			"identifier": GSID
-			};
-				socket.send(JSON.stringify(json));
-				}else{
-					let json = {
-            "intent": 205,
-			"payload": {
-				"array": [
-				],
-				"integer": 0
-			},
-			"identifier": "requested_ID"
-			};
-				}
-			}
-			if((board.rows[i].cells[0].innerHTML==o&&board.rows[i].cells[1].innerHTML==o&&board.rows[i].cells[2].innerHTML==o)||
-			(board.rows[0].cells[i].innerHTML==o&&board.rows[1].cells[i].innerHTML==o&&board.rows[2].cells[i].innerHTML==o)){
-				if(p1){
-					let json = {
-						"intent": 205,
-						"payload":  2,
-						"identifier": id
-					};
-					socket.send(JSON.stringify(json));
-				socket.send(JSON.stringify(json));
-				}else{
-					let json = {
-						"intent": 205,
-						"payload":  1,
-						"identifier": id
-					};
-					socket.send(JSON.stringify(json));
-				}
-			}
-		}
-		
-		if((board.rows[0].cells[0].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[2].innerHTML==o)||
-		(board.rows[0].cells[2].innerHTML==o&&board.rows[1].cells[1].innerHTML==o&&board.rows[2].cells[0].innerHTML==o)){
-			if(p1){
-					let json = {
-						"intent": 205,
-						"payload":  2,
-						"identifier": id
-					};
-					socket.send(JSON.stringify(json));
-				socket.send(JSON.stringify(json));
-				}else{
-					let json = {
-						"intent": 205,
-						"payload":  1,
-						"identifier": id
-					};
-					socket.send(JSON.stringify(json));
-				}
-		}else if((board.rows[0].cells[0].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[2].innerHTML==x)||
-		(board.rows[0].cells[2].innerHTML==x&&board.rows[1].cells[1].innerHTML==x&&board.rows[2].cells[0].innerHTML==x)){
-			if(p1){
-				let json = {
-						"intent": 205,
-						"payload":  1,
-						"identifier": id
-					};
-				socket.send(JSON.stringify(json));
-				}else{
-					let json = {
-						"intent": 205,
-						"payload":  2,
-						"identifier": id
-					};
-					socket.send(JSON.stringify(json));
-				}
-		}
-		 
-	}*/
+		myTurn = !myTurn;
+		if (myTurn) { p.innerHTML="It's your turn"; }
+		else { p.innerHTML="It's your opponent's turn"; }
+	}	 
 
 var tacGame="<style scoped>"+
 "table {"+
@@ -368,7 +320,7 @@ var tacGame="<style scoped>"+
 "</style>"+
 	"<h1>Tic-Tac-Toe</h1>"+
 	"<br>"+
-	"<p id='turn'>It is X's turn</p>"+
+	"<p id='turn'>It's your turn</p>"+
 	"<br><br>"+
 	"<table id='board'>"+
 	"	<tr>"+
@@ -389,8 +341,6 @@ var tacGame="<style scoped>"+
 	"</table>"+
   "<script>"+
 	"var board = document.getElementById('board');"+
-	"var myTurn = true;"+
-	"var turnCount=0;"+
 	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
 	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
 	"if (board != null) {"+
@@ -404,7 +354,6 @@ var tacGame="<style scoped>"+
 
 	"function move(boardCell,y,z) {"+
 	"	if(updateCell(boardCell)){"+
-	"		winCon(y,z);"+
 	"		updateTurn();"+
 	"		turnCount++;"+
 	"	}"+
@@ -421,17 +370,7 @@ var tacGame="<style scoped>"+
 	"	}"+
 	"	return true"+
 	"}"+
-	
-	"function updateTurn() {"+
-	"	p=document.getElementById('turn');"+
-	"	if(myTurn){"+
-	"		myTurn=false;"+
-	"		p.innerHTML='It is O's turn'"+
-	"	}else{"+
-	"		myTurn=true;"+
-	"		p.innerHTML='It is X's turn'"+
-	"	}"+
-	"}"+
+
 	
 	"function winCon(y,z) {"+
 	"	if(turnCount>=8){"+
