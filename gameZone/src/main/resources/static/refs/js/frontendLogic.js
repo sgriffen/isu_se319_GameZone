@@ -221,8 +221,17 @@ function selectGame(g) {
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
 
-function sendBoard() {
-    switch (game) {
+	function move(boardCell,y,z) {
+		if(updateCell(boardCell,boardCell.innerHTML)){
+			sendBoard();
+			turnCount++;
+		}
+	}
+	
+	function sendBoard() {
+	    switch (game) {
+
+	        case 1: //checkers
 
         case 1: //checkers
 
@@ -243,6 +252,7 @@ function sendBoard() {
                             arr[i].push(0);
                 }
             }
+<<<<<<< HEAD
 
             sendBackend(204,arr,0,GSID);
             break;
@@ -250,18 +260,21 @@ function sendBoard() {
 }
 var requestHuman=function(requested) {
 	sendBackend(202,requested,0,id);
+=======
+                sendBackend(204,arr,0,GSID);
+                break;
+	    }
+	}
+	
+var requestHuman=function(requested){
+	sendBackend(202,requested,game,id);
+>>>>>>> 6f7ac96c0bd8992486d6a7a12bfc86c6279ed75a
 }
 
 var requestAI=function(){
-	sendBackend(202,"AI",0,id);
+	sendBackend(202,"AI",game,id);
 }
 
-function move(boardCell,y,z) {
-	if(updateCell(boardCell, boardCell.innerHTML)){
-		sendBoard();
-		turnCount++;
-	}
-}
 
 var updateCell = function(boardCell,contents) {
     if(contents==x||contents==o||myTurn==false)
@@ -282,6 +295,7 @@ function updateTurn() {
     if (myTurn) { p.innerHTML="It's your turn"; }
     else { p.innerHTML="It's your opponent's turn"; }
 }
+
 var sendBackend = function(code,arra,integ,identif) {//this code oddity was made solely for testing
 	let json = {
         "intent": code,
@@ -294,6 +308,7 @@ var sendBackend = function(code,arra,integ,identif) {//this code oddity was made
 	
 	socket.send(JSON.stringify(json));
 }
+
 function getTicHtml() {
 
     var xhr = new XMLHttpRequest();
@@ -303,6 +318,7 @@ function getTicHtml() {
     xhr.send();
     tacGame = xhr.response;
 }
+
 function getCheckHtml() {
 
     var xhr = new XMLHttpRequest();
@@ -312,6 +328,7 @@ function getCheckHtml() {
     xhr.send();
     checkGame = xhr.response;
 }
+
 function getChessHtml() {
 
     var xhr = new XMLHttpRequest();
