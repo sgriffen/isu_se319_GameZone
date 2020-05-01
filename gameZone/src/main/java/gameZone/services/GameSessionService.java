@@ -156,7 +156,7 @@ public class GameSessionService {
 					gs.getChess().setBoard(gameBoard);
 					if(gs.getChess().checkForWin()) {gs.setGameStatus(1);}
 					if(gs.getAi() && gs.getGameStatus() != 1){
-						gs.getCheck().setBoard(gs.getChess().AImove());
+						gs.getChess().setBoard(gs.getChess().AImove());
 						if(gs.getChess().checkForWin()){
 							gs.setGameStatus(2);
 						}
