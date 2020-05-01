@@ -32,11 +32,45 @@ function chess_init() {
     b_bishop  = "<img class='game_piece' src='/images/chess/b_bishop.png'>";
     b_rook    = "<img class='game_piece' src='/images/chess/b_rook.png'>";
     b_queen   = "<img class='game_piece' src='/images/chess/b_queen.png'>";
-    b_king    = "<img class='game_piece' src='/images/chess/b_king.png'>;";
+    b_king    = "<img class='game_piece' src='/images/chess/b_king.png'>";
 
     pending = null;
 
+    //fill black spaces
+    board.rows[0].cells[0].innerHTML = b_rook;
+    board.rows[0].cells[1].innerHTML = b_knight;
+    board.rows[0].cells[2].innerHTML = b_bishop;
+    board.rows[0].cells[3].innerHTML = b_queen;
+    board.rows[0].cells[4].innerHTML = b_king;
+    board.rows[0].cells[5].innerHTML = b_bishop;
+    board.rows[0].cells[6].innerHTML = b_knight;
+    board.rows[0].cells[7].innerHTML = b_rook;
+    board.rows[1].cells[0].innerHTML = b_pawn;
+    board.rows[1].cells[1].innerHTML = b_pawn;
+    board.rows[1].cells[2].innerHTML = b_pawn;
+    board.rows[1].cells[3].innerHTML = b_pawn;
+    board.rows[1].cells[4].innerHTML = b_pawn;
+    board.rows[1].cells[5].innerHTML = b_pawn;
+    board.rows[1].cells[6].innerHTML = b_pawn;
+    board.rows[1].cells[7].innerHTML = b_pawn;
 
+    //fill white spaces
+    board.rows[7].cells[0].innerHTML = w_rook;
+    board.rows[7].cells[1].innerHTML = w_knight;
+    board.rows[7].cells[2].innerHTML = w_bishop;
+    board.rows[7].cells[3].innerHTML = w_queen;
+    board.rows[7].cells[4].innerHTML = w_king;
+    board.rows[7].cells[5].innerHTML = w_bishop;
+    board.rows[7].cells[6].innerHTML = w_knight;
+    board.rows[7].cells[7].innerHTML = w_rook;
+    board.rows[6].cells[0].innerHTML = w_pawn;
+    board.rows[6].cells[1].innerHTML = w_pawn;
+    board.rows[6].cells[2].innerHTML = w_pawn;
+    board.rows[6].cells[3].innerHTML = w_pawn;
+    board.rows[6].cells[4].innerHTML = w_pawn;
+    board.rows[6].cells[5].innerHTML = w_pawn;
+    board.rows[6].cells[6].innerHTML = w_pawn;
+    board.rows[6].cells[7].innerHTML = w_pawn;
 }
 
 function chess_move(cell) {
@@ -53,7 +87,7 @@ function chess_move(cell) {
         if (chessGame.moves({ square: pending.position }).includes(pos)) {
 
             chessGame.move({ from: pending.position, to: pos });
-            cell.innerHTML = pending,cell.innerHTML;
+            cell.innerHTML = pending.cell.innerHTML;
             pending.cell.innerHTML = "";
         }
         pending.cell.style = "";

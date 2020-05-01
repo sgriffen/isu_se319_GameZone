@@ -1,20 +1,19 @@
 table {
     border-spacing: 0;
-    width: 50%;
-    padding-top: 100%;
+    width: 500px;
+    height: 500px;
     border-collapse: collapse;
     position: relative;
+    table-layout: fixed;
 }
 td {
     border: 2px solid black;
     text-align: center;
-    position: relative;
+    width: 75px;
+    height: 75px;
 }
 tr {
-    height: 75px;
-    padding-left: 100%;
-    padding-right: 100%;
-    position: relative;
+
 }
 .game_piece {
     width: 95%;

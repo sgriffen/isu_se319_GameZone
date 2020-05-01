@@ -18,8 +18,8 @@ function tac_init() {
     }
 }
 function tac_move(boardCell,y,z) {
-    if(updateCell(boardCell)){
-        updateTurn();
+    if(updateCell(boardCell, boardCell.innerHTML)){
+        sendBoard();
         turnCount++;
     }
 }

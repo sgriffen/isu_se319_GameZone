@@ -383,6 +383,7 @@ public class WebSocketComponent {
     private void gameMove(Session whisperBackSession, Integer game_type, Integer[][] gameBoard, String game_id) {
         
         if (startedGameList.contains(game_id)) {
+            
             GameSession gs = gService.gameMove(game_id, game_type, gameBoard);
             if (gameBoard != null) {
                 

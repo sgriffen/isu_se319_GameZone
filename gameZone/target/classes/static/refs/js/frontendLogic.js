@@ -11,9 +11,9 @@ var requestPrefix = "localhost:8080/";
 var myTurn = true;
 var turnCount=0;
 var storage=window.localStorage;
-var myTurn = true;
 var turnCount = 0;
 var p1 = true;
+var ai_opponent = false;
 
 var init=function(screen) {
 
@@ -53,7 +53,7 @@ function socket_xhr(xhr) {
 			case 202:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			invitation(msg.payload);
+			invitation(msg);
 			break;
 			case 203:
 			if(msg.payload.status>=550)
@@ -147,19 +147,19 @@ function accepted(){
 	}
 }
 
-function invitation(payload){
-    switch (payload.payload.integer) {
+function invitation(msg){
+    switch (msg.payload.payload.integer) {
 
         case 1: //checkers
-             if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Checkers. Accept?")) {
+             if (confirm("Player" + msg.payload.payload.array[1] + " challenges you to a game of Checkers. Accept?")) {
                 p1 = false;
                 myTurn = false;
-                socket.send(JSON.stringify(payload));
+                socket.send(JSON.stringify(msg));
             } else {
                 let json = {
                     "intent": 203,
                     "payload": {
-                        "array": [payload.payload.array[0]
+                        "array": [msg.payload.payload.array[0]
                         ],
                         "integer": 100
                     },
@@ -170,15 +170,15 @@ function invitation(payload){
             }
             break;
         case 2: //chess
-             if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Chess. Accept?")) {
+             if (confirm("Player" + msg.payload.payload.array[1] + " challenges you to a game of Chess. Accept?")) {
                     p1 = false;
                     myTurn = false;
-                    socket.send(JSON.stringify(payload));
+                    socket.send(JSON.stringify(msg));
              } else {
                 let json = {
                     "intent": 203,
                     "payload": {
-                        "array": [payload.payload.array[0]
+                        "array": [msg.payload.payload.array[0]
                         ],
                         "integer": 100
                     },
@@ -189,15 +189,15 @@ function invitation(payload){
              }
             break;
         default: //tic tac toe
-            if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Tic Tac Toe. Accept?")) {
+            if (confirm("Player" + msg.payload.payload.array[1] + " challenges you to a game of Tic Tac Toe. Accept?")) {
                 p1 = false;
                 myTurn = false;
-                socket.send(JSON.stringify(payload));
+                socket.send(JSON.stringify(msg));
             } else {
                 let json = {
                     "intent": 203,
                     "payload": {
-                        "array": [payload.payload.array[0]
+                        "array": [msg.payload.payload.array[0]
                         ],
                         "integer": 100
                     },
@@ -222,25 +222,18 @@ function selectGame(g) {
 	"<label for='requestID' style='color:#ff9900;'>if player, input their ID <input type='text' id='requestID'></label>"+
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
-
-	function move(boardCell,y,z) {
-		if(updateCell(boardCell,boardCell.innerHTML)){
-			sendBoard();
-			turnCount++;
-		}
-	}
 	
 	function sendBoard() {
 	    switch (game) {
 
-	        case 1: //checkers
 
         case 1: //checkers
 
-
+            break;
         case 2: //chess
 
             chess_sendBoard();
+            break;
         default: //tic tac toe
             var board = document.getElementById('board');
             let arr = [[],[],[]];
@@ -260,10 +253,12 @@ function selectGame(g) {
 }
 	
 var requestHuman=function(requested){
-	sendBackend(202,requested,game,id);
+    let array = [requested];
+	sendBackend(202,array,game,id);
 }
 
 var requestAI=function(){
+    ai_opponent = true;
     let ai = ["AI"];
 	sendBackend(202,ai,game,id);
 }
@@ -283,10 +278,12 @@ var updateCell = function(boardCell,contents) {
     return true
 }
 function updateTurn() {
-    p=document.getElementById('turn');
-    myTurn = !myTurn;
-    if (myTurn) { p.innerHTML="It's your turn"; }
-    else { p.innerHTML="It's your opponent's turn"; }
+    if (!ai_opponent) {
+        p=document.getElementById('turn');
+        myTurn = !myTurn;
+        if (myTurn) { p.innerHTML="It's your turn"; }
+        else { p.innerHTML="It's your opponent's turn"; }
+    }
 }
 
 var sendBackend = function(code,arra,integ,identif) {//this code oddity was made solely for testing
