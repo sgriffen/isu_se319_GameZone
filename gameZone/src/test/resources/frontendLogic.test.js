@@ -48,7 +48,7 @@ test('test request AI', () => {
 	expect(back).toBeDefined();
 	requestAI()
 	expect(back.mock.calls[0][0]).toBe(202);
-	expect(back.mock.calls[0][1]).toBe(["AI"]);
+	expect(back.mock.calls[0][1]).toMatch(["AI"]);
 	expect(back.mock.calls[0][2]).toBe(0);
 	expect(back.mock.calls[0][3]).toBe(12345);
 });
@@ -56,7 +56,7 @@ test('test request AI', () => {
 test('test request human', () => {
 	requestHuman(2020)
 	expect(back.mock.calls[1][0]).toBe(202);
-	expect(back.mock.calls[1][1]).toBe([2020]);
+	expect(back.mock.calls[1][1]).toMatch([2020]);
 	expect(back.mock.calls[1][2]).toBe(0);
 	expect(back.mock.calls[1][3]).toBe(12345);
 });
