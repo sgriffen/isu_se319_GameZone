@@ -254,6 +254,7 @@ public class WebSocketComponent {
                     //whisper request to requested
                     ArrayList<String> ids = new ArrayList<>();
                     ids.add(id1);
+                    ids.add(id2);
                     SocketReturnWrapper<ObjectReturnWrapper<ArrayIntegerWrapper<String>>> requestGameIntent = new SocketReturnWrapper<>(
             
                             202,

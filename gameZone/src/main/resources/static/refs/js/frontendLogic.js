@@ -151,10 +151,10 @@ function invitation(msg){
     switch (msg.payload.payload.integer) {
 
         case 1: //checkers
-             if (confirm("Player" + msg.payload.payload.array[1] + " challenges you to a game of Checkers. Accept?")) {
+             if (confirm("Player " + msg.payload.payload.array[0] + " challenges you to a game of Checkers. Accept?")) {
                 p1 = false;
-                myTurn = false;
-                socket.send(JSON.stringify(msg));
+                myTurn = false
+                sendBackend(203, msg.payload.payload.array, msg.payload.payload.integer, msg.payload.payload.array[1]);
             } else {
                 let json = {
                     "intent": 203,
@@ -170,10 +170,10 @@ function invitation(msg){
             }
             break;
         case 2: //chess
-             if (confirm("Player" + msg.payload.payload.array[1] + " challenges you to a game of Chess. Accept?")) {
+             if (confirm("Player " + msg.payload.payload.array[0] + " challenges you to a game of Chess. Accept?")) {
                     p1 = false;
                     myTurn = false;
-                    socket.send(JSON.stringify(msg));
+                    sendBackend(203, msg.payload.payload.array, msg.payload.payload.integer, msg.payload.payload.array[1]);
              } else {
                 let json = {
                     "intent": 203,
@@ -189,10 +189,10 @@ function invitation(msg){
              }
             break;
         default: //tic tac toe
-            if (confirm("Player" + msg.payload.payload.array[1] + " challenges you to a game of Tic Tac Toe. Accept?")) {
+            if (confirm("Player " + msg.payload.payload.array[0] + " challenges you to a game of Tic Tac Toe. Accept?")) {
                 p1 = false;
                 myTurn = false;
-                socket.send(JSON.stringify(msg));
+                sendBackend(203, msg.payload.payload.array, msg.payload.payload.integer, msg.payload.payload.array[1]);
             } else {
                 let json = {
                     "intent": 203,
