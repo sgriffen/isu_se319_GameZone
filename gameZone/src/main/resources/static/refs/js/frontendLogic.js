@@ -461,7 +461,7 @@ checkGame=
 	"	}"+
 	"}"+
 	//TODO, update to checkers functionality
-	"function updateCell(boardCell, y, z) {"+
+	"function checkers_updateCell(boardCell, y, z) {"+
 	"	if(boardCell.innerHTML==(x||xKing)||boardCell.innerHTML==(o||oKing))"+
 	"		return false"+
 	"	if(myTurn && board.rows[firstY].cells[firstZ] == x){"+
