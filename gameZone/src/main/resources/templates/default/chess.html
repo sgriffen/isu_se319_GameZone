@@ -122,9 +122,11 @@
             if (chessGame.moves({ square: pending.position }).includes(pos)) {
                 
                 chessGame.move({ from: pending.position, to: pos });
-                pending.cell.style = "";
-                pending = null;
+                cell.innerHTML = pending,cell.innerHTML;
+                pending.cell.innerHTML = "";
             }
+            pending.cell.style = "";
+            pending = null;
         }
     }
     function chess_sendBoard() {
