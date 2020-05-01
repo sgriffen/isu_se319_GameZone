@@ -91,16 +91,7 @@ function chess_sendBoard() {
         }
     }
 
-    let sendJson = {
-        "intent" : 204,
-        "payload" : {
-            "array": board_translated,
-            "integer": 2
-        },
-        identifier: GSID
-    }
-
-    socket.send(JSON.stringify(json));
+    sendBackend(204,board_translated,2,GSID);
 }
 function chess_updateBoard(updateTo) {
 

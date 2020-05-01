@@ -13,7 +13,8 @@ var turnCount=0;
 var x="<img src='images/x.png' style='width:95%;height:95%;'>";
 var o="<img src='images/o.png' style='width:95%;height:95%;'>";
 var storage=window.localStorage;
-
+var myTurn = true;
+var turnCount = 0;
 
 var init=function(screen) {
 
@@ -105,6 +106,7 @@ function updateBoard(newBoard) {
             break;
         case 2: //chess
 
+            chess_updateBoard(newBoard);
             break;
         default : //tic tac toe
             for (var i = 0; i < board.rows.length; i++) {
@@ -129,8 +131,6 @@ function updateBoard(newBoard) {
 var closeSocket=function(){
 	socket.close();
 }
-
-
 
 //Sets the page to display game based on selection.
 function accepted(){
@@ -205,7 +205,7 @@ function invitation(payload){
                 socket.send(JSON.stringify(json));
             }
             break;
-	}
+    }
 }
 
 function selectGame(g) {
@@ -220,8 +220,6 @@ function selectGame(g) {
 	"<label for='requestID' style='color:#ff9900;'>if player, input their ID <input type='text' id='requestID'></label>"+
 	"<button type='button' onclick='playerSelect()'>Connect</button>";
 }
-	var myTurn = true;
-	var turnCount = 0;
 
 	function move(boardCell,y,z) {
 		if(updateCell(boardCell,boardCell.innerHTML)){
@@ -235,51 +233,52 @@ function selectGame(g) {
 
 	        case 1: //checkers
 
+        case 1: //checkers
 
-	        case 2: //chess
 
+        case 2: //chess
 
-	        default: //tic tac toe
-                var board = document.getElementById('board');
-                let arr = [[],[],[]];
-                for (var i = 0; i < board.rows.length; i++) {
-                    for (var j = 0; j < board.rows[i].cells.length; j++){
-                            if(board.rows[i].cells[j].value==1)
-                                arr[i].push(1);
-                            else if(board.rows[i].cells[j].value==2)
-                                arr[i].push(2);
-                            else
-                                arr[i].push(0);
-                    }
+            chess_sendBoard();
+        default: //tic tac toe
+            var board = document.getElementById('board');
+            let arr = [[],[],[]];
+            for (var i = 0; i < board.rows.length; i++) {
+                for (var j = 0; j < board.rows[i].cells.length; j++){
+                        if(board.rows[i].cells[j].value==1)
+                            arr[i].push(1);
+                        else if(board.rows[i].cells[j].value==2)
+                            arr[i].push(2);
+                        else
+                            arr[i].push(0);
                 }
-
+            }
                 sendBackend(204,arr,0,GSID);
                 break;
 	    }
 	}
 	
 var requestHuman=function(requested){
-	sendBackend(202,requested,0,id);
+	sendBackend(202,requested,game,id);
 }
 
 var requestAI=function(){
-	sendBackend(202,"AI",0,id);
+	sendBackend(202,"AI",game,id);
 }
 
-var updateCell=function(boardCell,contents) {
-	if(contents==x||contents==o||myTurn==false)
-		return false
-	
-	if(p1){
-		boardCell.innerHTML =x
-		boardCell.value = 1
-	}else{
-		boardCell.innerHTML =o
-		boardCell.value = 2
-	}
-	return true
-}
 
+var updateCell = function(boardCell,contents) {
+    if(contents==x||contents==o||myTurn==false)
+        return false
+
+    if(p1){
+        boardCell.innerHTML =x
+        boardCell.value = 1
+    }else{
+        boardCell.innerHTML =o
+        boardCell.value = 2
+    }
+    return true
+}
 function updateTurn() {
     p=document.getElementById('turn');
     myTurn = !myTurn;
@@ -287,7 +286,7 @@ function updateTurn() {
     else { p.innerHTML="It's your opponent's turn"; }
 }
 
-var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
+var sendBackend = function(code,arra,integ,identif) {//this code oddity was made solely for testing
 	let json = {
         "intent": code,
 		"payload": {
