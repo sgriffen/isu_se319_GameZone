@@ -1,5 +1,5 @@
 var board;
-var x;;
+var x;
 var o;
 
 function tac_init() {

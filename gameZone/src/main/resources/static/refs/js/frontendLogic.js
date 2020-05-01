@@ -248,7 +248,7 @@ function sendBoard() {
             break;
     }
 }
-var requestHuman=function(requested){
+var requestHuman=function(requested) {
 	sendBackend(202,requested,0,id);
 }
 
