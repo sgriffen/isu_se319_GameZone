@@ -106,7 +106,7 @@ function updateBoard(newBoard) {
             break;
         case 2: //chess
 
-            chess_updateBoard(newBoard);
+            chess_updateBoard(newBoard[0]);
             break;
         default : //tic tac toe
             for (var i = 0; i < board.rows.length; i++) {

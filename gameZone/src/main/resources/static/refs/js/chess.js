@@ -203,6 +203,7 @@ function chess_updateBoard(updateTo_fen) {
 //    }
 
     chessGame.load(updateTo_fen);
+    let chessGame_board = chessGame.board();
     for (i = 0; i < chessGame_board.length; i++) {
         for (j = 0; j < chessGame_board[i].length; j++) {
             let cell = chessGame_board[i][j];
