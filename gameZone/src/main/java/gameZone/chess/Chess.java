@@ -36,13 +36,11 @@ public class Chess {
     /**
      * FEN
      */
-    @Transient
     private String fen;
 
     /**
      * Turn
      */
-    @Transient
     private int turn = 0;
 
     public Chess()
@@ -139,6 +137,7 @@ public class Chess {
     public Integer[][] AImove()
     {
         AlphaBetaPlayer abp = new AlphaBetaPlayer(false, 3);
+//        RandomPlayer abp = new RandomPlayer(false);
         Move m = abp.getNextMove(trueBoard);
         int x = trueBoard.makeMove(m);
         for(int i = 0; i < 8; i++)
@@ -209,7 +208,6 @@ public class Chess {
                 }
             }
         }
-        this.generateFEN();
         return board;
     }
 
@@ -226,7 +224,7 @@ public class Chess {
         return false;
     }
 
-    private void generateFEN(){
+    public void generateFEN(){
         fen = "";
         int empty = 0;
         for(int i = 0; i < 8; i++) {
@@ -295,8 +293,9 @@ public class Chess {
             if(i != 7)
                 fen += "/";
         }
-        fen += " w - - " + turn +  " 1";
         turn ++;
+        if (turn % 2 == 0) { fen += " w - - " + turn +  " 1"; }
+        else { fen += " b - - " + turn +  " 1"; }
     }
 
     /*

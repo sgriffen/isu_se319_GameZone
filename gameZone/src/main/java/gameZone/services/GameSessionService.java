@@ -162,13 +162,16 @@ public class GameSessionService {
 					break;
 				case 2: //game is chess
 					gs.getChess().setBoard(gameBoard);
-					if(gs.getChess().checkForWin()) {gs.setGameStatus(1);}
-					if(gs.getAi() && gs.getGameStatus() != 1){
+					if(gs.getChess().checkForWin()) { gs.setGameStatus(1); }
+					if(gs.getAi() && gs.getGameStatus() != 1) {
 						gs.getChess().setBoard(gs.getChess().AImove());
-						if(gs.getChess().checkForWin()){
+						if(gs.getChess().checkForWin()) {
 							gs.setGameStatus(2);
 						}
-					}
+						
+						gs.getChess().generateFEN();
+						gs.getChess().generateFEN();
+					} else if (!gs.getAi()) { gs.getChess().generateFEN(); }
 					break;
 				default: //game is ultimate tic tac toe
 					

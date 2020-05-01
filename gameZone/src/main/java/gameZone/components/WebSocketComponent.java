@@ -451,7 +451,7 @@ public class WebSocketComponent {
                     );
                     whisper(intentReturn, whisperBackSession); //whisper updated game board
                     if (!gs.getAi()) { //whisper updated game board to player 2
-        
+                        
                         UserInterface otherPlayer;
                         if (playerWon.getIdApp().equals(gs.getUsers().get(0).getIdApp())) {
                             otherPlayer = gs.getUsers().get(1);

@@ -83,9 +83,7 @@ function chess_move(cell) {
         };
     } else {
 
-        if (chessGame.moves({ square: pending.position }).includes(pos)) {
-
-            chessGame.move({ from: pending.position, to: pos });
+        if (chessGame.move({ from: pending.position, to: pos }) != null) {
             cell.innerHTML = pending.cell.innerHTML;
             pending.cell.innerHTML = "";
 
@@ -105,24 +103,22 @@ function chess_sendBoard() {
     //translate game board;
     for (i = 0; i < chessGame_board.length; i++) {
         for (j = 0; j < chessGame_board[i].length; j++) {
-
             let cell = chessGame_board[i][j];
             if (cell != null) {
-                if (cell.color == 'b') { //piece is black
-                    if (cell.type == 'p') { board_translated[i].push(1); }      //piece is pawn
-                    else if (cell.type == 'b') { board_translated[i].push(2); } //piece is bishop
-                    else if (cell.type == 'n') { board_translated[i].push(3); } //piece is knight
-                    else if (cell.type == 'r') { board_translated[i].push(4); } //piece is rook
-                    else if (cell.type == 'q') { board_translated[i].push(5); } //piece is queen
-                    else if (cell.type == 'k') { board_translated[i].push(6); } //piece is king
+                if (cell.color == "b") { //piece is black
+                    if (cell.type == "p") { board_translated[i].push(1); }       //piece is pawn
+                    else if (cell.type == "b") { board_translated[i].push(2); } //piece is bishop
+                    else if (cell.type == "n") { board_translated[i].push(3); } //piece is knight
+                    else if (cell.type == "r") { board_translated[i].push(4); } //piece is rook
+                    else if (cell.type == "q") { board_translated[i].push(5); } //piece is queen
+                    else if (cell.type == "k") { board_translated[i].push(6); } //piece is king
                 } else { //piece is white
-
-                    if (cell.type == 'p') { board_translated[i].push(7); }      //piece is pawn
-                    else if (cell.type == 'b') { board_translated[i].push(8); } //piece is bishop
-                    else if (cell.type == 'n') { board_translated[i].push(9); } //piece is knight
-                    else if (cell.type == 'r') { board_translated[i].push(10); } //piece is rook
-                    else if (cell.type == 'q') { board_translated[i].push(11); } //piece is queen
-                    else if (cell.type == 'k') { board_translated[i].push(12); } //piece is king
+                    if (cell.type == "p") { board_translated[i].push(7); }      //piece is pawn
+                    else if (cell.type == "b") { board_translated[i].push(8); } //piece is bishop
+                    else if (cell.type == "n") { board_translated[i].push(9); } //piece is knight
+                    else if (cell.type == "r") { board_translated[i].push(10); } //piece is rook
+                    else if (cell.type == "q") { board_translated[i].push(11); } //piece is queen
+                    else if (cell.type == "k") { board_translated[i].push(12); } //piece is king
                 }
             } else { board_translated[i].push(0); }
         }
@@ -208,20 +204,20 @@ function chess_updateBoard(updateTo_fen) {
         for (j = 0; j < chessGame_board[i].length; j++) {
             let cell = chessGame_board[i][j];
             if (cell != null) {
-                if (cell.color == 'b') { //piece is black
-                    if (cell.type == 'p') { board.rows[i].cells[j].innerHTML = b_pawn; }       //piece is pawn
-                    else if (cell.type == 'b') { board.rows[i].cells[j].innerHTML = b_bishop; } //piece is bishop
-                    else if (cell.type == 'n') { board.rows[i].cells[j].innerHTML = b_knight; } //piece is knight
-                    else if (cell.type == 'r') { board.rows[i].cells[j].innerHTML = b_rook; } //piece is rook
-                    else if (cell.type == 'q') { board.rows[i].cells[j].innerHTML = b_queen; } //piece is queen
-                    else if (cell.type == 'k') { board.rows[i].cells[j].innerHTML = b_king; } //piece is king
+                if (cell.color == "b") { //piece is black
+                    if (cell.type == "p") { board.rows[i].cells[j].innerHTML = b_pawn; }       //piece is pawn
+                    else if (cell.type == "b") { board.rows[i].cells[j].innerHTML = b_bishop; } //piece is bishop
+                    else if (cell.type == "n") { board.rows[i].cells[j].innerHTML = b_knight; } //piece is knight
+                    else if (cell.type == "r") { board.rows[i].cells[j].innerHTML = b_rook; } //piece is rook
+                    else if (cell.type == "q") { board.rows[i].cells[j].innerHTML = b_queen; } //piece is queen
+                    else if (cell.type == "k") { board.rows[i].cells[j].innerHTML = b_king; } //piece is king
                 } else { //piece is white
-                    if (cell.type == 'p') { board.rows[i].cells[j].innerHTML = w_pawn; }      //piece is pawn
-                    else if (cell.type == 'b') { board.rows[i].cells[j].innerHTML = w_bishop; } //piece is bishop
-                    else if (cell.type == 'n') { board.rows[i].cells[j].innerHTML = w_knight; } //piece is knight
-                    else if (cell.type == 'r') { board.rows[i].cells[j].innerHTML = w_rook; } //piece is rook
-                    else if (cell.type == 'q') { board.rows[i].cells[j].innerHTML = w_queen; } //piece is queen
-                    else if (cell.type == 'k') { board.rows[i].cells[j].innerHTML = w_king; } //piece is king
+                    if (cell.type == "p") { board.rows[i].cells[j].innerHTML = w_pawn; }      //piece is pawn
+                    else if (cell.type == "b") { board.rows[i].cells[j].innerHTML = w_bishop; } //piece is bishop
+                    else if (cell.type == "n") { board.rows[i].cells[j].innerHTML = w_knight; } //piece is knight
+                    else if (cell.type == "r") { board.rows[i].cells[j].innerHTML = w_rook; } //piece is rook
+                    else if (cell.type == "q") { board.rows[i].cells[j].innerHTML = w_queen; } //piece is queen
+                    else if (cell.type == "k") { board.rows[i].cells[j].innerHTML = w_king; } //piece is king
                 }
             } else { board.rows[i].cells[j].innerHTML = null; }
         }
