@@ -66,7 +66,12 @@ function socket_xhr(xhr) {
 			case 205:
 			if(msg.payload.status>=550)
 				break;//fix this later
-			alert("you lose");
+			if(msg.payload.payload==2)
+				alert("you lose");
+			if(msg.payload.payload==1)
+				alert("you win");
+			if(msg.payload.payload==0)
+				alert("Tie game");
 			GSID=0;
 			location.reload();
 			break;
@@ -166,7 +171,6 @@ function move(boardCell,y,z) {
 		//winCon(y,z)
 		sendBoard();
 		turnCount++;
-		updateTurn();
 	}
 }
 	
