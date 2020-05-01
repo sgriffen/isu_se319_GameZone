@@ -31,9 +31,8 @@ var init=function(screen) {
     });
 
 	document=screen;
-	if (window.localStorage.getItem("userID") == null) {
+	if (storage.getItem("userID") == null) {
 	    xhr.open("POST", "http://" + requestPrefix + "user/generate/token",true);
-//	    xhr.open("POST", "http://" + requestPrefix + "user/generate/token");
 	    xhr.send();
 	} else { socket_xhr(null); }
 }
@@ -45,8 +44,7 @@ function socket_xhr(xhr) {
         storage.setItem("userID", id);
     } else { id = storage.getItem("userID"); }
 
-    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);//localhost
-//    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);//localhost
+    socket = new WebSocket("ws://" + requestPrefix + "websocket/" + id);
 
     socket.onmessage = function(event) {
 		msg=JSON.parse(event.data);
@@ -207,6 +205,8 @@ function invitation(payload){
                 socket.send(JSON.stringify(json));
             }
             break;
+	}
+}
 
 function selectGame(g) {
 	game=g;
@@ -224,11 +224,12 @@ function selectGame(g) {
 	var turnCount = 0;
 
 	function move(boardCell,y,z) {
-		if(updateCell(boardCell)){
+		if(updateCell(boardCell,boardCell.innerHTML)){
 			sendBoard();
 			turnCount++;
 		}
 	}
+	
 	function sendBoard() {
 	    switch (game) {
 
@@ -255,6 +256,8 @@ function selectGame(g) {
                 sendBackend(204,arr,0,GSID);
                 break;
 	    }
+	}
+	
 var requestHuman=function(requested){
 	sendBackend(202,requested,0,id);
 }
@@ -263,42 +266,6 @@ var requestAI=function(){
 	sendBackend(202,"AI",0,id);
 }
 
-function move(boardCell,y,z) {
-	if(updateCell(boardCell,boardCell.innerHTML)){
-		//winCon(y,z)
-		sendBoard();
-		turnCount++;
-	}
-}
-	
-function sendBoard(){
-	var board = document.getElementById('board');
-	let arr = [[],[],[]];
-	for (var i = 0; i < board.rows.length; i++) {
-		for (var j = 0; j < board.rows[i].cells.length; j++){
-			if(board.rows[i].cells[j].value==1)
-				arr[i].push(1);
-			else if(board.rows[i].cells[j].value==2)
-				arr[i].push(2);
-			else
-				arr[i].push(0);
-		}
-	}
-	sendBackend(204,arr,0,GSID);
-}
-
-function updateCell(boardCell) {
-		if(boardCell.innerHTML==x||boardCell.innerHTML==o)
-			return false
-		
-		if (p1) {
-		    boardCell.innerHTML =x
-		    boardCell.value = 1
-		} else {
-			boardCell.innerHTML =o
-			boardCell.value = 2
-		}
-		return true
 var updateCell=function(boardCell,contents) {
 	if(contents==x||contents==o||myTurn==false)
 		return false
@@ -319,6 +286,7 @@ function updateTurn() {
     if (myTurn) { p.innerHTML="It's your turn"; }
     else { p.innerHTML="It's your opponent's turn"; }
 }
+
 var sendBackend=function(code,arra,integ,identif) {//this code oddity was made solely for testing
 	let json = {
         "intent": code,
@@ -331,6 +299,7 @@ var sendBackend=function(code,arra,integ,identif) {//this code oddity was made s
 	
 	socket.send(JSON.stringify(json));
 }
+
 function getTicHtml() {
 
     var xhr = new XMLHttpRequest();
@@ -340,6 +309,7 @@ function getTicHtml() {
     xhr.send();
     tacGame = xhr.response;
 }
+
 function getCheckHtml() {
 
     var xhr = new XMLHttpRequest();
@@ -349,6 +319,7 @@ function getCheckHtml() {
     xhr.send();
     checkGame = xhr.response;
 }
+
 function getChessHtml() {
 
     var xhr = new XMLHttpRequest();
