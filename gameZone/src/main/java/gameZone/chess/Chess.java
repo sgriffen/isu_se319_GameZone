@@ -286,7 +286,7 @@ public class Chess {
             }
             if(emptyCounter != 0)
                 fen += emptyCounter;
-            if(i != 0)
+            if(i != 7)
                 fen += "/";
         }
         fen += " w ---- - - -";
