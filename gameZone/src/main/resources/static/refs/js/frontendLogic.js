@@ -10,11 +10,10 @@ var requestPrefix = "localhost:8080/";
 //var requestPrefix = "coms-319-052.cs.iastate.edu:8080/";
 var myTurn = true;
 var turnCount=0;
-var x="<img src='images/x.png' style='width:95%;height:95%;'>";
-var o="<img src='images/o.png' style='width:95%;height:95%;'>";
 var storage=window.localStorage;
 var myTurn = true;
 var turnCount = 0;
+var p1 = true;
 
 var init=function(screen) {
 
@@ -154,6 +153,7 @@ function invitation(payload){
         case 1: //checkers
              if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Checkers. Accept?")) {
                 p1 = false;
+                myTurn = false;
                 socket.send(JSON.stringify(payload));
             } else {
                 let json = {
@@ -172,6 +172,7 @@ function invitation(payload){
         case 2: //chess
              if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Chess. Accept?")) {
                     p1 = false;
+                    myTurn = false;
                     socket.send(JSON.stringify(payload));
              } else {
                 let json = {
@@ -190,6 +191,7 @@ function invitation(payload){
         default: //tic tac toe
             if (confirm("Player" + payload.payload.array[1] + " challenges you to a game of Tic Tac Toe. Accept?")) {
                 p1 = false;
+                myTurn = false;
                 socket.send(JSON.stringify(payload));
             } else {
                 let json = {
@@ -252,27 +254,18 @@ function selectGame(g) {
                             arr[i].push(0);
                 }
             }
-<<<<<<< HEAD
-
             sendBackend(204,arr,0,GSID);
             break;
     }
 }
-var requestHuman=function(requested) {
-	sendBackend(202,requested,0,id);
-=======
-                sendBackend(204,arr,0,GSID);
-                break;
-	    }
-	}
 	
 var requestHuman=function(requested){
 	sendBackend(202,requested,game,id);
->>>>>>> 6f7ac96c0bd8992486d6a7a12bfc86c6279ed75a
 }
 
 var requestAI=function(){
-	sendBackend(202,"AI",game,id);
+    let ai = ["AI"];
+	sendBackend(202,ai,game,id);
 }
 
 

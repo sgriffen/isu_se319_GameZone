@@ -1,21 +1,24 @@
 table {
-    text-align: center;
     border-spacing: 0;
     width: 50%;
-    height: 50%;
+    padding-top: 100%;
     border-collapse: collapse;
+    position: relative;
 }
 td {
     border: 2px solid black;
-    padding-left: 100%;
-    padding-right: 100%;
+    text-align: center;
+    position: relative;
 }
 tr {
     height: 75px;
+    padding-left: 100%;
+    padding-right: 100%;
+    position: relative;
 }
 .game_piece {
-    width:90%;
-    height:90%;
+    width: 95%;
+    height: 95%;
 }
 .tile-dark {
     background-color: rgba(108, 122, 137, 0.80);

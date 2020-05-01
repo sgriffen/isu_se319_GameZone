@@ -21,20 +21,22 @@ function chess_init() {
 
     board = document.getElementById("board");
 
-    w_pawn    = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/w_pawn.png'></div>");
-    w_knight  = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/w_knight.png'></div>");
-    w_bishop  = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/w_bishop.png'></div>");
-    w_rook    = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/w_rook.png'></div>");
-    w_queen   = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/w_queen.png'></div>");
-    w_king    = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/w_king.png'></div>");
-    b_pawn    = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/b_pawn.png'></div>");
-    b_knight  = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/b_knight.png'></div>");
-    b_bishop  = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/b_bishop.png'></div>");
-    b_rook    = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/b_rook.png'></div>>");
-    b_queen   = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/b_queen.png'></div>");
-    b_king    = createElementFromHTML("<div class='container_piece'><img class='game_piece' src='chess/b_king.png'></div>");
+    w_pawn    = "<img class='game_piece' src='/images/chess/w_pawn.png'>";
+    w_knight  = "<img class='game_piece' src='/images/chess/w_knight.png'>";
+    w_bishop  = "<img class='game_piece' src='/images/chess/w_bishop.png'>";
+    w_rook    = "<img class='game_piece' src='/images/chess/w_rook.png'>";
+    w_queen   = "<img class='game_piece' src='/images/chess/w_queen.png'>";
+    w_king    = "<img class='game_piece' src='/images/chess/w_king.png'>";
+    b_pawn    = "<img class='game_piece' src='/images/chess/b_pawn.png'>";
+    b_knight  = "<img class='game_piece' src='/images/chess/b_knight.png'>";
+    b_bishop  = "<img class='game_piece' src='/images/chess/b_bishop.png'>";
+    b_rook    = "<img class='game_piece' src='/images/chess/b_rook.png'>";
+    b_queen   = "<img class='game_piece' src='/images/chess/b_queen.png'>";
+    b_king    = "<img class='game_piece' src='/images/chess/b_king.png'>;";
 
     pending = null;
+
+
 }
 
 function chess_move(cell) {
