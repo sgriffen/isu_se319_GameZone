@@ -390,12 +390,29 @@ public class WebSocketComponent {
                 if (gs.getGameStatus() == 2 && gs.getAi()) { aiWon = true; }
     
                 ArrayList<ArrayList<Integer>> gameBoard_objectStyle = new ArrayList<>();
-                for (int i = 0; i < gs.getTic().getBoard().length; i++) {
-                    ArrayList<Integer> gameRow_temp = new ArrayList<>();
-                    for (int j = 0; j < gs.getTic().getBoard()[ 0 ].length; j++) {
-                        gameRow_temp.add(gs.getTic().getBoard()[ i ][ j ]);
-                    }
-                    gameBoard_objectStyle.add(gameRow_temp);
+                switch (game_type) {
+                    
+                    case 1: //checkers move
+                        for (int i = 0; i < gs.getCheck().getBoard().length; i++) {
+                            ArrayList<Integer> gameRow_temp = new ArrayList<>();
+                            for (int j = 0; j < gs.getCheck().getBoard()[0].length; j++) { gameRow_temp.add(gs.getCheck().getBoard()[i][j]); }
+                            gameBoard_objectStyle.add(gameRow_temp);
+                        }
+                        break;
+                    case 2: //chess move
+                        for (int i = 0; i < gs.getChess().getBoard().length; i++) {
+                            ArrayList<Integer> gameRow_temp = new ArrayList<>();
+                            for (int j = 0; j < gs.getChess().getBoard()[0].length; j++) { gameRow_temp.add(gs.getChess().getBoard()[i][j]); }
+                            gameBoard_objectStyle.add(gameRow_temp);
+                        }
+                        break;
+                    default : //tic tac toe move
+                        for (int i = 0; i < gs.getTic().getBoard().length; i++) {
+                            ArrayList<Integer> gameRow_temp = new ArrayList<>();
+                            for (int j = 0; j < gs.getTic().getBoard()[0].length; j++) { gameRow_temp.add(gs.getTic().getBoard()[i][j]); }
+                            gameBoard_objectStyle.add(gameRow_temp);
+                        }
+                        break;
                 }
                 
                 //get players and whisper updated game boards if applicable

@@ -54,12 +54,18 @@ public class GameSession {
 	 * Tictactoe game for this {@code GameSession}. Used for holding the tictactoe game if one is being played.
 	 */
 	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name="board", column=@Column(name="tic_board"))
+	})
 	private TicTacToe tic;
 
 	/**
 	 * Checkers game for this {@coee GameSession}. Used for holding the Checkers game if one is being played.
 	 */
 	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name="board", column=@Column(name="checkers_board"))
+	})
 	private Checkers check;
 
 	/**
