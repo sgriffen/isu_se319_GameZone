@@ -1,0 +1,25 @@
+<div id="container_tic">
+    <h1>Tic-Tac-Toe</h1>
+    <br>
+    <p id='turn'>It's your turn</p>
+    <br><br>
+    <div id="container_board">
+        <table id='board'>
+            <tr>
+                <td class='tile-light' style='border-top: none; border-left: none;' onclick='tac_move(this,0,0)' value="0"></td>
+                <td class='tile-light' style='border-top: none;' onclick='tac_move(this,0,1)' value="0"></td>
+                <td class='tile-light' style='border-top: none; border-right: none;' onclick='tac_move(this,0,2)' value="0"></td>
+            </tr>
+            <tr>
+                <td class='tile-light' style='border-left: none;' onclick='tac_move(this,1,0)' value="0"></td>
+                <td class='tile-light' onclick='tac_move(this,1,1)' value="0"></td>
+                <td class='tile-light' style='border-right: none;' onclick='tac_move(this,1,2)' value="0"></td>
+            </tr>
+            <tr>
+                <td class='tile-light' style='border-bottom: none; border-left: none;' onclick='tac_move(this,2,0)' value="0"></td>
+                <td class='tile-light' style='border-bottom: none;' onclick='tac_move(this,2,1)' value="0"></td>
+                <td class='tile-light' style='border-bottom: none;border-right: none;' onclick='tac_move(this,2,2)' value="0"></td>
+            </tr>
+        </table>
+    </div>
+</div>

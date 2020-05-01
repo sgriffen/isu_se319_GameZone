@@ -254,6 +254,7 @@ public class WebSocketComponent {
                     //whisper request to requested
                     ArrayList<String> ids = new ArrayList<>();
                     ids.add(id1);
+                    ids.add(id2);
                     SocketReturnWrapper<ObjectReturnWrapper<ArrayIntegerWrapper<String>>> requestGameIntent = new SocketReturnWrapper<>(
             
                             202,
@@ -383,6 +384,7 @@ public class WebSocketComponent {
     private void gameMove(Session whisperBackSession, Integer game_type, Integer[][] gameBoard, String game_id) {
         
         if (startedGameList.contains(game_id)) {
+            
             GameSession gs = gService.gameMove(game_id, game_type, gameBoard);
             if (gameBoard != null) {
                 
@@ -390,29 +392,74 @@ public class WebSocketComponent {
                 if (gs.getGameStatus() == 2 && gs.getAi()) { aiWon = true; }
     
                 ArrayList<ArrayList<Integer>> gameBoard_objectStyle = new ArrayList<>();
-                for (int i = 0; i < gs.getTic().getBoard().length; i++) {
-                    ArrayList<Integer> gameRow_temp = new ArrayList<>();
-                    for (int j = 0; j < gs.getTic().getBoard()[ 0 ].length; j++) {
-                        gameRow_temp.add(gs.getTic().getBoard()[ i ][ j ]);
-                    }
-                    gameBoard_objectStyle.add(gameRow_temp);
-                }
                 
+                switch (game_type) {
+                    
+                    case 1: //checkers move
+                        for (int i = 0; i < gs.getCheck().getBoard().length; i++) {
+                            ArrayList<Integer> gameRow_temp = new ArrayList<>();
+                            for (int j = 0; j < gs.getCheck().getBoard()[0].length; j++) { gameRow_temp.add(gs.getCheck().getBoard()[i][j]); }
+                            gameBoard_objectStyle.add(gameRow_temp);
+                        }
+                        break;
+                    case 2: //chess move
+                        for (int i = 0; i < gs.getChess().getBoard().length; i++) {
+                            ArrayList<Integer> gameRow_temp = new ArrayList<>();
+                            for (int j = 0; j < gs.getChess().getBoard()[0].length; j++) { gameRow_temp.add(gs.getChess().getBoard()[i][j]); }
+                            gameBoard_objectStyle.add(gameRow_temp);
+                        }
+                        break;
+                    default : //tic tac toe move
+                        for (int i = 0; i < gs.getTic().getBoard().length; i++) {
+                            ArrayList<Integer> gameRow_temp = new ArrayList<>();
+                            for (int j = 0; j < gs.getTic().getBoard()[0].length; j++) { gameRow_temp.add(gs.getTic().getBoard()[i][j]); }
+                            gameBoard_objectStyle.add(gameRow_temp);
+                        }
+                        break;
+                }
+    
                 //get players and whisper updated game boards if applicable
                 UserInterface playerWon = uService.getUser(listeners_session.get(whisperBackSession));
-                
-                SocketReturnWrapper<ObjectReturnWrapper<ArrayList<ArrayList<Integer>>>> intentReturn = new SocketReturnWrapper<>(
-                
-                        204,
-                        new ObjectReturnWrapper<>(200, gameBoard_objectStyle, null)
-                );
-                whisper(intentReturn, whisperBackSession); //whisper updated game board
-                if (!gs.getAi()) { //whisper updated game board to player 2
-                    
-                    UserInterface otherPlayer;
-                    if (playerWon.getIdApp().equals(gs.getUsers().get(0).getIdApp())) { otherPlayer = gs.getUsers().get(1); }
-                    else { otherPlayer = gs.getUsers().get(0); }
-                    whisper(intentReturn, listeners_user.get(otherPlayer.getIdApp()));
+                if (game_type < 2) {
+                    //get players and whisper updated game boards if applicable
+    
+                    SocketReturnWrapper<ObjectReturnWrapper<ArrayList<ArrayList<Integer>>>> intentReturn = new SocketReturnWrapper<>(
+            
+                            204,
+                            new ObjectReturnWrapper<>(200, gameBoard_objectStyle, null)
+                    );
+                    whisper(intentReturn, whisperBackSession); //whisper updated game board
+                    if (!gs.getAi()) { //whisper updated game board to player 2
+        
+                        UserInterface otherPlayer;
+                        if (playerWon.getIdApp().equals(gs.getUsers().get(0).getIdApp())) {
+                            otherPlayer = gs.getUsers().get(1);
+                        } else {
+                            otherPlayer = gs.getUsers().get(0);
+                        }
+                        whisper(intentReturn, listeners_user.get(otherPlayer.getIdApp()));
+                    }
+                } else { //for chess
+    
+                    ArrayList<String> gameFenArray = new ArrayList<>();
+                    gameFenArray.add(gs.getChess().getFEN());
+    
+                    SocketReturnWrapper<ObjectReturnWrapper<ArrayList<String>>> intentReturn = new SocketReturnWrapper<>(
+            
+                            204,
+                            new ObjectReturnWrapper<>(200, gameFenArray, null)
+                    );
+                    whisper(intentReturn, whisperBackSession); //whisper updated game board
+                    if (!gs.getAi()) { //whisper updated game board to player 2
+                        
+                        UserInterface otherPlayer;
+                        if (playerWon.getIdApp().equals(gs.getUsers().get(0).getIdApp())) {
+                            otherPlayer = gs.getUsers().get(1);
+                        } else {
+                            otherPlayer = gs.getUsers().get(0);
+                        }
+                        whisper(intentReturn, listeners_user.get(otherPlayer.getIdApp()));
+                    }
                 }
                 
                 //check game states
@@ -456,7 +503,7 @@ public class WebSocketComponent {
                     gService.removeGs(gs.getId_db());
                 }
                 
-                if (gs.getTic().checkForCat()) { //if there is a cat game
+                if (gs.getTic() != null && gs.getTic().checkForCat()) { //if there is a cat game in tic tac toe
         
                     SocketReturnWrapper<ObjectReturnWrapper<Integer>> wonIntentReturn = new SocketReturnWrapper<>(
                             205,

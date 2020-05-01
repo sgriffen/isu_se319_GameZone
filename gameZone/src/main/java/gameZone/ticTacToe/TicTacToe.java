@@ -54,6 +54,8 @@ public class TicTacToe {
     public void setBoard(Integer[][] board) { this.board = board; }
 
     public void setSpace(int space, int x, int y) { this.board[x][y] = space; }
+
+    public int getSpace(int x, int y) {return this.board[x][y];}
     
     public Integer getNumMoves() { return this.numMoves; }
     public void setNumMoves(Integer numMoves) { this.numMoves = numMoves; }
