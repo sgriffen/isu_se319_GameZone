@@ -502,8 +502,10 @@ var checkGame="<style scoped>"+
 	"var board = document.getElementById('board');"+
 	"var myTurn = true;"+
 	"var turnCount=0;"+
-	"var x='<img src='x.png' style='width:95%;height:95%;'>';"+
-	"var o='<img src='o.jpg' style='width:95%;height:95%;'>';"+
+	"var x='<img src='images/blackCheck.jpg' style='width:95%;height:95%;'>';"+
+	"var o='<img src='images/whiteCheck.jpg' style='width:95%;height:95%;'>';"+
+	"var xKing='<img src='images/blackKing.jpg' style='width:95%;height:95%;'>';"+
+	"var oKing='<img src='images/whiteKing.jpg' style='width:95%;height:95%;'>';"+
 	"if (board != null) {"+
 	"	for (var i = 0; i < board.rows.length; i++) {"+
 	"		for (var j = 0; j < board.rows[i].cells.length; j++){"+
@@ -541,28 +543,28 @@ var checkGame="<style scoped>"+
 	
 	"		if(board.rows[firstY+1].cells[firstZ+1].innerHTML == o && (y ==firstY+2 && z == firstZ+2)){"+
 	"			var c = firstZ;"+
-	"			for(i=1; i<=7-firstY; i++){"+
-	"				if(board.rows[firstY+i].cells[c+1].innerHTML == o && (y ==firstY+i+1 && z == c+2)){"+
+	"			for(i=1; i<=7-firstY; i+=2){"+
+	"				if(board.rows[firstY+i].cells[c+1].innerHTML == o && (y ==firstY+i+1 && z == c+2) && !board.rows[firstY+i+1].cells[c+2].innerHTML==x||!board.rows[firstY+i+1].cells[c+2].innerHTML==o){"+
 	"					board.rows[firstY+i].cells[c+1].innerHTML = null;"+
-	"					boardCell.innerHTML =x;"+
-	"					c++;}"+
-	"				else if(board.rows[firstY+i].cells[c-1].innerHTML == o && (y ==firstY+i+1 && z == c-2)){"+
+	"					board.rows[firstY+i+1].cells[c+2].innerHTML =x;"+
+	"					c+=2;}"+
+	"				else if(board.rows[firstY+i].cells[c-1].innerHTML == o && (y ==firstY+i+1 && z == c-2) && !board.rows[firstY+i+1].cells[c-2].innerHTML==x||!board.rows[firstY+i+1].cells[c-2].innerHTML==o){"+
 	"					board.rows[firstY+i].cells[c-1].innerHTML = null;"+
-	"					boardCell.innerHTML =x;"+
-	"					c++;}"+
+	"					board.rows[firstY+i+1].cells[c-2].innerHTML =x;"+
+	"					c-=2;}"+
 	"				else{return true;}}}"+
 	
 	"		else if(board.rows[firstY+1].cells[firstZ-1].innerHTML == o && (y ==firstY+2 && z == firstZ-2)){"+
 	
 	"			var c = firstZ;"+
 	"			for(i=1; i<=7-firstY; i+=2){"+
-	"				if(board.rows[firstY+i].cells[c+1].innerHTML == o && (y ==firstY+i+1 && z == c+2)){"+
+	"				if(board.rows[firstY+i].cells[c+1].innerHTML == o && (y ==firstY+i+1 && z == c+2) && !board.rows[firstY+i+1].cells[c+2].innerHTML==x||!board.rows[firstY+i+1].cells[c+2].innerHTML==o){"+
 	"					board.rows[firstY+i].cells[c+1].innerHTML = null;"+
-	"					boardCell.innerHTML =x;"+
+	"					board.rows[firstY+i+1].cells[c+2].innerHTML =x;"+
 	"					c+=2;}"+
-	"				else if(board.rows[firstY+i].cells[c-1].innerHTML == o && (y ==firstY+i+1 && z == c-2)){"+
+	"				else if(board.rows[firstY+i].cells[c-1].innerHTML == o && (y ==firstY+i+1 && z == c-2) && !board.rows[firstY+i+1].cells[c-2].innerHTML==x||!board.rows[firstY+i+1].cells[c-2].innerHTML==o){"+
 	"					board.rows[firstY+i].cells[c-1].innerHTML = null;"+
-	"					boardCell.innerHTML =x;"+
+	"					board.rows[firstY+i+1].cells[c-2].innerHTML =x;"+
 	"					c-=2;}}"+
 	"				else{return true;}}"+
 	
@@ -582,18 +584,27 @@ var checkGame="<style scoped>"+
 	"			for(i=firstY; i>=0; i-=2){"+
 	"				if(board.rows[firstY-i].cells[c+1].innerHTML == x && (y ==firstY-i-1 && z == c+2)){"+
 	"					board.rows[firstY-i].cells[c+1].innerHTML = null;"+
-	"					boardCell.innerHTML =o;"+
+	"					board.rows[firstY-i-1].cells[c+2].innerHTML =o;"+
 	"					c+=2;}"+
 	"				else if(board.rows[firstY-i].cells[c-1].innerHTML == x && (y ==firstY-i-1 && z == c-2)){"+
 	"					board.rows[firstY-i].cells[c-1].innerHTML = null;"+
-	"					boardCell.innerHTML =o;"+
+	"					board.rows[firstY-i-1].cells[c-2].innerHTML =o;"+
 	"					c-=2;}"+
 	"				else{return true;}}}"+
 	
-	
-	"			boardCell.innerHTML =o;"+
 	"		else if(board.rows[firstY-1].cells[firstZ-1].innerHTML == x && (y ==firstY-2 && z == firstZ-2)){"+
-	"			boardCell.innerHTML =o;"+
+	"			var c = firstZ;"+
+	"			for(i=firstY; i>=0; i-=2){"+
+	"				if(board.rows[firstY-i].cells[c+1].innerHTML == x && (y ==firstY-i-1 && z == c+2)){"+
+	"					board.rows[firstY-i].cells[c+1].innerHTML = null;"+
+	"					board.rows[firstY-i-1].cells[c+2].innerHTML =o;"+
+	"					c+=2;}"+
+	"				else if(board.rows[firstY-i].cells[c-1].innerHTML == x && (y ==firstY-i-1 && z == c-2)){"+
+	"					board.rows[firstY-i].cells[c-1].innerHTML = null;"+
+	"					board.rows[firstY-i-1].cells[c-2].innerHTML =o;"+
+	"					c-=2;}"+
+	"				else{return true;}}}"+
+	
 	"		else if(y == firstY - 1 && z == firstZ + 1){" +
 	"			boardCell.innerHTML =o;"+
 	"		else if(y == firstY - 1 && z == firstZ - 1){" +
