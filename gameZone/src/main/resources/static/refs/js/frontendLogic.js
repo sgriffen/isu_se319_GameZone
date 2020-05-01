@@ -547,10 +547,16 @@ var checkGame="<style scoped>"+
 	"				if(board.rows[firstY+i].cells[c+1].innerHTML == o && (y ==firstY+i+1 && z == c+2) && !board.rows[firstY+i+1].cells[c+2].innerHTML==x||!board.rows[firstY+i+1].cells[c+2].innerHTML==o){"+
 	"					board.rows[firstY+i].cells[c+1].innerHTML = null;"+
 	"					board.rows[firstY+i+1].cells[c+2].innerHTML =x;"+
+	"			if(firstY+i+1==7){board.rows[firstY+i+1].cells[c+2].innerHTML = xKing;}"+
+	"			else{board.rows[firstY+i+1].cells[c+2].innerHTML =x;}"+
+
 	"					c+=2;}"+
+	
+	
 	"				else if(board.rows[firstY+i].cells[c-1].innerHTML == o && (y ==firstY+i+1 && z == c-2) && !board.rows[firstY+i+1].cells[c-2].innerHTML==x||!board.rows[firstY+i+1].cells[c-2].innerHTML==o){"+
 	"					board.rows[firstY+i].cells[c-1].innerHTML = null;"+
-	"					board.rows[firstY+i+1].cells[c-2].innerHTML =x;"+
+	"			if(firstY+i+1==7){board.rows[firstY+i+1].cells[c-2].innerHTML = xKing;}"+
+	"			else{board.rows[firstY+i+1].cells[c-2].innerHTML =x;}"+
 	"					c-=2;}"+
 	"				else{return true;}}}"+
 	
@@ -570,10 +576,12 @@ var checkGame="<style scoped>"+
 	
 	
 	"		else if(y == firstY + 1 && z == firstZ + 1){" +
-	"			boardCell.innerHTML =x;"+
+	"			if(y==7){boardCell.innerHTML = xKing;}"+
+	"			else{boardCell.innerHTML =x;}"+
 	"			return true;}"+
 	"		else if(y == firstY + 1 && z == firstZ - 1){" +
-	"			boardCell.innerHTML =x;"+
+	"			if(y==7){boardCell.innerHTML = xKing;}"+
+	"			else{boardCell.innerHTML =x;}"+
 	"			return true;}"+
 	"		else{"+
 	"			return false;}" +
@@ -606,9 +614,13 @@ var checkGame="<style scoped>"+
 	"				else{return true;}}}"+
 	
 	"		else if(y == firstY - 1 && z == firstZ + 1){" +
-	"			boardCell.innerHTML =o;"+
+	
+	"			if(y==0){boardCell.innerHTML = oKing;}"+
+	"			else{boardCell.innerHTML =o;}}"+
+	
 	"		else if(y == firstY - 1 && z == firstZ - 1){" +
-	"			boardCell.innerHTML =o;"+
+	"			if(y==0){boardCell.innerHTML = oKing;}"+
+	"			else{boardCell.innerHTML =o;}}"+
 	"		else{"+
 	"			return false;}" +
 	"	}"+
