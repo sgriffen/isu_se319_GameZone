@@ -50,7 +50,6 @@ test('test request AI', () => {
 	expect(back.mock.calls[0][0]).toBe(202);
 	expect(back.mock.calls[0][1].length ).toBe(1);
 	expect(back.mock.calls[0][1]).toContain("AI");
-	expect(back.mock.calls[0][3]).toBe(12345);
 });
 
 test('test request human', () => {
@@ -58,5 +57,4 @@ test('test request human', () => {
 	expect(back.mock.calls[1][0]).toBe(202);
 	expect(back.mock.calls[0][1].length ).toBe(1);
 	expect(back.mock.calls[1][1]).toContain(2020);
-	expect(back.mock.calls[1][3]).toBe(12345);
 });
