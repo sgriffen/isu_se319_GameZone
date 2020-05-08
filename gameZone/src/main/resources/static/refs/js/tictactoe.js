@@ -5,8 +5,8 @@ var o;
 function tac_init() {
 
     board = document.getElementById('board');
-    x = "<img class='game_piece' src='/images/tictactoe/x.png'>";
-    o = "<img class='game_piece' src='/images/tictactoe/o.png'>";
+    x = "<img src='/images/tictactoe/x.png' class='game_piece'>";
+    o = "<img src='/images/tictactoe/o.png' class='game_piece'>";
 
     if (board != null) {
         for (var i = 0; i < board.rows.length; i++) {
